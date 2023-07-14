@@ -6,7 +6,7 @@ export interface IUser{
     phone: string;
     email: string;
     password: string;
-    isAdmin: string
+    role: string
 }
 
 const userSchema = new Schema<IUser>({
@@ -15,7 +15,7 @@ const userSchema = new Schema<IUser>({
     phone: {type: String, required: true, unique: true},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    isAdmin: {type: String, default: 'user'}
+    role: {type: String, default: 'user'}
 })
 
 export default model<IUser>('User', userSchema)

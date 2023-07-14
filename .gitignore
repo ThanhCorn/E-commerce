@@ -128,6 +128,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-src/utils/jwtToken.ts
-src/routes/user.router.ts
-src/controllers/user.controller.ts

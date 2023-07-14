@@ -81,7 +81,7 @@ export const getUser = async (req: Request, res: Response) => {
 }
 
 // DELETE user by id
-export const deleteUser = async (req: Request, res: Response) => {
+export const deletedUser = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         const deleteUser = await UserModel.findByIdAndDelete(id);
@@ -96,7 +96,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 }
 
 // PUT update user by id
-export const updateUser = async (req: Request, res: Response) => {
+export const updatedUser = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         const updateUser = await UserModel.findByIdAndUpdate(id, {

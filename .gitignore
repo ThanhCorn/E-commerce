@@ -128,9 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-src/database.ts
 src/utils/jwtToken.ts
 src/routes/user.router.ts
-src/models/user.model.ts
 src/controllers/user.controller.ts
-src/server.ts

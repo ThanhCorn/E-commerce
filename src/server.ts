@@ -3,11 +3,12 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import userRouter from './routes/userRoutes';
+import productRouter from './routes/productRoutes';
 import { notFound, errorHandler } from './middleware/errorMiddleware';
 import { connectDB } from './config/database';
 import cookieParser from 'cookie-parser';
 
-const app = express();  
+const app = express();
 
 // Connect to the database
 connectDB();
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/user', userRouter);
+app.use('/api/product', productRouter);
 
 // Error handling middleware
 app.use(notFound);

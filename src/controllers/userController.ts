@@ -15,7 +15,7 @@ export const registerUser = async (req: Request, res: Response) => {
       return res.status(409).json({ message: 'Email already exists' });
     }
 
-    const newUser: IUser = await UserModel.create(req.body)
+    const newUser: IUser = await UserModel.create(req.body);
     return res.status(201).json(newUser);
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
@@ -36,25 +36,25 @@ export const loginUser = async (req: Request, res: Response) => {
       const refreshToken = await generateRefreshToken(user?._id);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const updateuser = await UserModel.findByIdAndUpdate(
-      user.id,
-      {
-        refreshToken: refreshToken,
-      },
-      { new: true },
-    );
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      maxAge: 72 * 60 * 60 * 1000,
-    });
-    res.status(200).json({
-      _id: user?._id,
-      firstname: user?.firstname,
-      lastname: user?.lastname,
-      email: user?.email,
-      phone: user?.phone,
-      token: generateToken(user?._id),
-    });
-  }
+        user.id,
+        {
+          refreshToken: refreshToken,
+        },
+        { new: true },
+      );
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        maxAge: 3 * 24 * 60 * 60 * 1000,
+      });
+      res.status(200).json({
+        _id: user?._id,
+        firstname: user?.firstname,
+        lastname: user?.lastname,
+        email: user?.email,
+        phone: user?.phone,
+        token: generateToken(user?._id),
+      });
+    }
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
@@ -64,8 +64,7 @@ export const loginUser = async (req: Request, res: Response) => {
 export const logoutUser = async (req: Request, res: Response) => {
   res.clearCookie('refreshToken');
   return res.status(200).json({ message: 'Logged out' });
-}
-
+};
 
 //GET RefreshToken
 export const handleRefreshToken = async (req: Request, res: Response) => {
@@ -86,13 +85,15 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
       refreshToken,
       process.env.JWT_SECRET || 'mysecretkey',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-       (err: any, decoded: any) => {
+      (err: any, decoded: any) => {
         if (err || user.id !== decoded.id) {
-          return res.status(403).json({ message: 'There is something wrong with the refresh token' });
+          return res.status(403).json({
+            message: 'There is something wrong with the refresh token',
+          });
         }
         const accessToken = generateToken(user._id);
         res.json({ accessToken });
-      }
+      },
     );
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
@@ -100,7 +101,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 };
 
 // GET all users
-export const getUsers = async (req: Request, res: Response) => {
+export const getAllUser = async (req: Request, res: Response) => {
   try {
     const getUsers = await UserModel.find();
     return res.status(200).json(getUsers);

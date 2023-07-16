@@ -1,7 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import UserModel from '../models/userModel';
-import 'dotenv/config';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -21,7 +20,7 @@ export const verifyToken = async (
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-      return res.status(401).json({ message: 'You need to be logged in' });
+      return res.status(401).json({ message: "You don't have permission" });
     }
 
     const decoded = (await jwt.verify(
@@ -48,12 +47,13 @@ export const isAdmin = async (
   next: NextFunction,
 ) => {
   try {
+    console.log(req.user);
     const { email } = req.user;
     const adminUser = await UserModel.findOne({ email });
     if (adminUser?.role === 'admin') {
       next();
     } else {
-      return res.status(401).json({ message: 'You need to be admin' });
+      res.status(401).json({ message: 'You need to be an admin' });
     }
   } catch (error) {
     throw new Error('Not implemented');

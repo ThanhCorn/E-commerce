@@ -1,6 +1,7 @@
 import ProductModel from '../models/productModel';
 import { Request, Response } from 'express';
 import slugify from 'slugify';
+import { Document, Query } from 'mongoose';
 
 // POST createProduct
 export const createProduct = async (req: Request, res: Response) => {
@@ -39,9 +40,17 @@ export const getAllProduct = async (req: Request, res: Response) => {
 
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    //gte = greater than or equal, gt = greater than, lte = less than or equal, lt = less than
 
-    const query = await ProductModel.find(JSON.parse(queryStr));
+    let query: Query<Document[], Document> = ProductModel.find(JSON.parse(queryStr));
+
+    // Sorting
+    if (req.query.sort) {
+      const sortBy = (req.query.sort as string).split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
+
     const allProduct = await query;
     return res.status(200).json(allProduct);
   } catch (error) {

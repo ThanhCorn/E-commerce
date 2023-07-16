@@ -1,14 +1,13 @@
-import { generateToken } from './../utils/jwtToken';
+import { generateToken } from '../utils/jwtToken';
+import { generateRefreshToken } from '../utils/refreshToken';
 import { Request, Response } from 'express';
 import UserModel, { IUser } from '../models/userModel';
-import bcrypt from 'bcrypt';
-import { generateRefreshToken } from '../utils/refreshToken';
-import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import jwt from 'jsonwebtoken';
 
 // POST register
 export const registerUser = async (req: Request, res: Response) => {
-  const { firstname, lastname, phone, email, password } = req.body;
+  const email = req.body.email;
   try {
     const existingEmail = await UserModel.findOne({ email });
 
@@ -16,15 +15,7 @@ export const registerUser = async (req: Request, res: Response) => {
       return res.status(409).json({ message: 'Email already exists' });
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    const newUser: IUser = await UserModel.create({
-      firstname,
-      lastname,
-      phone,
-      email,
-      password: passwordHash,
-    });
+    const newUser: IUser = await UserModel.create(req.body)
     return res.status(201).json(newUser);
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
@@ -38,16 +29,13 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const user = await UserModel.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'invalid email or password' });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-    const refreshToken = await generateRefreshToken(user?._id);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const updateuser = await UserModel.findByIdAndUpdate(
+    if (user && (await user.isPasswordMatch(password))) {
+      const refreshToken = await generateRefreshToken(user?._id);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const updateuser = await UserModel.findByIdAndUpdate(
       user.id,
       {
         refreshToken: refreshToken,
@@ -66,35 +54,49 @@ export const loginUser = async (req: Request, res: Response) => {
       phone: user?.phone,
       token: generateToken(user?._id),
     });
+  }
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-// GET RefreshToken
+// POST Logout
+export const logoutUser = async (req: Request, res: Response) => {
+  res.clearCookie('refreshToken');
+  return res.status(200).json({ message: 'Logged out' });
+}
+
+
+//GET RefreshToken
 export const handleRefreshToken = async (req: Request, res: Response) => {
-  const refreshToken = req.cookies.refreshToken;
+  const refreshToken = await req.cookies.refreshToken;
+  console.log(refreshToken);
 
   if (!refreshToken) {
     return res.status(401).json({ message: 'No Refresh token in Cookies' });
   }
-  const user = await UserModel.findOne({ refreshToken });
-  console.log(user);
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
-  }
 
-  jwt.verify(
-    refreshToken,
-    process.env.JWT_SECRET as string,
-    async (err: any, user: any) => {
-      if (err) {
-        return res.status(403).json({ message: 'Invalid Refresh Token' });
+  try {
+    const user = await UserModel.findOne({ refreshToken });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    jwt.verify(
+      refreshToken,
+      process.env.JWT_SECRET || 'mysecretkey',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+       (err: any, decoded: any) => {
+        if (err || user.id !== decoded.id) {
+          return res.status(403).json({ message: 'There is something wrong with the refresh token' });
+        }
+        const accessToken = generateToken(user._id);
+        res.json({ accessToken });
       }
-      const accessToken = await generateToken(user._id);
-      res.status(200).json({ accessToken });
-    },
-  );
+    );
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 // GET all users

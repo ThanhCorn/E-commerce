@@ -1,4 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 export interface IUser {
   _id: Types.ObjectId;
@@ -13,6 +14,7 @@ export interface IUser {
   address: string;
   wishlist: Types.ObjectId[];
   refreshToken: string;
+  isPasswordMatch: (password: string) => Promise<boolean>;
 }
 
 const userSchema = new Schema<IUser>({
@@ -28,5 +30,18 @@ const userSchema = new Schema<IUser>({
   wishlist: [{ type: Types.ObjectId, ref: 'Product' }],
   refreshToken: { type: String },
 });
+
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  const salt = bcrypt.genSaltSync(10);
+  this.password = bcrypt.hashSync(this.password, salt);
+  next();
+})
+
+userSchema.methods.isPasswordMatch = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+}
 
 export default model<IUser>('User', userSchema);

@@ -3,7 +3,7 @@ import 'dotenv/config';
 
 const MONGO_URI = process.env.MONGO_URI || '';
 
-export const connectDB = async (): Promise<void> => {
+export const connectDB = async () => {
   try {
     const conn = await mongoose.connect(MONGO_URI);
     console.log(`MongoDB connected: ${conn.connection.host}`);

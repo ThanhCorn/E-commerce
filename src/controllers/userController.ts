@@ -4,6 +4,9 @@ import { Request, Response } from 'express';
 import UserModel, { IUser } from '../models/userModel';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
+import { validateMongoDbId } from '../utils/validateMongodbid';
+import { EmailData, sendEmail } from './emailController';
+import crypto from 'crypto';
 
 // POST register
 export const registerUser = async (req: Request, res: Response) => {
@@ -29,6 +32,10 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const user = await UserModel.findOne({ email });
     if (!user) {
+      return res.status(404).json({ message: 'invalid email or password' });
+    }
+
+    if (user && !(await user.isPasswordMatch(password))) {
       return res.status(404).json({ message: 'invalid email or password' });
     }
 
@@ -197,4 +204,70 @@ export const unblockUser = async (req: Request, res: Response) => {
   } catch (error) {
     throw new Error('Internal server error');
   }
+};
+
+// Update Password
+export const updatedPassword = async (req: Request, res: Response) => {
+  const { _id } = req.user;
+  const { oldPassword, newPassword } = req.body;
+  validateMongoDbId(_id);
+  try {
+    const user = await UserModel.findById(_id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user && (await user.isPasswordMatch(oldPassword))) {
+      user.password = newPassword;
+      await user.save();
+      return res.status(200).json({ message: 'Password Updated' });
+    }
+    return res.status(401).json({ message: 'Invalid Password' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// POST forgot Password
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      res.status(404).json({ message: 'Email not found' });
+    }
+    const token = await user?.createPasswordResetToken();
+    await user?.save();
+    const resetUrl = `Hi, please click on the link to reset your password. This link is valid for 10 minutes only. 
+    <a href="http://localhost:5000/api/user/reset-password/${token}">Reset Password</a>`;
+    const data: EmailData = {
+      to: email,
+      text: 'Hey User',
+      subject: 'Reset Password',
+      html: resetUrl,
+    };
+    sendEmail(data, req, res);
+    res.json(token);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    res.status(500).json(error.message);
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const user = await UserModel.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+  if (!user) {
+    return res.status(400).json({ message: 'Token is invalid or has expired' });
+  }
+  user.password = password;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+  res.status(200).json(user);
 };

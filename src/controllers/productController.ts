@@ -41,7 +41,9 @@ export const getAllProduct = async (req: Request, res: Response) => {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    let query: Query<Document[], Document> = ProductModel.find(JSON.parse(queryStr));
+    let query: Query<Document[], Document> = ProductModel.find(
+      JSON.parse(queryStr),
+    );
 
     // Sorting
     if (req.query.sort) {
@@ -51,10 +53,32 @@ export const getAllProduct = async (req: Request, res: Response) => {
       query = query.sort('-createdAt');
     }
 
+    // Limiting fields
+    if (req.query.fields) {
+      const fields = (req.query.fields as string).split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v');
+    }
+
+    // Pagination
+    const page = Number(req.query.page as string) * 1 || 1;
+    const limit = Number(req.query.limit as string) * 1 || 10;
+    const skip = (page - 1) * limit;
+    query = query.skip(skip).limit(limit);
+
+    if (req.query.page) {
+      const productCount = await ProductModel.countDocuments();
+      if (skip >= productCount) {
+        throw new Error('This page does not exist.');
+      }
+    }
+
     const allProduct = await query;
     return res.status(200).json(allProduct);
-  } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };
 

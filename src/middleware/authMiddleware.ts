@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import UserModel from '../models/userModel';
+import UserModel from '../models/user.Model';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

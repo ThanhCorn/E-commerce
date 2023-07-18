@@ -1,4 +1,4 @@
-import ProductModel from '../models/productModel';
+import ProductModel from '../models/product.Model';
 import { Request, Response } from 'express';
 import slugify from 'slugify';
 import { Document, Query } from 'mongoose';

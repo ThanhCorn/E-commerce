@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+src/routes/productCategory.Routes.ts
+src/models/productCategory.Model.ts
+src/controllers/productCategory.Controler.ts

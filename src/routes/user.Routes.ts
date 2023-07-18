@@ -13,15 +13,15 @@ import {
   updatedPassword,
   forgotPassword,
   resetPassword,
-} from '../controllers/userController';
+} from '../controllers/user.Controller';
 import { isAdmin, verifyToken } from '../middleware/authMiddleware';
 import 'dotenv/config';
 
 const router = express.Router();
 
+router.get('/refresh', handleRefreshToken);
 router.get('/all-users', getAllUser);
 router.get('/:id', getUser);
-router.get('/refresh', handleRefreshToken);
 router.delete('/:id', verifyToken, isAdmin, deletedUser);
 router.post('/register', registerUser);
 router.put('/password', verifyToken, updatedPassword);

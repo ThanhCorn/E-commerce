@@ -1,11 +1,11 @@
 import { generateToken } from '../utils/jwtToken';
 import { generateRefreshToken } from '../utils/refreshToken';
 import { Request, Response } from 'express';
-import UserModel, { IUser } from '../models/userModel';
+import UserModel, { IUser } from '../models/user.Model';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import { validateMongoDbId } from '../utils/validateMongodbid';
-import { EmailData, sendEmail } from './emailController';
+import { EmailData, sendEmail } from './email.Controller';
 import crypto from 'crypto';
 
 // POST register
@@ -31,37 +31,30 @@ export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const user = await UserModel.findOne({ email });
-    if (!user) {
+    if (!user || !(await user.isPasswordMatch(password))) {
       return res.status(404).json({ message: 'invalid email or password' });
     }
-
-    if (user && !(await user.isPasswordMatch(password))) {
-      return res.status(404).json({ message: 'invalid email or password' });
-    }
-
-    if (user && (await user.isPasswordMatch(password))) {
-      const refreshToken = await generateRefreshToken(user?._id);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const updateuser = await UserModel.findByIdAndUpdate(
-        user.id,
-        {
-          refreshToken: refreshToken,
-        },
-        { new: true },
-      );
-      res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        maxAge: 3 * 24 * 60 * 60 * 1000,
-      });
-      res.status(200).json({
-        _id: user?._id,
-        firstname: user?.firstname,
-        lastname: user?.lastname,
-        email: user?.email,
-        phone: user?.phone,
-        token: generateToken(user?._id),
-      });
-    }
+    const refreshToken = await generateRefreshToken(user?._id);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const updateuser = await UserModel.findByIdAndUpdate(
+      user.id,
+      {
+        refreshToken: refreshToken,
+      },
+      { new: true },
+    );
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 3 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({
+      _id: user?._id,
+      firstname: user?.firstname,
+      lastname: user?.lastname,
+      email: user?.email,
+      phone: user?.phone,
+      token: generateToken(user?._id),
+    });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
@@ -75,7 +68,8 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 //GET RefreshToken
 export const handleRefreshToken = async (req: Request, res: Response) => {
-  const refreshToken = await req.cookies.refreshToken;
+  console.log(req.body, req.cookies);
+  const refreshToken = req.cookies.refreshToken;
   console.log(refreshToken);
 
   if (!refreshToken) {
@@ -90,7 +84,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 
     jwt.verify(
       refreshToken,
-      process.env.JWT_SECRET || 'mysecretkey',
+      process.env.JWT_SECRET as string,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
       (err: any, decoded: any) => {
         if (err || user.id !== decoded.id) {
@@ -102,8 +96,9 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
         res.json({ accessToken });
       },
     );
-  } catch (error) {
-    return res.status(500).json({ message: 'Internal server error' });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 };
 

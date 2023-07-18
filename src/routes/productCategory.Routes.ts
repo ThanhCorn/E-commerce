@@ -5,7 +5,7 @@ import {
   getAllCategory,
   getCategory,
   updateCategory,
-} from '../controllers/productCategory.Controler';
+} from '../controllers/productCategory.Controller';
 import { isAdmin, verifyToken } from '../middleware/authMiddleware';
 
 const router = express.Router();

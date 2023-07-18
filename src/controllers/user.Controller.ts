@@ -203,16 +203,16 @@ export const unblockUser = async (req: Request, res: Response) => {
 
 // Update Password
 export const updatedPassword = async (req: Request, res: Response) => {
+  console.log(req.user);
   const { _id } = req.user;
   const { oldPassword, newPassword } = req.body;
-  validateMongoDbId(_id);
   try {
     const user = await UserModel.findById(_id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    if (user && (await user.isPasswordMatch(oldPassword))) {
+    if (await user.isPasswordMatch(oldPassword)) {
       user.password = newPassword;
       await user.save();
       return res.status(200).json({ message: 'Password Updated' });

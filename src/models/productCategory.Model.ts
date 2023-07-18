@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose';
 
-export interface ICategory {}
+export interface ICategory {
+  title: string;
+}
 
 const productCategorySchema = new Schema<ICategory>(
   {

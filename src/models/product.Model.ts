@@ -16,11 +16,12 @@ export interface IProduct {
   }>;
   color?: string[];
   tag?: string;
-  rating?: Array<{
+  ratings?: Array<{
     star: number;
     postedBy: Types.ObjectId;
     comment?: string;
   }>;
+  totalRating?: string;
 }
 
 const productSchema = new Schema<IProduct>(
@@ -36,13 +37,14 @@ const productSchema = new Schema<IProduct>(
     tag: String,
     images: [{ public_id: String, url: String }],
     color: [],
-    rating: [
+    ratings: [
       {
         star: { type: Number, default: 0 },
         postedBy: { type: Types.ObjectId, ref: 'User' },
         comment: String,
       },
     ],
+    totalRating: { type: String, default: 0 },
   },
   { timestamps: true },
 );

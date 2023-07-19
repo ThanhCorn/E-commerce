@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 import UserModel, { IUser } from '../models/user.Model';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
-import { validateMongoDbId } from '../utils/validateMongodbid';
 import { EmailData, sendEmail } from './email.Controller';
 import crypto from 'crypto';
 
@@ -68,9 +67,7 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 //GET RefreshToken
 export const handleRefreshToken = async (req: Request, res: Response) => {
-  console.log(req.body, req.cookies);
   const refreshToken = req.cookies.refreshToken;
-  console.log(refreshToken);
 
   if (!refreshToken) {
     return res.status(401).json({ message: 'No Refresh token in Cookies' });
@@ -203,7 +200,6 @@ export const unblockUser = async (req: Request, res: Response) => {
 
 // Update Password
 export const updatedPassword = async (req: Request, res: Response) => {
-  console.log(req.user);
   const { _id } = req.user;
   const { oldPassword, newPassword } = req.body;
   try {
@@ -212,7 +208,7 @@ export const updatedPassword = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    if (await user.isPasswordMatch(oldPassword)) {
+    if (user && (await user.isPasswordMatch(oldPassword))) {
       user.password = newPassword;
       await user.save();
       return res.status(200).json({ message: 'Password Updated' });

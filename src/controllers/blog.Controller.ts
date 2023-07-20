@@ -1,6 +1,7 @@
 import BlogModel from '../models/blog.Model';
 import { Request, Response } from 'express';
 import { validateMongoDbId } from '../utils/validateMongodbid';
+import { cloudinaryUpload } from '../utils/cloudinary';
 
 // POST createBlog
 export const createBlog = async (req: Request, res: Response) => {
@@ -167,5 +168,39 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
       { new: true },
     );
     return res.status(200).json(blog);
+  }
+};
+
+export const uploadImages = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const uploader = async (file: Express.Multer.File) =>
+      cloudinaryUpload(file);
+    const urls = [];
+    const files = req.files as Express.Multer.File[];
+    for (const file of files) {
+      const newPath = await uploader(file);
+      if (newPath) {
+        urls.push(newPath);
+      }
+    }
+
+    // Filter out any null values from the urls array
+    const filteredUrls = urls.filter((url) => url !== null);
+
+    const findProduct = await BlogModel.findByIdAndUpdate(
+      id,
+      {
+        images: filteredUrls.map((file) => {
+          return file;
+        }),
+      },
+      { new: true },
+    );
+
+    return res.status(200).json(findProduct);
+  } catch (error) {
+    console.error('Error while uploading images:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };

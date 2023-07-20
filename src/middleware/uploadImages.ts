@@ -8,7 +8,7 @@ import fs from 'fs';
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../public/images/products'));
+    cb(null, path.join(__dirname, '../public/images/'));
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
@@ -72,23 +72,39 @@ export const productImgResize = async (
   }
 };
 
-export const resizePhotoBlog = async (
+export const blogImgResize = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   if (!req.files || !Array.isArray(req.files)) return next();
 
-  await Promise.all(
-    req.files.map(async (file: Express.Multer.File) => {
-      await sharp(file.path)
-        .resize(300, 300)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/images/blogs/${file.filename}`),
-        fs.unlinkSync(file.path);
-    }),
-  );
+  try {
+    await Promise.all(
+      req.files.map(async (file: Express.Multer.File) => {
+        if (!file.buffer || file.buffer.length === 0) {
+          // Skip image processing for empty files
+          return;
+        }
 
-  next();
+        const outputPath = `public/images/blogs/${file.filename}`;
+        const resizedImageBuffer = await sharp(file.buffer)
+          .resize(300, 300)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toBuffer();
+
+        fs.writeFileSync(outputPath, resizedImageBuffer);
+        fs.unlinkSync(file.path);
+      }),
+    );
+
+    next();
+  } catch (error) {
+    // Handle errors more gracefully
+    console.error('Error while resizing and saving images:', error);
+    return res
+      .status(500)
+      .json({ message: 'Failed to resize and save images.' });
+  }
 };

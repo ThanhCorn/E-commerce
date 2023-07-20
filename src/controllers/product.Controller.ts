@@ -234,7 +234,6 @@ export const uploadImages = async (req: Request, res: Response) => {
       { new: true },
     );
 
-    console.log(findProduct);
     return res.status(200).json(findProduct);
   } catch (error) {
     console.error('Error while uploading images:', error);

@@ -1,8 +1,8 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import UserModel, { IUser } from '../models/user.Model';
-import 'dotenv/config';
-
+import dotenv from 'dotenv';
+dotenv.config();
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {

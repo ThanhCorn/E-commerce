@@ -21,7 +21,7 @@ router.put(
   '/upload/:id',
   verifyToken,
   isAdmin,
-  uploadPhoto.array('images', 2),
+  uploadPhoto.array('images',2),
   blogImgResize,
   uploadImages,
 );

@@ -1,7 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 
 export interface IProduct {
-  _id: Types.ObjectId;
   title: string;
   slug: string;
   description: string;
@@ -10,10 +9,10 @@ export interface IProduct {
   quantity: number;
   brand?: string;
   sold: number;
-  images?: Array<{
+  images?: {
     public_id: string;
     url: string;
-  }>;
+  };
   color?: string[];
   tag?: string;
   ratings?: Array<{
@@ -49,4 +48,4 @@ const productSchema = new Schema<IProduct>(
   { timestamps: true },
 );
 
-export default model<IProduct>('Product', productSchema);
+export default model('Product', productSchema);

@@ -20,6 +20,9 @@ import {
   getUserCart,
   emptyCart,
   applyCoupon,
+  createOrder,
+  getOrders,
+  updateOrderStatus,
 } from '../controllers/user.Controller';
 import { isAdmin, verifyToken } from '../middleware/authMiddleware';
 import 'dotenv/config';
@@ -35,6 +38,9 @@ router.post('/login', loginUser);
 router.post('/login-admin', loginAdmin);
 router.post('/cart', verifyToken, userCart);
 router.post('/cart/applycoupon', verifyToken, applyCoupon);
+router.post('/cart/cash-order', verifyToken, createOrder);
+router.get('/get-orders', verifyToken, getOrders);
+router.put('/update-order/:id', verifyToken, isAdmin, updateOrderStatus);
 router.get('/all-users', getAllUser);
 router.get('/refresh', handleRefreshToken);
 router.post('/logout', logoutUser);

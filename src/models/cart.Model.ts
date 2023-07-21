@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-export interface IProduct {
-  _id?: Schema.Types.ObjectId;
+export interface ICartProduct {
   product?: Schema.Types.ObjectId;
   count?: number;
   color?: string;
@@ -9,7 +8,7 @@ export interface IProduct {
 }
 
 export interface ICart {
-  products: IProduct[];
+  products?: ICartProduct[];
   cartTotal?: number;
   totalAfterDiscount?: number;
   orderedBy?: Schema.Types.ObjectId;

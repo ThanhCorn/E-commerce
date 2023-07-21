@@ -2,13 +2,15 @@ import { generateToken } from '../utils/jwtToken';
 import { generateRefreshToken } from '../utils/refreshToken';
 import { Request, Response } from 'express';
 import UserModel, { IUser } from '../models/user.Model';
-import CartModel, { ICart } from '../models/cart.Model';
+import CartModel, { ICartProduct } from '../models/cart.Model';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import { EmailData, sendEmail } from './email.Controller';
 import crypto from 'crypto';
 import ProductModel from '../models/product.Model';
 import CouponModel from '../models/coupon.Model';
+import OrderModel from '../models/order.Model';
+import { v4 as uuidv4 } from 'uuid';
 
 // POST register
 export const registerUser = async (req: Request, res: Response) => {
@@ -360,6 +362,13 @@ export const userCart = async (req: Request, res: Response) => {
       cartTotal,
       orderedBy: user?._id,
     });
+    await UserModel.findByIdAndUpdate(
+      user?._id,
+      {
+        cart: newCart?._id,
+      },
+      { new: true },
+    );
     res.status(200).json(newCart);
     console.log(products);
   } catch (error) {
@@ -399,7 +408,7 @@ export const applyCoupon = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid Coupon' });
     }
     const user = await UserModel.findById(_id);
-    const cart = await CartModel.findOne<ICart>({
+    const cart = await CartModel.findOne({
       orderedBy: user?._id,
     });
     if (!cart) {
@@ -424,6 +433,94 @@ export const applyCoupon = async (req: Request, res: Response) => {
     );
 
     res.status(200).json(updatedCart);
+  } catch (error) {
+    throw new Error('Internal server error');
+  }
+};
+
+export const createOrder = async (req: Request, res: Response) => {
+  const { COD, couponApplied } = req.body;
+  const { _id } = req.user;
+  try {
+    if (!COD) throw new Error('Create cash order failed');
+    const user = await UserModel.findById(_id);
+    console.log(user);
+    const userCart = await CartModel.findOne({ orderedBy: user?._id });
+    console.log(userCart);
+    let finalAmout = 0;
+    if (couponApplied && userCart?.totalAfterDiscount) {
+      finalAmout = userCart.totalAfterDiscount;
+    } else {
+      if (userCart?.cartTotal) {
+        finalAmout = userCart?.cartTotal;
+      }
+    }
+
+    const newOrder = await new OrderModel({
+      products: userCart?.products,
+      orderedBy: user?._id,
+      paymentIntent: {
+        id: uuidv4(),
+        method: 'COD',
+        amount: finalAmout,
+        status: 'Cash on Delivery',
+        created: Date.now(),
+        currency: 'usd',
+      },
+      orderStatus: 'Cash on Delivery',
+    }).save();
+    const bulkWriteOperations: any[] = [];
+
+    // Construct bulk write operations and push them into the array
+    userCart?.products?.forEach((item: ICartProduct) => {
+      if (item.count) {
+        const updateOperation = {
+          updateOne: {
+            filter: { _id: item.product },
+            update: { $inc: { quantity: -item.count, sold: +item.count } },
+          },
+        };
+        bulkWriteOperations.push(updateOperation);
+      } else {
+        throw new Error('Cart product count is undefined');
+      }
+    });
+
+    // Use nullish coalescing operator to provide an empty array if userCart?.products is falsy
+    await ProductModel.bulkWrite(bulkWriteOperations ?? [], {});
+    res.json({ message: 'success' });
+  } catch (error) {
+    throw new Error('Interval server error');
+  }
+};
+
+export const getOrders = async (req: Request, res: Response) => {
+  const { _id } = req.user;
+  try {
+    const userOrders = await OrderModel.find({ orderedBy: _id }).populate(
+      'products.product',
+    );
+    res.status(200).json(userOrders);
+  } catch (error) {
+    throw new Error('Internal server error');
+  }
+};
+
+export const updateOrderStatus = async (req: Request, res: Response) => {
+  const { status } = req.body;
+  const { id } = req.params;
+  try {
+    const findOrder = await OrderModel.findByIdAndUpdate(
+      id,
+      {
+        orderStatus: status,
+        paymentIntent: {
+          status: status,
+        },
+      },
+      { new: true },
+    );
+    res.status(200).json(findOrder);
   } catch (error) {
     throw new Error('Internal server error');
   }

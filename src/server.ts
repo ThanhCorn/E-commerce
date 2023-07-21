@@ -9,6 +9,8 @@ import categoryRouter from './routes/productCategory.Routes';
 import blogCategoryRouter from './routes/blogCategory.Routes';
 import brandRouter from './routes/brand.Routes';
 import couponRouter from './routes/coupon.Routes';
+import contactRouter from './routes/contact.Routes';
+import colorRouter from './routes/color.Routes';
 import { notFound, errorHandler } from './middleware/errorMiddleware';
 import { connectDB } from './config/database';
 import cookieParser from 'cookie-parser';
@@ -38,6 +40,8 @@ app.use('/api/category', categoryRouter);
 app.use('/api/blogcategory', blogCategoryRouter);
 app.use('/api/brand', brandRouter);
 app.use('/api/coupon', couponRouter);
+app.use('/api/color', colorRouter);
+app.use('/api/contact', contactRouter);
 // Error handling middleware
 app.use(notFound);
 app.use(errorHandler);

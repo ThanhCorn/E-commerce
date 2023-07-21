@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
-import CouponModel from '../models/coupon.Model';
+import couponModel from '../models/coupon.Model';
 
 export const createCoupon = async (req: Request, res: Response) => {
   try {
-    const newCoupon = await CouponModel.create(req.body);
+    const newCoupon = await couponModel.create(req.body);
     return res.status(201).json(newCoupon);
   } catch (error: any) {
     throw new Error(error.message);
@@ -13,7 +14,7 @@ export const createCoupon = async (req: Request, res: Response) => {
 
 export const getAllCoupon = async (req: Request, res: Response) => {
   try {
-    const allCoupon = await CouponModel.find();
+    const allCoupon = await couponModel.find();
     return res.status(200).json(allCoupon);
   } catch (error: any) {
     throw new Error(error.message);
@@ -23,7 +24,7 @@ export const getAllCoupon = async (req: Request, res: Response) => {
 export const updateCoupon = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const findCoupon = await CouponModel.findByIdAndUpdate(id, req.body, {
+    const findCoupon = await couponModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     return res.status(200).json(findCoupon);
@@ -35,7 +36,7 @@ export const updateCoupon = async (req: Request, res: Response) => {
 export const deleteCoupon = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const findCoupon = await CouponModel.findByIdAndDelete(id);
+    const findCoupon = await couponModel.findByIdAndDelete(id);
     return res.status(200).json({
       message: 'Delete coupon successfully',
     });

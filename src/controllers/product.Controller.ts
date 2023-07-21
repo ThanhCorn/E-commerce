@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import ProductModel from '../models/product.Model';
-import UserModel from '../models/user.Model';
+import productModel from '../models/product.Model';
+import userModel from '../models/user.Model';
 import { Request, Response } from 'express';
 import slugify from 'slugify';
 import { Document, Query } from 'mongoose';
 import { validateMongoDbId } from '../utils/validateMongodbid';
-import { cloudinaryUpload } from '../utils/cloudinary';
+import { cloudinaryDelete, cloudinaryUpload } from '../utils/cloudinary';
 
 // POST createProduct
 export const createProduct = async (req: Request, res: Response) => {
@@ -15,7 +15,7 @@ export const createProduct = async (req: Request, res: Response) => {
         lower: true,
       });
     }
-    const newProduct = await ProductModel.create(req.body);
+    const newProduct = await productModel.create(req.body);
     return res.status(201).json(newProduct);
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
@@ -26,7 +26,7 @@ export const createProduct = async (req: Request, res: Response) => {
 export const getProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const findProduct = await ProductModel.findById(id);
+    const findProduct = await productModel.findById(id);
     if (findProduct) {
       return res.status(200).json(findProduct);
     }
@@ -45,7 +45,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    let query: Query<Document[], Document> = ProductModel.find(
+    let query: Query<Document[], Document> = productModel.find(
       JSON.parse(queryStr),
     );
 
@@ -72,7 +72,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
     query = query.skip(skip).limit(limit);
 
     if (req.query.page) {
-      const productCount = await ProductModel.countDocuments();
+      const productCount = await productModel.countDocuments();
       if (skip >= productCount) {
         throw new Error('This page does not exist.');
       }
@@ -95,7 +95,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         lower: true,
       });
     }
-    const updateProduct = await ProductModel.findByIdAndUpdate(id, req.body, {
+    const updateProduct = await productModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     return res.status(200).json(updateProduct);
@@ -108,7 +108,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 export const deleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const deleteProduct = await ProductModel.findByIdAndDelete(id);
+    const deleteProduct = await productModel.findByIdAndDelete(id);
     if (deleteProduct) {
       return res.status(200).json({
         message: 'Product deleted successfully',
@@ -128,19 +128,19 @@ export const addToWishlist = async (req: Request, res: Response) => {
   const { _id } = req.user;
   const { productId } = req.body;
   try {
-    const user = await UserModel.findById(_id);
+    const user = await userModel.findById(_id);
     const alreadyAdded = await user?.wishlist.find(
       (id) => id.toString() === productId,
     );
     if (alreadyAdded) {
-      const user = await UserModel.findByIdAndUpdate(
+      const user = await userModel.findByIdAndUpdate(
         _id,
         { $pull: { wishlist: productId } },
         { new: true },
       );
       res.status(200).json(user);
     } else {
-      const user = await UserModel.findByIdAndUpdate(
+      const user = await userModel.findByIdAndUpdate(
         _id,
         { $push: { wishlist: productId } },
         { new: true },
@@ -159,19 +159,19 @@ export const rating = async (req: Request, res: Response) => {
   const { productId, star, comment } = req.body;
 
   try {
-    const product = await ProductModel.findById(productId);
+    const product = await productModel.findById(productId);
     const alreadyRated = await product?.ratings?.find(
       (userId) => userId.postedBy.toString() === _id.toString(),
     );
 
     if (alreadyRated) {
-      const updateRating = await ProductModel.updateOne(
+      const updateRating = await productModel.updateOne(
         { ratings: { $elemMatch: alreadyRated } },
         { $set: { 'ratings.$.star': star, 'ratings.$.comment': comment } },
         { new: true },
       );
     } else {
-      const rateProduct = await ProductModel.findByIdAndUpdate(
+      const rateProduct = await productModel.findByIdAndUpdate(
         productId,
         {
           $push: { ratings: { star: star, postedBy: _id, comment: comment } },
@@ -180,7 +180,7 @@ export const rating = async (req: Request, res: Response) => {
       );
     }
 
-    const getAllRating = await ProductModel.findById(productId);
+    const getAllRating = await productModel.findById(productId);
     const ratingLength = getAllRating?.ratings?.length;
     const totalRating = getAllRating?.ratings
       ?.map((rating) => rating.star)
@@ -188,7 +188,7 @@ export const rating = async (req: Request, res: Response) => {
 
     if (ratingLength && totalRating) {
       const averageRating = Math.round(totalRating / ratingLength);
-      const updateAverageRating = await ProductModel.findByIdAndUpdate(
+      const updateAverageRating = await productModel.findByIdAndUpdate(
         productId,
         {
           totalRating: averageRating,
@@ -208,7 +208,6 @@ export const rating = async (req: Request, res: Response) => {
 };
 
 export const uploadImages = async (req: Request, res: Response) => {
-  const { id } = req.params;
   try {
     const uploader = async (file: Express.Multer.File) =>
       cloudinaryUpload(file);
@@ -221,20 +220,21 @@ export const uploadImages = async (req: Request, res: Response) => {
       }
     }
 
-    // Filter out any null values from the urls array
-    const filteredUrls = urls.filter((url) => url !== null);
+    const images = urls.map((file) => {
+      return file;
+    });
+    res.json(images);
+  } catch (error) {
+    console.error('Error while uploading images:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
-    const findProduct = await ProductModel.findByIdAndUpdate(
-      id,
-      {
-        images: filteredUrls.map((file) => {
-          return file;
-        }),
-      },
-      { new: true },
-    );
-
-    return res.status(200).json(findProduct);
+export const deleteImages = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const deteled = await cloudinaryDelete(id);
+    res.json({ message: 'Delete successfully' });
   } catch (error) {
     console.error('Error while uploading images:', error);
     res.status(500).json({ message: 'Internal server error' });

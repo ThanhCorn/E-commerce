@@ -1,28 +1,28 @@
 import { generateToken } from '../utils/jwtToken';
 import { generateRefreshToken } from '../utils/refreshToken';
 import { Request, Response } from 'express';
-import UserModel, { IUser } from '../models/user.Model';
-import CartModel, { ICartProduct } from '../models/cart.Model';
+import userModel, { IUser } from '../models/user.Model';
+import cartModel, { ICartProduct } from '../models/cart.Model';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import { EmailData, sendEmail } from './email.Controller';
 import crypto from 'crypto';
-import ProductModel from '../models/product.Model';
+import productModel from '../models/product.Model';
 import CouponModel from '../models/coupon.Model';
-import OrderModel from '../models/order.Model';
+import orderModel from '../models/order.Model';
 import { v4 as uuidv4 } from 'uuid';
 
 // POST register
 export const registerUser = async (req: Request, res: Response) => {
   const email = req.body.email;
   try {
-    const existingEmail = await UserModel.findOne({ email });
+    const existingEmail = await userModel.findOne({ email });
 
     if (existingEmail) {
       return res.status(409).json({ message: 'Email already exists' });
     }
 
-    const newUser: IUser = await UserModel.create(req.body);
+    const newUser: IUser = await userModel.create(req.body);
     return res.status(201).json(newUser);
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
@@ -34,13 +34,13 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const user = await UserModel.findOne({ email });
+    const user = await userModel.findOne({ email });
     if (!user || !(await user.isPasswordMatch(password))) {
       return res.status(404).json({ message: 'invalid email or password' });
     }
     const refreshToken = await generateRefreshToken(user?._id);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const updateuser = await UserModel.findByIdAndUpdate(
+    const updateuser = await userModel.findByIdAndUpdate(
       user.id,
       {
         refreshToken: refreshToken,
@@ -69,7 +69,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const findAdmin = await UserModel.findOne({ email });
+    const findAdmin = await userModel.findOne({ email });
     if (findAdmin?.role !== 'admin') {
       return res.status(404).json({ message: 'Not Authorized' });
     }
@@ -78,7 +78,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
     }
     const refreshToken = await generateRefreshToken(findAdmin?._id);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const updateuser = await UserModel.findByIdAndUpdate(
+    const updateuser = await userModel.findByIdAndUpdate(
       findAdmin.id,
       {
         refreshToken: refreshToken,
@@ -112,7 +112,7 @@ export const logoutUser = async (req: Request, res: Response) => {
 export const saveAddress = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
-    const findUser = await UserModel.findByIdAndUpdate(
+    const findUser = await userModel.findByIdAndUpdate(
       _id,
       {
         address: req?.body?.address,
@@ -133,7 +133,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
   }
 
   try {
-    const user = await UserModel.findOne({ refreshToken });
+    const user = await userModel.findOne({ refreshToken });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -161,7 +161,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 // GET all users
 export const getAllUser = async (req: Request, res: Response) => {
   try {
-    const getUsers = await UserModel.find();
+    const getUsers = await userModel.find();
     return res.status(200).json(getUsers);
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
@@ -172,7 +172,7 @@ export const getAllUser = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const getUser = await UserModel.findById(id);
+    const getUser = await userModel.findById(id);
     return res.status(200).json(getUser);
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
@@ -183,7 +183,7 @@ export const getUser = async (req: Request, res: Response) => {
 export const deletedUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const deleteUser = await UserModel.findByIdAndDelete(id);
+    const deleteUser = await userModel.findByIdAndDelete(id);
     if (deleteUser) {
       return res.status(200).json({
         message: 'User deleted successfully',
@@ -198,7 +198,7 @@ export const deletedUser = async (req: Request, res: Response) => {
 export const updatedUser = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
-    const updateUser = await UserModel.findByIdAndUpdate(
+    const updateUser = await userModel.findByIdAndUpdate(
       _id,
       {
         firstname: req.body?.firstname,
@@ -220,7 +220,7 @@ export const blockUser = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const blockuser = await UserModel.findByIdAndUpdate(
+    const blockuser = await userModel.findByIdAndUpdate(
       id,
       {
         isBlocked: true,
@@ -240,7 +240,7 @@ export const unblockUser = async (req: Request, res: Response) => {
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const unblock = await UserModel.findByIdAndUpdate(
+    const unblock = await userModel.findByIdAndUpdate(
       id,
       {
         isBlocked: false,
@@ -262,7 +262,7 @@ export const updatedPassword = async (req: Request, res: Response) => {
   const { _id } = req.user;
   const { oldPassword, newPassword } = req.body;
   try {
-    const user = await UserModel.findById(_id);
+    const user = await userModel.findById(_id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -282,7 +282,7 @@ export const updatedPassword = async (req: Request, res: Response) => {
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
   try {
-    const user = await UserModel.findOne({ email });
+    const user = await userModel.findOne({ email });
     if (!user) {
       res.status(404).json({ message: 'Email not found' });
     }
@@ -308,7 +308,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   const { token } = req.params;
   const { password } = req.body;
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
-  const user = await UserModel.findOne({
+  const user = await userModel.findOne({
     passwordResetToken: hashedToken,
     passwordResetExpires: { $gt: Date.now() },
   });
@@ -325,7 +325,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const getWishlist = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
-    const findUser = await UserModel.findById(_id).populate('wishlist');
+    const findUser = await userModel.findById(_id).populate('wishlist');
     res.status(200).json(findUser?.wishlist);
   } catch (error) {
     throw new Error('Internal server error');
@@ -337,17 +337,17 @@ export const userCart = async (req: Request, res: Response) => {
   const { cart } = req.body;
   try {
     const products = [];
-    const user = await UserModel.findById(_id);
-    const alreadyAdded = await CartModel.findOne({ orderedBy: user?._id });
+    const user = await userModel.findById(_id);
+    const alreadyAdded = await cartModel.findOne({ orderedBy: user?._id });
     if (alreadyAdded) {
-      const removeCart = await CartModel.findOneAndRemove({
+      const removeCart = await cartModel.findOneAndRemove({
         orderedBy: user?._id,
       });
       res.status(200).json(removeCart);
     }
     let cartTotal = 0;
     for (let i = 0; i < cart.length; i++) {
-      const product = await ProductModel.findById(cart[i]._id);
+      const product = await productModel.findById(cart[i]._id);
 
       products.push({
         product: product?._id,
@@ -357,12 +357,12 @@ export const userCart = async (req: Request, res: Response) => {
       });
       cartTotal = cartTotal + product!.price * cart[i].count;
     }
-    const newCart = await CartModel.create({
+    const newCart = await cartModel.create({
       products,
       cartTotal,
       orderedBy: user?._id,
     });
-    await UserModel.findByIdAndUpdate(
+    await userModel.findByIdAndUpdate(
       user?._id,
       {
         cart: newCart?._id,
@@ -379,9 +379,9 @@ export const userCart = async (req: Request, res: Response) => {
 export const getUserCart = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
-    const cart = await CartModel.find({ orderedBy: _id }).populate(
-      'products.product',
-    );
+    const cart = await cartModel
+      .find({ orderedBy: _id })
+      .populate('products.product');
     res.status(200).json(cart);
   } catch (error) {
     throw new Error('Internal server error');
@@ -391,8 +391,8 @@ export const getUserCart = async (req: Request, res: Response) => {
 export const emptyCart = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
-    const user = await UserModel.findOne(_id);
-    const cart = await CartModel.findOneAndRemove({ orderedBy: user?._id });
+    const user = await userModel.findOne(_id);
+    const cart = await cartModel.findOneAndRemove({ orderedBy: user?._id });
     res.status(200).json(cart);
   } catch (error) {
     throw new Error('Internal server error');
@@ -407,8 +407,8 @@ export const applyCoupon = async (req: Request, res: Response) => {
     if (!validCoupon) {
       return res.status(400).json({ message: 'Invalid Coupon' });
     }
-    const user = await UserModel.findById(_id);
-    const cart = await CartModel.findOne({
+    const user = await userModel.findById(_id);
+    const cart = await cartModel.findOne({
       orderedBy: user?._id,
     });
     if (!cart) {
@@ -426,7 +426,7 @@ export const applyCoupon = async (req: Request, res: Response) => {
       cartTotal -
       (cartTotal * validCoupon?.discount) / 100
     ).toFixed(2);
-    const updatedCart = await CartModel.findOneAndUpdate(
+    const updatedCart = await cartModel.findOneAndUpdate(
       { orderedBy: user?._id },
       { totalAfterDiscount },
       { new: true },
@@ -443,9 +443,9 @@ export const createOrder = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
     if (!COD) throw new Error('Create cash order failed');
-    const user = await UserModel.findById(_id);
+    const user = await userModel.findById(_id);
     console.log(user);
-    const userCart = await CartModel.findOne({ orderedBy: user?._id });
+    const userCart = await cartModel.findOne({ orderedBy: user?._id });
     console.log(userCart);
     let finalAmout = 0;
     if (couponApplied && userCart?.totalAfterDiscount) {
@@ -456,7 +456,8 @@ export const createOrder = async (req: Request, res: Response) => {
       }
     }
 
-    const newOrder = await new OrderModel({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const newOrder = await new orderModel({
       products: userCart?.products,
       orderedBy: user?._id,
       paymentIntent: {
@@ -469,6 +470,7 @@ export const createOrder = async (req: Request, res: Response) => {
       },
       orderStatus: 'Cash on Delivery',
     }).save();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bulkWriteOperations: any[] = [];
 
     // Construct bulk write operations and push them into the array
@@ -487,7 +489,7 @@ export const createOrder = async (req: Request, res: Response) => {
     });
 
     // Use nullish coalescing operator to provide an empty array if userCart?.products is falsy
-    await ProductModel.bulkWrite(bulkWriteOperations ?? [], {});
+    await productModel.bulkWrite(bulkWriteOperations ?? [], {});
     res.json({ message: 'success' });
   } catch (error) {
     throw new Error('Interval server error');
@@ -497,9 +499,9 @@ export const createOrder = async (req: Request, res: Response) => {
 export const getOrders = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
-    const userOrders = await OrderModel.find({ orderedBy: _id }).populate(
-      'products.product',
-    );
+    const userOrders = await orderModel
+      .find({ orderedBy: _id })
+      .populate('products.product');
     res.status(200).json(userOrders);
   } catch (error) {
     throw new Error('Internal server error');
@@ -510,7 +512,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
   const { status } = req.body;
   const { id } = req.params;
   try {
-    const findOrder = await OrderModel.findByIdAndUpdate(
+    const findOrder = await orderModel.findByIdAndUpdate(
       id,
       {
         orderStatus: status,

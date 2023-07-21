@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import BrandModel from '../models/brand.Model';
+import brandModel from '../models/brand.Model';
 import { validateMongoDbId } from '../utils/validateMongodbid';
 
 export const createBrand = async (req: Request, res: Response) => {
   try {
-    const newBrand = await BrandModel.create(req.body);
+    const newBrand = await brandModel.create(req.body);
     return res.status(201).json(newBrand);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +18,7 @@ export const updateBrand = async (req: Request, res: Response) => {
   validateMongoDbId(id);
 
   try {
-    const updateBrand = await BrandModel.findByIdAndUpdate(id, req.body, {
+    const updateBrand = await brandModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     return res.status(200).json(updateBrand);
@@ -33,7 +33,7 @@ export const deleteBrand = async (req: Request, res: Response) => {
   validateMongoDbId(id);
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const deleteBrand = await BrandModel.findByIdAndDelete(id);
+    const deleteBrand = await brandModel.findByIdAndDelete(id);
     return res.status(200).json({
       message: 'Delete Brand successfully',
     });
@@ -47,7 +47,7 @@ export const getBrand = async (req: Request, res: Response) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const getBrand = await BrandModel.findById(id);
+    const getBrand = await brandModel.findById(id);
     return res.status(200).json(getBrand);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -57,7 +57,7 @@ export const getBrand = async (req: Request, res: Response) => {
 
 export const getAllBrand = async (req: Request, res: Response) => {
   try {
-    const allBrand = await BrandModel.find();
+    const allBrand = await brandModel.find();
     return res.status(200).json(allBrand);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

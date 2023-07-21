@@ -22,9 +22,23 @@ export const cloudinaryUpload = async (file: Express.Multer.File) => {
           resolve({
             public_id: result?.public_id,
             url: result?.secure_url,
+            asset_id: result?.asset_id,
           });
         }
       },
     );
+  });
+};
+
+export const cloudinaryDelete = async (id: string) => {
+  return new Promise((resolve) => {
+    cloudinary.uploader.destroy(id, (error, result) => {
+      if (error) {
+        console.error('Error while deleting image from cloudinary:', error);
+        resolve(null);
+      } else {
+        resolve(result);
+      }
+    });
   });
 };

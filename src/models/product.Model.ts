@@ -5,16 +5,16 @@ export interface IProduct {
   slug: string;
   description: string;
   price: number;
-  category?: string;
+  category: string;
   quantity: number;
-  brand?: string;
-  sold: number;
+  brand: string;
+  sold?: number;
   images?: {
     public_id: string;
     url: string;
   };
   color?: string[];
-  tag?: string;
+  tags?: string[];
   ratings?: Array<{
     star: number;
     postedBy: Types.ObjectId;
@@ -33,7 +33,7 @@ const productSchema = new Schema<IProduct>(
     quantity: { type: Number, required: true },
     brand: { type: String, require: true },
     sold: { type: Number, default: 0 },
-    tag: String,
+    tags: [],
     images: [{ public_id: String, url: String }],
     color: [],
     ratings: [

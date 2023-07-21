@@ -1,4 +1,4 @@
-import BlogModel from '../models/blog.Model';
+import blogModel from '../models/blog.Model';
 import { Request, Response } from 'express';
 import { validateMongoDbId } from '../utils/validateMongodbid';
 import { cloudinaryUpload } from '../utils/cloudinary';
@@ -6,7 +6,7 @@ import { cloudinaryUpload } from '../utils/cloudinary';
 // POST createBlog
 export const createBlog = async (req: Request, res: Response) => {
   try {
-    const newBlog = await BlogModel.create(req.body);
+    const newBlog = await blogModel.create(req.body);
     return res.status(201).json(newBlog);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -19,7 +19,7 @@ export const updateBlog = async (req: Request, res: Response) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const updateBlog = await BlogModel.findByIdAndUpdate(id, req.body, {
+    const updateBlog = await blogModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     return res.status(200).json(updateBlog);
@@ -34,10 +34,11 @@ export const getBlog = async (req: Request, res: Response) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const getBlog = await BlogModel.findById(id)
+    const getBlog = await blogModel
+      .findById(id)
       .populate('likes')
       .populate('dislikes');
-    await BlogModel.findByIdAndUpdate(
+    await blogModel.findByIdAndUpdate(
       id,
       { $inc: { numViews: 1 } },
       { new: true },
@@ -52,7 +53,7 @@ export const getBlog = async (req: Request, res: Response) => {
 // GET all blog
 export const getAllBlog = async (req: Request, res: Response) => {
   try {
-    const allBlog = await BlogModel.find();
+    const allBlog = await blogModel.find();
 
     return res.status(200).json(allBlog);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,7 +67,7 @@ export const deleteBlog = async (req: Request, res: Response) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const deleteBlog = await BlogModel.findByIdAndDelete(id);
+    const deleteBlog = await blogModel.findByIdAndDelete(id);
     return res.status(200).json(deleteBlog);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -80,7 +81,7 @@ export const likeTheBlog = async (req: Request, res: Response) => {
   validateMongoDbId(blogId);
 
   // Find the blog by ID
-  const blog = await BlogModel.findById(blogId);
+  const blog = await blogModel.findById(blogId);
   // Get the login user ID by req.user._id
   const loginUserId = req?.user._id;
   // Check if the user already liked the blog
@@ -90,7 +91,7 @@ export const likeTheBlog = async (req: Request, res: Response) => {
     (userId) => userId?.toString() === loginUserId?.toString(),
   );
   if (alreadyDisliked) {
-    const blog = await BlogModel.findByIdAndUpdate(
+    const blog = await blogModel.findByIdAndUpdate(
       blogId,
       {
         $pull: { dislikes: loginUserId },
@@ -101,7 +102,7 @@ export const likeTheBlog = async (req: Request, res: Response) => {
     return res.status(200).json(blog);
   }
   if (isLiked) {
-    const blog = await BlogModel.findByIdAndUpdate(
+    const blog = await blogModel.findByIdAndUpdate(
       blogId,
       {
         $pull: { likes: loginUserId },
@@ -111,7 +112,7 @@ export const likeTheBlog = async (req: Request, res: Response) => {
     );
     return res.status(200).json(blog);
   } else {
-    const blog = await BlogModel.findByIdAndUpdate(
+    const blog = await blogModel.findByIdAndUpdate(
       blogId,
       {
         $push: { likes: loginUserId },
@@ -129,7 +130,7 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
   validateMongoDbId(blogId);
 
   // Find the blog by ID
-  const blog = await BlogModel.findById(blogId);
+  const blog = await blogModel.findById(blogId);
   const loginUserId = req?.user._id;
   // Check if the user already disliked the blog
   const isDisliked = blog?.isDisliked;
@@ -138,7 +139,7 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
     (userId) => userId?.toString() === loginUserId?.toString(),
   );
   if (alreadyLiked) {
-    const blog = await BlogModel.findByIdAndUpdate(
+    const blog = await blogModel.findByIdAndUpdate(
       blogId,
       {
         $pull: { likes: loginUserId },
@@ -149,7 +150,7 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
     return res.status(200).json(blog);
   }
   if (isDisliked) {
-    const blog = await BlogModel.findByIdAndUpdate(
+    const blog = await blogModel.findByIdAndUpdate(
       blogId,
       {
         $pull: { dislikes: loginUserId },
@@ -159,7 +160,7 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
     );
     return res.status(200).json(blog);
   } else {
-    const blog = await BlogModel.findByIdAndUpdate(
+    const blog = await blogModel.findByIdAndUpdate(
       blogId,
       {
         $push: { dislikes: loginUserId },
@@ -188,7 +189,7 @@ export const uploadImages = async (req: Request, res: Response) => {
     // Filter out any null values from the urls array
     const filteredUrls = urls.filter((url) => url !== null);
 
-    const findProduct = await BlogModel.findByIdAndUpdate(
+    const findProduct = await blogModel.findByIdAndUpdate(
       id,
       {
         images: filteredUrls.map((file) => {

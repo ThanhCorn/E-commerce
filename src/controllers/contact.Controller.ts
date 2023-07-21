@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import categoryModel from '../models/productCategory.Model';
+import contactModel from '../models/contact.Model';
 import { validateMongoDbId } from '../utils/validateMongodbid';
 
-export const createCategory = async (req: Request, res: Response) => {
+export const createContact = async (req: Request, res: Response) => {
   try {
-    const newCategory = await categoryModel.create(req.body);
-    return res.status(201).json(newCategory);
+    const newContact = await contactModel.create(req.body);
+    return res.status(201).json(newContact);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -13,29 +13,29 @@ export const createCategory = async (req: Request, res: Response) => {
   }
 };
 
-export const updateCategory = async (req: Request, res: Response) => {
+export const updateContact = async (req: Request, res: Response) => {
   const { id } = req.params;
   validateMongoDbId(id);
 
   try {
-    const updateCategory = await categoryModel.findByIdAndUpdate(id, req.body, {
+    const updateContact = await contactModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    return res.status(200).json(updateCategory);
+    return res.status(200).json(updateContact);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new Error(error.message);
   }
 };
 
-export const deleteCategory = async (req: Request, res: Response) => {
+export const deleteContact = async (req: Request, res: Response) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const deleteCategory = await categoryModel.findByIdAndDelete(id);
+    const deleteContact = await contactModel.findByIdAndDelete(id);
     return res.status(200).json({
-      message: 'Delete category successfully',
+      message: 'Delete Color successfully',
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -43,22 +43,22 @@ export const deleteCategory = async (req: Request, res: Response) => {
   }
 };
 
-export const getCategory = async (req: Request, res: Response) => {
+export const getContact = async (req: Request, res: Response) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const getCategory = await categoryModel.findById(id);
-    return res.status(200).json(getCategory);
+    const getContact = await contactModel.findById(id);
+    return res.status(200).json(getContact);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new Error(error.message);
   }
 };
 
-export const getAllCategory = async (req: Request, res: Response) => {
+export const getAllContact = async (req: Request, res: Response) => {
   try {
-    const allCategory = await categoryModel.find();
-    return res.status(200).json(allCategory);
+    const allContact = await contactModel.find();
+    return res.status(200).json(allContact);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new Error(error.message);

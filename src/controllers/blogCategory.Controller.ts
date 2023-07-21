@@ -18,9 +18,13 @@ export const updateBlogCategory = async (req: Request, res: Response) => {
   validateMongoDbId(id);
 
   try {
-    const updateBlogCategory = await blogCategoryModel.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const updateBlogCategory = await blogCategoryModel.findByIdAndUpdate(
+      id,
+      req.body,
+      {
+        new: true,
+      },
+    );
     return res.status(200).json(updateBlogCategory);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

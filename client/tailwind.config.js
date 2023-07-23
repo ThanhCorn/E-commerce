@@ -2,8 +2,14 @@
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    fontFamily: {
+      'rubik': ['Rubik', 'sans-serif'],
+    },
+    extend: {
+      colors: {
+        'primary': '#131921',
+      }
+    },
   },
   plugins: [],
 }
-

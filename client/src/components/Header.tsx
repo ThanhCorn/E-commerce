@@ -22,11 +22,11 @@ const Header = () => {
   return (
     <>
       <div className="bg-primary">
-        <div className="max-w-screen-2xl mx-auto w-full pt-2 ">
-          {/* Header top */}
-          <div className="grid grid-flow-col border-b-1 border-white">
+        {/* Header top */}
+        <div className="hidden sm:block pt-2 max-w-screen-2xl mx-auto">
+          <div className="grid grid-flow-col border-b-1 border-white mx-5">
             <div className="">
-              <p className="">Free shipping over $100 & Free return</p>
+              <p className="flex">Free shipping over $100 & Free return</p>
             </div>
             <div className="flex justify-end">
               <p className="">Hotline:[888] 4344 6000-(888) 1338 8193</p>
@@ -36,19 +36,19 @@ const Header = () => {
             </div>
           </div>
         </div>
-      </div>
-      {/* Header Upper */}
-      <div className="bg-primary">
+
+        {/* Header Upper */}
+
         <div className="max-w-screen-2xl grid grid-cols-12 mx-auto h-20 items-center ">
-          <div className="col-span-2">
+          <div className="col-span-2 ml-5">
             <h1>
-              <Link to="" className="text-2xl text-white">
+              <Link to="" className="text-sm lg:text-2xl lg:text-white ">
                 Dev ThanhCorn.
               </Link>
             </h1>
           </div>
-          <div className="col-span-5">
-            <div className="relative mx-auto text-gray-600 flex items-center w-full ">
+          <div className="col-span-5 mx-5">
+            <div className="relative text-gray-600 flex items-center w-full  ">
               <input
                 className="border-2 border-gray-300 bg-white h-8 px-5 pr-16 w-full rounded-lg text-sm focus:outline-none "
                 type="search"
@@ -63,7 +63,7 @@ const Header = () => {
               </button>
             </div>
           </div>
-          <div className="col-span-5 ml-24">
+          <div className="col-span-5 ml-24 mr-5">
             <div className="flex items-center justify-between ">
               <div>
                 <Link to="" className="flex items-center">
@@ -107,10 +107,10 @@ const Header = () => {
       </div>
       {/* Header Bottom */}
       <div className="bg-third">
-        <div className="max-w-screen-2xl mx-auto h-[50px] flex">
+        <div className="max-w-screen-2xl mx-auto h-[50px] flex ">
           <div className=" flex items-center">
             <div className="text-left flex mr-10">
-              <div className="relative flex">
+              <div className="relative flex mx-5">
                 <img src={menuSVG} alt="menu-icon" />
                 <button
                   type="button"

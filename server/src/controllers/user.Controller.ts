@@ -272,7 +272,7 @@ export const updatedPassword = async (req: Request, res: Response) => {
       await user.save();
       return res.status(200).json({ message: 'Password Updated' });
     }
-    return res.status(401).json({ message: 'Invalid Password' });
+    return res.status(401).json({ message: 'Password incorrect' });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
@@ -444,9 +444,7 @@ export const createOrder = async (req: Request, res: Response) => {
   try {
     if (!COD) throw new Error('Create cash order failed');
     const user = await userModel.findById(_id);
-    console.log(user);
     const userCart = await cartModel.findOne({ orderedBy: user?._id });
-    console.log(userCart);
     let finalAmout = 0;
     if (couponApplied && userCart?.totalAfterDiscount) {
       finalAmout = userCart.totalAfterDiscount;

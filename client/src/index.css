@@ -17,6 +17,9 @@
     font-size: 14px;
     font-weight: 100;
   }
+  .blog-description {
+    @apply text-black mt-2 mb-3 overflow-hidden line-clamp-2;
+  }
 }
 
 .footer-links {
@@ -33,4 +36,14 @@
   flex-direction: row;
   gap: 40px;
   margin-top: 20px;
+}
+
+.action-bar {
+  top: 10%;
+  right: -23px;
+  transition: all 0.3s ease-in-out;
+}
+
+.product-card:hover .action-bar {
+  right: 8px;
 }

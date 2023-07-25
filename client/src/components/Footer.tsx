@@ -4,7 +4,7 @@ import { BsGithub, BsInstagram, BsLinkedin, BsYoutube } from 'react-icons/bs';
 const Footer = () => {
   return (
     <>
-      <div className="bg-third ">
+      <div className="bg-third flex-grow-1">
         <div className="max-w-screen-2xl mx-auto text-3xl">
           <div className="grid grid-cols-2 py-10 items-center m-10">
             <div className="col-span-1">

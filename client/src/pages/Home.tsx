@@ -4,11 +4,18 @@ import catBanner1 from '../assets/images/catbanner-01.jpg';
 import catBanner2 from '../assets/images/catbanner-02.jpg';
 import catBanner3 from '../assets/images/catbanner-03.jpg';
 import catBanner4 from '../assets/images/catbanner-04.jpg';
+import service from '../assets/images/service.png';
+import service2 from '../assets/images/service-02.png';
+import service3 from '../assets/images/service-03.png';
+import service4 from '../assets/images/service-04.png';
+import service5 from '../assets/images/service-05.png';
+import camera from '../assets/images/camera.jpg';
 
 const Home = () => {
   return (
-    <section className="max-w-screen-2xl mx-auto flex flex-col min-h-screen py-10 ">
-      <div className="grid grid-cols-2 gap-5 mx-5">
+    <div>
+    <section className="max-w-screen-2xl mx-auto flex flex-col mb-12 ">
+      <div className="grid grid-cols-2 gap-5 m-10">
         <div className="relative">
           <img
             src={mainBanner}
@@ -91,6 +98,87 @@ const Home = () => {
         </div>
       </div>
     </section>
+    <div className='bg-[#f5f5f7] h-screen'>
+
+    <section className='px-10 h-24 w-full items-center flex justify-between gap-5'>
+        <div className="flex gap-5 items-center">
+          <img src={service} alt="" className="h-7 w-8" />
+          <div>
+            <h6 className="font-bold">Free shipping</h6>
+            <p className="text-black">From all orders over $100</p>
+          </div>
+        </div>
+        <div className="flex gap-5 items-center">
+          <img src={service2} alt="" className="h-7 w-8" />
+          <div>
+            <h6 className="font-bold">Daily Surprise Offers</h6>
+            <p className="text-black">Save up to 25% off</p>
+          </div>
+        </div>
+        <div className="flex gap-5 items-center">
+          <img src={service3} alt="" className="h-7 w-8" />
+          <div>
+            <h6 className="font-bold">Support 24/7</h6>
+            <p className="text-black">Shop with an expert</p>
+          </div>
+        </div>
+        <div className="flex gap-5 items-center">
+          <img src={service4} alt="" className="h-7 w-8" />
+          <div>
+            <h6 className="font-bold">Affordable Prices</h6>
+            <p className="text-black">Get factory direct price</p>
+          </div>
+        </div>
+        <div className="flex gap-5 items-center">
+          <img src={service5} alt="" className="h-8 w-10" />
+          <div>
+            <h6 className="font-bold">Secure Payments</h6>
+            <p className="text-black">100% Protected Payments</p>
+          </div>
+        </div>
+    </section>
+    <section className=' px-10'>
+      <div className='bg-white flex justify-between shadow-lg'>
+        <div className='flex mx-5 items-center'>
+          <div className='mr-5'>
+            <h6>Camera</h6>
+            <p className='text-black'>10 Items</p>
+          </div>
+          <img src={camera} alt=" camera" />
+        </div>
+        <div className='flex mx-5 items-center'>
+          <div className='mr-5'>
+            <h6>Camera</h6>
+            <p className='text-black'>10 Items</p>
+          </div>
+          <img src={camera} alt=" camera" />
+        </div>
+        <div className='flex mx-5 items-center'>
+          <div className='mr-5'>
+            <h6>Camera</h6>
+            <p className='text-black'>10 Items</p>
+          </div>
+          <img src={camera} alt=" camera" />
+        </div>
+        <div className='flex mx-5 items-center'>
+          <div className='mr-5'>
+            <h6>Camera</h6>
+            <p className='text-black'>10 Items</p>
+          </div>
+          <img src={camera} alt=" camera" />
+        </div>
+        <div className='flex mx-5 items-center'>
+          <div className='mr-5'>
+            <h6>Camera</h6>
+            <p className='text-black'>10 Items</p>
+          </div>
+          <img src={camera} alt=" camera" />
+        </div>
+      </div>
+    </section>
+    </div>
+    </div>
+
   );
 };
 

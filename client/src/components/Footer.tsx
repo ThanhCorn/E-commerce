@@ -6,7 +6,7 @@ const Footer = () => {
     <>
       <div className="bg-third ">
         <div className="max-w-screen-2xl mx-auto text-3xl">
-          <div className="grid grid-cols-2 py-10 items-center">
+          <div className="grid grid-cols-2 py-10 items-center m-10">
             <div className="col-span-1">
               <div className="flex  ">
                 <img
@@ -32,7 +32,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-12">
+          <div className="grid grid-cols-12 m-10">
             <div className="col-span-3">
               <h4 className="text-white text-xl mb-4">Contact Us</h4>
               <div className="footer-links">

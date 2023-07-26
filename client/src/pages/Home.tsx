@@ -28,7 +28,11 @@ import brand7 from '../assets/images/brand-07.png';
 import brand8 from '../assets/images/brand-08.png';
 import BlogCard from '../components/BlogCard';
 import ProductCard from '../components/ProductCard';
-
+import SpecialProduct from '../components/SpecialProduct';
+import famousWatch from '../assets/images/famous-watch.jpg';
+import macbook from '../assets/images/macbook.jpg';
+import speakerApple from '../assets/images/speakerApple.jpg';
+import iphone from '../assets/images/iphone.jpg';
 const Home = () => {
   return (
     <>
@@ -154,7 +158,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section className="px-10">
+        <section className="px-10 mb-10">
           <div className="bg-white grid grid-cols-4 shadow-lg border-b border-gray-100">
             <div className="flex items-center justify-center border-r border-gray-100">
               <div className="mr-5 w-[50%]">
@@ -232,6 +236,76 @@ const Home = () => {
             </div>
           </div>
         </section>
+        <section className="px-10 mb-12">
+          <h3 className="text-xl font-bold mb-3">Featured Collection</h3>
+          <div className="grid grid-flow-col grid-cols-5 gap-5 mx-auto">
+            <ProductCard grid={false} />
+            <ProductCard grid={false} />
+            <ProductCard grid={false} />
+            <ProductCard grid={false} />
+            <ProductCard grid={false} />
+          </div>
+        </section>
+        <section className="px-10 mb-12">
+          <div className="famous-card grid grid-flow-col grid-cols-4 gap-5 mx-auto">
+            <div className="relative rounded-lg bg-black h-[400px] w-[300px]">
+              <img
+                src={famousWatch}
+                alt="famous"
+                className="absolute right-0  bottom-0 left-0 w-[280px] object-contain mx-auto"
+              />
+              <div className="absolute top-3 left-4 mr-3 ">
+                <h5 className="text-white text-xs opacity-80">BIG SCREEN</h5>
+                <h6 className="text-white font-bold text-xl my-1">
+                  Smart Watch Series 7
+                </h6>
+                <p className="text-xs">From $399 or $16.62/mo. for 24 mo.*</p>
+              </div>
+            </div>
+            <div className="relative bg-white rounded-lg  h-[400px] w-[300px]">
+              <img
+                src={macbook}
+                alt="famous"
+                className="absolute right-0  bottom-0 left-0 w-[280px] object-contain mx-auto"
+              />
+              <div className="absolute top-3 left-4 mr-3 ">
+                <h5 className="text-xs opacity-80">STUDIO DISPLAY</h5>
+                <h6 className=" font-bold text-xl my-1">Macbook Pro 16 inch</h6>
+                <p className="text-xs text-black">
+                  16-inch Retina display with True Tone
+                </p>
+              </div>
+            </div>{' '}
+            <div className="relative bg-white rounded-lg  h-[400px] w-[300px]">
+              <img
+                src={iphone}
+                alt="famous"
+                className="absolute right-0  bottom-0 left-0 w-[280px] h-[280px] object-contain mx-auto"
+              />
+              <div className="absolute top-3 left-4 mr-3 ">
+                <h5 className="text-xs opacity-80">SMARTPHONES</h5>
+                <h6 className=" font-bold text-xl my-1">Smartphone 13 Pro.</h6>
+                <p className="text-xs text-black">
+                  Now in White and Black. From $699 or $29.12/mo. for 24 mo.*
+                </p>
+              </div>
+            </div>{' '}
+            <div className="relative bg-white rounded-lg h-[400px] w-[300px]">
+              <img
+                src={speakerApple}
+                alt="famous"
+                className="absolute right-0  bottom-0 left-0 w-[280px] object-contain mx-auto"
+              />
+              <div className="absolute top-3 left-4 mr-3 ">
+                <h5 className=" text-xs opacity-80">HOME SPEAKERS</h5>
+                <h6 className=" font-bold text-xl my-1">Room-filling Sound.</h6>
+                <p className="text-xs text-black">
+                  From $399 or $16.62/mo. for 24 mo.*
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
         <section className=" px-10 mt-10 mb-12">
           <div className="bg-white shadow-lg grid grid-flow-row">
             <Marquee className="gap-10">
@@ -294,17 +368,23 @@ const Home = () => {
             </Marquee>
           </div>
         </section>
-        <section className="px-10 mb-12">
-          <h3 className="text-xl font-bold mb-3">Featured Collection</h3>
-          <div className="grid grid-flow-col grid-cols-5 gap-5">
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+        <section className="special-product px-10 mb-12">
+          <h3 className="text-xl font-bold mb-3">Special Products</h3>
+          <div className="grid grid-flow-row grid-cols-3 auto-fit gap-5 mx-auto">
+            <SpecialProduct />
+            <SpecialProduct />
+            <SpecialProduct />
           </div>
         </section>
-        <section className="px-10">
+        <section className="popular-product px-10 mb-12">
+          <h3 className="text-xl font-bold mb-3">Our Popular Products</h3>
+          <div className="grid grid-flow-row grid-cols-3 auto-fit gap-5 mx-auto">
+            <SpecialProduct />
+            <SpecialProduct />
+            <SpecialProduct />
+          </div>
+        </section>
+        <section className="blog-card px-10 mb-12">
           <h3 className="text-xl font-bold mb-3">Our Latest News</h3>
           <div className="grid grid-flow-col grid-cols-4 gap-5">
             <BlogCard />

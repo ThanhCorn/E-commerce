@@ -39,11 +39,31 @@
 }
 
 .action-bar {
+  display: none;
   top: 10%;
   right: -23px;
-  transition: all 0.3s ease-in-out;
 }
 
 .product-card:hover .action-bar {
   right: 8px;
+  display: block;
+  transition: all 0.3s ease-in-out;
+}
+
+.product-images > img:last-child {
+  display: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.product-images:hover > img:last-child {
+  display: block;
+}
+
+.product-images:hover > img:nth-child(1) {
+  display: none;
+}
+
+.product-images > img {
+  width: 270px;
+  height: 270px;
 }

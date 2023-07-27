@@ -24,38 +24,30 @@ const Contact = () => {
             }}
             loading="lazy"
           ></iframe>
-          <div className="grid grid-cols-2 bg-white  mb-10 rounded-xl">
+          <div className="grid grid-cols-2 bg-white  mb-10 rounded-xl gap-5">
             <div className="col-span-1 ml-10 mt-5">
               <h2 className="text-2xl font-bold mb-5">Contact</h2>
               <form action="" className="flex flex-col gap-5">
-                <div className="border border-gray-300 bg-[#f5f5f7] w-[80%] h-[40px] rounded-lg ">
-                  <input
-                    type="text"
-                    className="mt-2 ml-2 bg-[#f5f5f7]"
-                    placeholder="Name"
-                  />
+                <div className=" ">
+                  <input type="text" className=" input" placeholder="Name" />
                 </div>
-                <div className="border bg-[#f5f5f7] border-gray-200 w-[80%] h-[40px] rounded-lg">
-                  <input
-                    type="email"
-                    className="mt-2 ml-2 bg-[#f5f5f7]"
-                    placeholder="Email"
-                  />
+                <div className="">
+                  <input type="email" className=" input" placeholder="Email" />
                 </div>
-                <div className="border bg-[#f5f5f7] border-gray-200 w-[80%] h-[40px] rounded-lg">
+                <div className="">
                   <input
                     type="tel"
-                    className="mt-2 ml-2 bg-[#f5f5f7]"
+                    className=" input"
                     placeholder="Phone Number"
                   />
                 </div>
-                <div className="border bg-[#f5f5f7] border-gray-200 w-[80%] rounded-lg">
+                <div className="">
                   <textarea
                     name=""
                     id=""
                     cols={30}
                     rows={5}
-                    className="mt-2 ml-2 bg-[#f5f5f7]"
+                    className=" bg-gray-100 py-2 pl-2   w-full rounded-lg flex placeholder:items-center"
                     placeholder="Comments"
                   ></textarea>
                 </div>

@@ -4,7 +4,7 @@ import { BsGithub, BsInstagram, BsLinkedin, BsYoutube } from 'react-icons/bs';
 const Footer = () => {
   return (
     <div className="">
-      <div className="bg-third mb-0">
+      <div className="bg-third ">
         <div className="max-w-screen-2xl mx-auto text-3xl">
           <div className="grid grid-cols-2 py-10 items-center mx-10">
             <div className="col-span-1">
@@ -64,11 +64,11 @@ const Footer = () => {
             <div className="col-span-2">
               <h4 className="text-white text-xl  mb-4">Information</h4>
               <div className="footer-links">
-                <Link to="">Privacy Policy</Link>
-                <Link to="">Refund Policy</Link>
-                <Link to="">Shipping Policy</Link>
-                <Link to="">Terms Of Service</Link>
-                <Link to="">Blogs</Link>
+                <Link to="/privacy-policy">Privacy Policy</Link>
+                <Link to="/refund-policy">Refund Policy</Link>
+                <Link to="/shipping-policy">Shipping Policy</Link>
+                <Link to="/term-conditions">Terms Of Service</Link>
+                <Link to="/blogs">Blogs</Link>
               </div>
             </div>
             <div className="col-span-2">

@@ -63,37 +63,37 @@ const Header = () => {
               </button>
             </div>
           </div>
-          <div className="col-span-5 ml-24 mr-10">
-            <div className="flex items-center justify-between ">
-              <div>
+          <div className="col-span-5 flex justify-between mr-10 ml-auto">
+            <div className="flex items-center  gap-5 ">
+              <div className="w-[100px]">
                 <Link to="/compare-product" className="flex items-center">
-                  <img src={compareSVG} alt="compare" className="mr-5" />
+                  <img src={compareSVG} alt="compare" className="mr-3" />
                   <p>
                     Compare <br /> Product
                   </p>
                 </Link>
               </div>
-              <div>
+              <div className="w-[120px]">
                 <Link to="/wishlist" className="flex items-center">
-                  <img src={wishlistSVG} alt="wishlist" className="mr-5" />
+                  <img src={wishlistSVG} alt="wishlist" className="mr-3 ml-2" />
                   <p>
                     {' '}
                     Favourite <br /> Wishlist
                   </p>
                 </Link>
               </div>
-              <div>
+              <div className="w-[120px]">
                 <Link to="/login" className="flex items-center">
-                  <img src={userSVG} alt="user" className="mr-5" />
-                  <p>
+                  <img src={userSVG} alt="user" className="" />
+                  <p className="w-[100px] flex flex-col">
                     Log in <br /> My Account
                   </p>
                 </Link>
               </div>
-              <div>
-                <Link to="/cart" className="flex items-center">
-                  <img src={cartSVG} alt="cart" className="mr-5" />
-                  <div className="flex flex-col  items-center">
+              <div className="w-[90px]">
+                <Link to="/cart" className="flex items-center justify-end">
+                  <img src={cartSVG} alt="cart" className="mr-3" />
+                  <div className="flex flex-col">
                     <span className="bg-white text-black text-center rounded-xl w-[90%]">
                       0
                     </span>
@@ -160,13 +160,13 @@ const Header = () => {
                 HOME
               </NavLink>
               <NavLink
-                to="/store"
+                to="/product"
                 className="text-xs mr-4 text-white font-thin "
               >
                 OUR STORE
               </NavLink>
               <NavLink
-                to="/blog"
+                to="/blogs"
                 className="text-xs mr-4 text-white font-thin "
               >
                 BLOGS

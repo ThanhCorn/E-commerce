@@ -10,6 +10,7 @@ import gr4 from '../assets/images/gr4.svg';
 import { useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import { useLocation } from 'react-router-dom';
+import Color from '../components/Color';
 
 const OurStore = () => {
   const [grid, setGrid] = useState(3);
@@ -75,35 +76,7 @@ const OurStore = () => {
                   <div className="mb-3">
                     <h5 className="mb-3 font-bold text-sm ">Colors</h5>
                     <div className="flex flex-wrap">
-                      <ul>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                        <li className="inline-block mr-2">
-                          <div className="w-6 h-6 rounded-full bg-red-600"></div>
-                        </li>
-                      </ul>
+                      <Color />
                     </div>
                   </div>
                   <div className="mb-6">

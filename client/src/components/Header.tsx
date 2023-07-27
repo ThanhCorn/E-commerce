@@ -66,7 +66,7 @@ const Header = () => {
           <div className="col-span-5 ml-24 mr-10">
             <div className="flex items-center justify-between ">
               <div>
-                <Link to="" className="flex items-center">
+                <Link to="/compare-product" className="flex items-center">
                   <img src={compareSVG} alt="compare" className="mr-5" />
                   <p>
                     Compare <br /> Product
@@ -74,7 +74,7 @@ const Header = () => {
                 </Link>
               </div>
               <div>
-                <Link to="" className="flex items-center">
+                <Link to="/wishlist" className="flex items-center">
                   <img src={wishlistSVG} alt="wishlist" className="mr-5" />
                   <p>
                     {' '}
@@ -83,7 +83,7 @@ const Header = () => {
                 </Link>
               </div>
               <div>
-                <Link to="" className="flex items-center">
+                <Link to="/login" className="flex items-center">
                   <img src={userSVG} alt="user" className="mr-5" />
                   <p>
                     Log in <br /> My Account
@@ -91,7 +91,7 @@ const Header = () => {
                 </Link>
               </div>
               <div>
-                <Link to="" className="flex items-center">
+                <Link to="/cart" className="flex items-center">
                   <img src={cartSVG} alt="cart" className="mr-5" />
                   <div className="flex flex-col  items-center">
                     <span className="bg-white text-black text-center rounded-xl w-[90%]">
@@ -165,10 +165,13 @@ const Header = () => {
               >
                 OUR STORE
               </NavLink>
-              <NavLink to="/" className="text-xs mr-4 text-white font-thin ">
+              <NavLink
+                to="/blog"
+                className="text-xs mr-4 text-white font-thin "
+              >
                 BLOGS
               </NavLink>
-              <NavLink to="/" className="text-xs  text-white font-thin ">
+              <NavLink to="/contact" className="text-xs  text-white font-thin ">
                 CONTACT
               </NavLink>
             </div>

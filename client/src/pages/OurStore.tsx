@@ -20,7 +20,7 @@ const OurStore = () => {
     <>
       <Meta title="Our Store" />
       <BreadCrumb title="Our Store" />
-      <div className="store-wrapper w-full h-full bg-[#f5f5f7]">
+      <div className="store-wrapper w-full h-[100%] max-h-full bg-[#f5f5f7]">
         <div className="max-w-screen-2xl mx-auto">
           <div className="mx-10 pt-5 grid grid-flow-col grid-cols-12 gap-5">
             <div className="col-span-3">
@@ -171,7 +171,7 @@ const OurStore = () => {
                   </div>
                 </div>
               </div>
-              <div className="mb-3 bg-white pb-5">
+              <div className="mb-10 bg-white pb-5">
                 <div className="mx-4 pt-3">
                   <h3 className=" font-bold mb-4">Random Products</h3>
                   <div>
@@ -213,8 +213,8 @@ const OurStore = () => {
                 </div>
               </div>
             </div>
-            <div className="col-span-9">
-              <div className="filter-sort-grid bg-white rounded-lg h-[5%] flex items-center justify-between">
+            <div className="col-span-9 mb-20">
+              <div className="filter-sort-grid bg-white rounded-lg  h-[64px]  flex items-center justify-between">
                 <div className="flex items-center mx-3 gap-5 w-[50%] ">
                   <p className="text-black font-normal text-sm">Sort By:</p>
                   <select
@@ -236,25 +236,25 @@ const OurStore = () => {
                   <p className="text-black font-normal">21 Products</p>
                   <div className="flex items-center gap-3">
                     <div
-                      className="px-2 bg-gray-200 py-2 rounded-lg"
+                      className="cursor-pointer px-2 bg-gray-200 py-2 rounded-lg"
                       onClick={() => setGrid(1)}
                     >
                       <img src={gr} alt="grid" className="w-5 h-5 " />
                     </div>
                     <div
-                      className="px-2 bg-gray-200 py-2 rounded-lg"
+                      className="cursor-pointer px-2 bg-gray-200 py-2 rounded-lg"
                       onClick={() => setGrid(2)}
                     >
                       <img src={gr2} alt="grid" className="w-5 h-5 " />
                     </div>
                     <div
-                      className="px-2 bg-gray-200 py-2 rounded-lg"
+                      className="cursor-pointer px-2 bg-gray-200 py-2 rounded-lg"
                       onClick={() => setGrid(3)}
                     >
                       <img src={gr3} alt="grid" className="w-5 h-5 " />
                     </div>
                     <div
-                      className="px-2 bg-gray-200 py-2 rounded-lg"
+                      className="cursor-pointer px-2 bg-gray-200 py-2 rounded-lg"
                       onClick={() => setGrid(4)}
                     >
                       <img src={gr4} alt="grid" className="w-5 h-5 " />
@@ -263,12 +263,14 @@ const OurStore = () => {
                 </div>
               </div>
               <div
-                className={`product-list mt-5 rounded-lg gap-3 grid ${
+                className={`product-list mt-5 rounded-lg gap-3  ${
                   location.pathname == '/store'
-                    ? `grid-cols-${grid}`
-                    : 'grid-cols-3'
+                    ? `grid grid-cols-${grid}`
+                    : 'grid grid-cols-3'
                 }`}
               >
+                <ProductCard grid={grid} />
+                <ProductCard grid={grid} />
                 <ProductCard grid={grid} />
                 <ProductCard grid={grid} />
                 <ProductCard grid={grid} />

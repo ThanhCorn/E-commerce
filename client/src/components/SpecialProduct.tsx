@@ -9,7 +9,7 @@ import love from '../assets/images/love.svg';
 const SpecialProduct = () => {
   return (
     <>
-      <div className="bg-white rounded-md overflow-hidden product-card flex">
+      <div className="bg-white rounded-md overflow-hidden product-card flex pb-5">
         <div className="relative">
           <img src={watch} alt="watch" className="w-[350px] h-[250px]" />
           <div className="absolute top-3 right-2 ">
@@ -63,9 +63,7 @@ const SpecialProduct = () => {
           </div>
           <div className="">
             <Link to="">
-              <p className="mb-10 px-6 bg-third py-3 rounded-full">
-                Add to Cart
-              </p>
+              <p className="button">Add to Cart</p>
             </Link>
           </div>
         </div>

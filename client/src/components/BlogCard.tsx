@@ -4,9 +4,9 @@ import blog1 from '../assets/images/blog-1.jpg';
 const BlogCard = () => {
   return (
     <>
-      <div className="bg-white">
-        <img src={blog1} alt="blog" className="rounded-t-lg" />
-        <div className="mx-3 mt-3 mb-10">
+      <div className="bg-white w-full">
+        <img src={blog1} alt="blog" className="rounded-t-lg w-full" />
+        <div className="mx-3 mt-3 mb-5">
           <p className="text-black text-xs font-light">23 JULY, 2023</p>
           <h5 className="mt-2 font-bold">
             A Beautiful Sunday Morning Renaissance
@@ -16,7 +16,7 @@ const BlogCard = () => {
             itaque rerum magnam modi architecto tenetur laudantium ex rem
             numquam sit.
           </p>
-          <Link to="" className="px-5 bg-third text-white rounded-full py-2">
+          <Link to="" className="button">
             Read More
           </Link>
         </div>

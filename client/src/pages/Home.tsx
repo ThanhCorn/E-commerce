@@ -262,7 +262,7 @@ const Home = () => {
               </div>
             </section>
             <section className="px-10 mb-12">
-              <div className="famous-card grid grid-flow-col grid-cols-4 gap-5 mx-auto">
+              <div className="famous-card flex items-center justify-between gap-5 mx-auto">
                 <div className="relative rounded-lg bg-black h-[400px] w-[300px]">
                   <img
                     src={famousWatch}

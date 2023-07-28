@@ -27,21 +27,21 @@ const ProductCard = (props: IProductCard) => {
             <img src={watch} alt="watch" className="mx-auto" />
             <img src={watch1} alt="watch" className="mx-auto" />
             <div className="absolute top-3 right-2  ">
-              <Link to="">
+              <button >
                 <img src={love} alt="love" className="w-5" />
-              </Link>
+              </button>
             </div>
             <div className="absolute action-bar">
               <div className="flex flex-col gap-2">
-                <Link to="">
+                <button >
                   <img src={prodcompare} alt="prodcompare" className="w-5" />
-                </Link>
-                <Link to="">
+                </button>
+                <button >
                   <img src={addCard} alt="add card" />
-                </Link>
-                <Link to="">
+                </button>
+                <button >
                   <img src={view} alt="view" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>

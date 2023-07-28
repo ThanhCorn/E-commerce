@@ -67,7 +67,7 @@ const Header = () => {
             <div className="flex items-center  gap-5 ">
               <div className="w-[100px]">
                 <Link to="/compare-product" className="flex items-center">
-                  <img src={compareSVG} alt="compare" className="mr-3" />
+                  <img src={compareSVG} alt="compare" className="mr-3 ml-3" />
                   <p>
                     Compare <br /> Product
                   </p>

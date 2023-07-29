@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import BreadCrumb from '../components/BreadCrumb';
 import Meta from '../components/Meta';
+import CustomInput from '../components/CustomInput';
 
 const Login = () => {
   return (
@@ -16,22 +17,18 @@ const Login = () => {
                   Login
                 </h3>
                 <form action="">
-                  <div className=" mb-3 bg-gray-300 rounded-lg">
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      className=" bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center"
-                    />
-                  </div>
-                  <div className=" mb-1 ">
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      className=" bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center"
-                    />
-                  </div>
+                  <CustomInput 
+                   type="email"
+                   name="email"
+                   placeholder="Email"
+                   className=""/>
+                  <CustomInput 
+                   type="password"
+                   name="password"
+                   placeholder="Password"
+                   className=""/>
+                
+              
                   <div>
                     <Link to="/forgot-password" className="text-blue-500 mb-3">
                       Forgot Password?

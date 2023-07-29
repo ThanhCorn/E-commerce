@@ -5,11 +5,6 @@ import catBanner1 from '../assets/images/catbanner-01.jpg';
 import catBanner2 from '../assets/images/catbanner-02.jpg';
 import catBanner3 from '../assets/images/catbanner-03.jpg';
 import catBanner4 from '../assets/images/catbanner-04.jpg';
-import service from '../assets/images/service.png';
-import service2 from '../assets/images/service-02.png';
-import service3 from '../assets/images/service-03.png';
-import service4 from '../assets/images/service-04.png';
-import service5 from '../assets/images/service-05.png';
 import camera from '../assets/images/camera.jpg';
 import laptop from '../assets/images/laptop.jpg';
 import headPhone from '../assets/images/headphone.jpg';
@@ -33,6 +28,7 @@ import famousWatch from '../assets/images/famous-watch.jpg';
 import macbook from '../assets/images/macbook.jpg';
 import speakerApple from '../assets/images/speakerApple.jpg';
 import iphone from '../assets/images/iphone.jpg';
+import { services } from '../utils/data';
 const Home = () => {
   return (
     <>
@@ -121,41 +117,16 @@ const Home = () => {
         <div className="bg-[#f5f5f7] w-full">
           <div className="max-w-screen-2xl  mx-auto">
             <section className="px-10 h-24 w-full items-center flex justify-between gap-5">
-              <div className="flex gap-5 items-center">
-                <img src={service} alt="" className="h-7 w-8" />
+              {services.map((service,index) => {
+                return  <div className="flex gap-5 items-center" key={index}>
+                <img src={service.image} alt="services" className="h-7 w-8" />
                 <div>
-                  <h6 className="font-bold">Free shipping</h6>
-                  <p className="text-black">From all orders over $100</p>
+                  <h6 className="font-bold">{service.title}</h6>
+                  <p className="text-black">{service.tagline}</p>
                 </div>
               </div>
-              <div className="flex gap-5 items-center">
-                <img src={service2} alt="" className="h-7 w-8" />
-                <div>
-                  <h6 className="font-bold">Daily Surprise Offers</h6>
-                  <p className="text-black">Save up to 25% off</p>
-                </div>
-              </div>
-              <div className="flex gap-5 items-center">
-                <img src={service3} alt="" className="h-7 w-8" />
-                <div>
-                  <h6 className="font-bold">Support 24/7</h6>
-                  <p className="text-black">Shop with an expert</p>
-                </div>
-              </div>
-              <div className="flex gap-5 items-center">
-                <img src={service4} alt="" className="h-7 w-8" />
-                <div>
-                  <h6 className="font-bold">Affordable Prices</h6>
-                  <p className="text-black">Get factory direct price</p>
-                </div>
-              </div>
-              <div className="flex gap-5 items-center">
-                <img src={service5} alt="" className="h-8 w-10" />
-                <div>
-                  <h6 className="font-bold">Secure Payments</h6>
-                  <p className="text-black">100% Protected Payments</p>
-                </div>
-              </div>
+              })}
+              
             </section>
             <section className="px-10 mb-10">
               <div className="bg-white grid grid-cols-4 shadow-lg border-b border-gray-100">

@@ -1,4 +1,5 @@
 import BreadCrumb from '../components/BreadCrumb';
+import CustomInput from '../components/CustomInput';
 import Meta from '../components/Meta';
 
 const ResetPassword = () => {
@@ -15,22 +16,16 @@ const ResetPassword = () => {
                   Reset Password
                 </h3>
                 <form action="">
-                  <div className=" mb-3 bg-gray-300 rounded-lg">
-                    <input
-                      type="password"
+                  <CustomInput  type="password"
                       name="password"
                       placeholder="Password"
-                      className=" bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center"
-                    />
-                  </div>
-                  <div className=" mb-5 ">
-                    <input
-                      type="confirmpassword"
+                      className=""/>
+                  <CustomInput  type="confirmpassword"
                       name="confirmpassword"
                       placeholder="Confirm Password"
-                      className=" bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center"
-                    />
-                  </div>
+                      className=""/>
+               
+                
                   <div>
                     <div className="flex justify-center gap-3">
                       <button className="button" type="submit">

@@ -33,7 +33,7 @@ html {
     @apply px-5 bg-third text-white rounded-full py-2;
   }
   .input {
-    @apply bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center;
+    @apply bg-gray-100 py-2 pl-2 h-[40px] w-full rounded-lg flex placeholder:items-center;
   }
 }
 

@@ -1,4 +1,5 @@
 import BreadCrumb from '../components/BreadCrumb';
+import CustomInput from '../components/CustomInput';
 import Meta from '../components/Meta';
 
 const Signup = () => {
@@ -15,38 +16,25 @@ const Signup = () => {
                   Sign Up
                 </h3>
                 <form action="">
-                  <div className=" mb-3 bg-gray-300 rounded-lg">
-                    <input
-                      type="text"
+                  <CustomInput  type="text"
                       name="name"
                       placeholder="Name"
-                      className=" bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center"
-                    />
-                  </div>
-                  <div className=" mb-3 bg-gray-300 rounded-lg">
-                    <input
-                      type="email"
+                      className=''/>
+              <CustomInput  type="email"
                       name="email"
                       placeholder="Email"
-                      className=" bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center"
-                    />
-                  </div>
-                  <div className=" mb-3 bg-gray-300 rounded-lg">
-                    <input
-                      type="tel"
+                      className=""/>
+              <CustomInput  type="tel"
                       name="phone"
                       placeholder="Phone Number"
-                      className=" bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center"
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <input
-                      type="password"
+                      className=""/>
+              <CustomInput  type="password"
                       name="password"
                       placeholder="Password"
-                      className=" bg-gray-100 py-2 pl-2  h-[40px] w-full rounded-lg flex placeholder:items-center"
-                    />
-                  </div>
+                      className=""/>
+                
+            
+           
                   <div>
                     <div className="flex justify-center gap-3">
                       <button className="button">Sign Up</button>

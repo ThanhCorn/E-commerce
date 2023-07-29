@@ -17,12 +17,14 @@ const ProductCard = (props: IProductCard) => {
   return (
     <>
       <div
-        className={`bg-white rounded-md overflow-hidden product-card ${
-          location.pathname == '/store' && props.grid == 1 ? 'flex' : ''
-        } 
-  `}
+        className="bg-white rounded-md overflow-hidden product-card" 
+
       >
-        <Link to="/product/:id">
+        <Link to={` ${
+          location.pathname == "/" ? "/product/:id" : location.pathname == "/product/:id" ? "/product/1" : ":id"
+        }`} className={`${
+          location.pathname == '/product' && props.grid == 1 ? 'flex' : ''
+        } `}>
           <div className="product-images relative">
             <img src={watch} alt="watch" className="mx-auto" />
             <img src={watch1} alt="watch" className="mx-auto" />

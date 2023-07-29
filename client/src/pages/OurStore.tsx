@@ -193,8 +193,10 @@ const OurStore = () => {
                   <select
                     name=""
                     id=""
+                    defaultValue={"manual"}
                     className="bg-gray-200 min-w-[170px] py-2 px-2 rounded-lg opacity-70 "
                   >
+                    <option value="manual">Featured</option>
                     <option value="best-selling">Best selling</option>
                     <option value="manual">Featured</option>
                     <option value="title-ascending">A-Z</option>
@@ -237,7 +239,7 @@ const OurStore = () => {
               </div>
               <div
                 className={`product-list mt-5 rounded-lg gap-3  ${
-                  location.pathname == '/store'
+                  location.pathname == '/product'
                     ? `grid grid-cols-${grid}`
                     : 'grid grid-cols-3'
                 }`}

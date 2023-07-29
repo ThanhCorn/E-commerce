@@ -134,7 +134,7 @@ const Header = () => {
                   </span>
                 </button>
                 {isMenuOpen && (
-                  <div className="absolute top-[100%] right-0 w-[200px  n] rounded-md shadow-lg bg-primary ring-1 ring-black ring-opacity-5">
+                  <div className="absolute top-[100%] right-0 w-[200px] z-50 rounded-md shadow-lg bg-primary ring-1 ring-black ring-opacity-5">
                     <div
                       className="py-1"
                       role="menu"

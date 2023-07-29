@@ -2,10 +2,10 @@ import ReactStars from 'react-stars';
 import BreadCrumb from '../components/BreadCrumb';
 import Meta from '../components/Meta';
 import { useState } from 'react';
-import SpecialProduct from '../components/SpecialProduct';
 import bestwatch from '../assets/images/bestwatch.jpg';
 import Color from '../components/Color';
 import { TbGitCompare, TbHeart } from 'react-icons/tb';
+import ProductCard from '../components/ProductCard';
 
 const SingleProduct = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -307,10 +307,11 @@ const SingleProduct = () => {
           </div>
           <section className="popular-product px-10 mb-12">
             <h3 className="text-xl font-bold mb-3">Our Popular Products</h3>
-            <div className="grid grid-flow-row grid-cols-3 auto-fit gap-5 mx-auto">
-              <SpecialProduct />
-              <SpecialProduct />
-              <SpecialProduct />
+            <div className="grid grid-flow-row grid-cols-4 auto-fit gap-5 mx-auto">
+                    <ProductCard grid={false}/>
+                    <ProductCard grid={false}/>
+                    <ProductCard grid={false}/>
+                    <ProductCard grid={false}/>
             </div>
           </section>
         </div>

@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+@layer base {
+  .input {
+    @apply text-sm bg-gray-100 py-2 pl-2 h-[40px] w-full rounded-lg flex placeholder:items-center;
+  }
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-menu-title-content {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ant-layout-content {
+  background: transparent !important;
+}

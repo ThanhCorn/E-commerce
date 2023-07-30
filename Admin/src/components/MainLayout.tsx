@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
@@ -13,6 +13,7 @@ import { BiBookAdd } from "react-icons/bi";
 import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
 import { useNavigate, Outlet, Link } from "react-router-dom";
+import { getUserFromLocalStorage } from "../utils/localStorage";
 
 const { Header, Sider, Content } = Layout;
 
@@ -23,6 +24,13 @@ const MainLayout: React.FC = () => {
   } = theme.useToken();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
+  const user = getUserFromLocalStorage();
+
+  useEffect(() => {
+    if (user == null) {
+      navigate("/");
+    }
+  }, []);
 
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);

@@ -1,51 +1,50 @@
-import { IProduct } from "../../@types/custom-types.d";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import productService from "./productService";
+import { IProductCategory } from "../../@types/custom-types";
+import pCategoryService from "./pCategoryService";
 
-interface ProductSate {
-  products: IProduct[];
+interface ProductCategoryState {
+  pCategories: IProductCategory[];
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
 }
 
-const initialState: ProductSate = {
-  products: [],
+const initialState: ProductCategoryState = {
+  pCategories: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
 };
 
-export const getAllProduct = createAsyncThunk(
-  "product/get-products",
+export const getAllProductCategory = createAsyncThunk(
+  `productCategory/get-categories`,
   async (_, thunkAPI) => {
     try {
-      const res = await productService.getAllProduct();
+      const res = await pCategoryService.getAllProductCategory();
       return res;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
   }
 );
-
-export const productSlice = createSlice({
-  name: "products",
+const pCategorySlice = createSlice({
+  name: "pCategories",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllProduct.fulfilled, (state, action) => {
-      state.products = action.payload;
+    builder.addCase(getAllProductCategory.fulfilled, (state, action) => {
+      state.pCategories = action.payload;
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
     }),
-      builder.addCase(getAllProduct.rejected, (state) => {
+      builder.addCase(getAllProductCategory.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
       }),
-      builder.addCase(getAllProduct.pending, (state) => {
+      builder.addCase(getAllProductCategory.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
@@ -53,4 +52,4 @@ export const productSlice = createSlice({
   },
 });
 
-export default productSlice.reducer;
+export default pCategorySlice.reducer;

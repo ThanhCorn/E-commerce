@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../app/store";
 import { login } from "../features/auth/authSlice";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -18,6 +17,7 @@ const SignupSchema = Yup.object().shape({
 
 const Login = () => {
   const dispatch: AppDispatch = useDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user, isLoading, isSuccess, isError, errorMessage } = useSelector(
     (state: RootState) => state.auth
   );
@@ -35,7 +35,7 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (isSuccess || user) {
+    if (isSuccess) {
       navigate("/admin");
     }
   });

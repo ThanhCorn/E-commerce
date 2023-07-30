@@ -1,6 +1,6 @@
 interface ICustomInput {
   type: string;
-  name: string;
+  name?: string;
   className: string;
   placeholder: string;
   id?: string;

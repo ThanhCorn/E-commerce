@@ -49,11 +49,3 @@ main {
   height: 200px;
   padding-bottom: 40px;
 }
-
-.account-dropdown {
-  display: none;
-}
-
-.account:hover .account-dropdown {
-  display: block;
-}

@@ -19,6 +19,8 @@ import Addcolor from "./pages/Addcolor";
 import Addcategory from "./pages/Addcategory";
 import Addbrand from "./pages/Addbrand";
 import Addproduct from "./pages/Addproduct";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -47,6 +49,7 @@ function App() {
             <Route path="product" element={<Addproduct />} />
           </Route>
         </Routes>
+        <ToastContainer position="top-right" />
       </Router>
     </>
   );

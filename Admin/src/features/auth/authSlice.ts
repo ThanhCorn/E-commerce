@@ -1,15 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
-import { IUser } from "../../@types/custom-types";
+import { IOrder, IUser } from "../../@types/custom-types";
 import {
   addUserToLocalStorage,
   getUserFromLocalStorage,
 } from "../../utils/localStorage";
 import { toast } from "react-toastify";
 
-const initialState = {
-  user: getUserFromLocalStorage,
+interface AuthState {
+  user: IUser | null;
+  orders: IOrder[];
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  errorMessage: string | unknown;
+}
+
+const initialState: AuthState = {
+  user: getUserFromLocalStorage(),
+  orders: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -21,6 +31,18 @@ export const login = createAsyncThunk(
   async (user: IUser, thunkAPI) => {
     try {
       const res = await authService.login(user);
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const getAllOrder = createAsyncThunk(
+  `order/get-orders`,
+  async (_, thunkAPI) => {
+    try {
+      const res = await authService.getAllOrder();
       return res;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -52,6 +74,20 @@ export const authSlice = createSlice({
       builder.addCase(login.pending, (state) => {
         state.isLoading = true;
       });
+    builder.addCase(getAllOrder.fulfilled, (state, action) => {
+      state.orders = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+    });
+    builder.addCase(getAllOrder.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+    });
+    builder.addCase(getAllOrder.pending, (state) => {
+      state.isLoading = true;
+    });
   },
 });
 

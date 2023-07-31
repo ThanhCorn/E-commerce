@@ -38,7 +38,7 @@ const Addblog = () => {
 
   return (
     <div>
-      <h3 className="text-xl font-semibold mb-5">Add blog</h3>
+      <h3 className="text-2xl font-semibold mb-5">Add blog</h3>
       <div>
         <form action="">
           <Dragger {...props}>

@@ -63,7 +63,7 @@ const Bloglist = () => {
 
   return (
     <div>
-      <h3 className="text-xl font-semibold mb-5">Bloglist</h3>
+      <h3 className="text-2xl font-semibold mb-5">Bloglist</h3>
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>

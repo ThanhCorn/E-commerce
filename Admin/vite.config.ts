@@ -11,4 +11,8 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: "../server/public",
+    chunkSizeWarningLimit: 1000,
+  },
 });

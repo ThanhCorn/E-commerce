@@ -18,7 +18,7 @@ const SignupSchema = Yup.object().shape({
 const Login = () => {
   const dispatch: AppDispatch = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { user, isLoading, isSuccess, isError, errorMessage } = useSelector(
+  const { isSuccess, errorMessage } = useSelector(
     (state: RootState) => state.auth
   );
   const navigate = useNavigate();

@@ -11,8 +11,8 @@ const getAllProductCategory = async () => {
   }
 };
 
-const pCategoryService = {
+const pcategoryService = {
   getAllProductCategory,
 };
 
-export default pCategoryService;
+export default pcategoryService;

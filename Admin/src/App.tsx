@@ -4,7 +4,7 @@ import Resetpassword from "./pages/Resetpassword";
 import Forgotpassword from "./pages/Forgotpassword";
 import MainLayout from "./components/MainLayout";
 import Dashboard from "./pages/Dashboard";
-import Enquiries from "./pages/Enquiries";
+import Contact from "./pages/Contact";
 import Bloglist from "./pages/Bloglist";
 import Blogcategorylist from "./pages/Blogcategorylist";
 import Orders from "./pages/Orders";
@@ -32,7 +32,7 @@ function App() {
           <Route path="/forgot-password" element={<Forgotpassword />}></Route>
           <Route path="/admin" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="enquiries" element={<Enquiries />} />
+            <Route path="contact" element={<Contact />} />
             <Route path="blog-list" element={<Bloglist />} />
             <Route path="blog" element={<Addblog />} />
             <Route path="blog-category" element={<Addblogcategory />} />

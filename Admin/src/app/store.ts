@@ -7,6 +7,7 @@ import pCategoryReducer from "../features/pCategory/pcategorySlice";
 import bCategoryReducer from "../features/bCategory/bcategorySlice";
 import colorReducer from "../features/color/colorSlice";
 import blogReducer from "../features/blogs/blogSlice";
+import contactReducer from "../features/contact/contactSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     color: colorReducer,
     blogs: blogReducer,
     bCategories: bCategoryReducer,
+    contacts: contactReducer,
   },
 });
 

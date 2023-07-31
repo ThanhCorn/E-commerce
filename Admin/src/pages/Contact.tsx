@@ -4,14 +4,17 @@ import { AppDispatch, RootState } from "../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FiEdit } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
-import { getAllColor } from "../features/color/colorSlice";
+import { getAllContact } from "../features/contact/contactSlice";
 
 interface DataType {
   key: React.Key;
   name: string;
-  action?: JSX.Element;
+  email: string;
+  phone: string;
+  comment: string;
+  status: JSX.Element;
+  action: JSX.Element;
 }
 
 const columns: ColumnsType<DataType> = [
@@ -24,29 +27,52 @@ const columns: ColumnsType<DataType> = [
     dataIndex: "name",
   },
   {
+    title: "Email",
+    dataIndex: "email",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+  },
+  {
+    title: "Comment",
+    dataIndex: "comment",
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+  },
+  {
     title: "Action",
     dataIndex: "action",
   },
 ];
 
-const Colorlist = () => {
+const Contact = () => {
   const dispatch: AppDispatch = useDispatch();
-  const colors = useSelector((state: RootState) => state.color.colors);
+  const contacts = useSelector((state: RootState) => state.contacts.contacts);
 
   useEffect(() => {
-    dispatch(getAllColor());
+    dispatch(getAllContact());
   }, [dispatch]);
 
   const data1: DataType[] = [];
-  for (let i = 0; i < colors.length; i++) {
+  for (let i = 0; i < contacts.length; i++) {
     data1.push({
       key: i,
-      name: colors[i].title || "",
+      name: contacts[i].name || "",
+      email: contacts[i].email || "",
+      phone: contacts[i].phone || "",
+      comment: contacts[i].comment || "",
+      status: (
+        <>
+          <select name="" id="">
+            <option value="">Set status</option>
+          </select>
+        </>
+      ),
       action: (
         <div className="flex gap-3">
-          <Link to="" className="text-blue-600">
-            <FiEdit size={25} />
-          </Link>
           <Link to="" className="text-red-600">
             <AiOutlineDelete size={25} />
           </Link>
@@ -54,10 +80,9 @@ const Colorlist = () => {
       ),
     });
   }
-
   return (
     <div>
-      <h3 className="text-2xl font-semibold mb-5">Colors</h3>
+      <h3 className="text-2xl font-semibold mb-5">Contact</h3>
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
@@ -65,4 +90,4 @@ const Colorlist = () => {
   );
 };
 
-export default Colorlist;
+export default Contact;

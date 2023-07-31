@@ -59,7 +59,7 @@ const Blogcategorylist = () => {
 
   return (
     <div>
-      <h3 className="text-xl font-semibold mb-5">Blog Categories</h3>
+      <h3 className="text-2xl font-semibold mb-5">Blog Categories</h3>
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>

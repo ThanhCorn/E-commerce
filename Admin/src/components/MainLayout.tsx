@@ -156,9 +156,9 @@ const MainLayout: React.FC = () => {
               ],
             },
             {
-              key: "enquiries",
+              key: "contact",
               icon: <FaClipboardList size={24} />,
-              label: "Enquiries",
+              label: "Contact",
             },
           ]}
         />

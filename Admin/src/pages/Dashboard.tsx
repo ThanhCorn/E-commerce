@@ -104,7 +104,7 @@ export const data = {
 const Dashboard = () => {
   return (
     <div>
-      <h3 className="text-xl font-semibold mb-5">Dashboard</h3>
+      <h3 className="text-2xl font-semibold mb-5">Dashboard</h3>
       <div className="flex items-center justify-between gap-5 ">
         <div className="bg-white w-1/3 shadow-xl px-4 py-6">
           <div className="flex items-center justify-between mb-5 font-normal text-lg text-gray-400">

@@ -3,7 +3,7 @@ import CustomInput from "../components/CustomInput";
 const Addcolor = () => {
   return (
     <div>
-      <h3 className="text-xl font-semibold mb-5">Add Color</h3>
+      <h3 className="text-2xl font-semibold mb-5">Add Color</h3>
       <div>
         <form action="">
           <CustomInput

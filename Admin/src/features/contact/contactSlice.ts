@@ -1,50 +1,50 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IProductCategory } from "../../@types/custom-types";
-import pCategoryService from "./pcategoryService";
+import { IContact } from "../../@types/custom-types";
+import contactService from "../contact/contactService";
 
-interface ProductCategoryState {
-  pCategories: IProductCategory[];
+interface ContactState {
+  contacts: IContact[];
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
 }
 
-const initialState: ProductCategoryState = {
-  pCategories: [],
+const initialState: ContactState = {
+  contacts: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
 };
 
-export const getAllProductCategory = createAsyncThunk(
-  `productCategory/get-categories`,
+export const getAllContact = createAsyncThunk(
+  `contact/get-contacts`,
   async (_, thunkAPI) => {
     try {
-      const res = await pCategoryService.getAllProductCategory();
+      const res = await contactService.getAllContact();
       return res;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
   }
 );
-const pCategorySlice = createSlice({
-  name: "pCategories",
+const contactSlice = createSlice({
+  name: "contacts",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllProductCategory.fulfilled, (state, action) => {
-      state.pCategories = action.payload;
+    builder.addCase(getAllContact.fulfilled, (state, action) => {
+      state.contacts = action.payload;
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
     }),
-      builder.addCase(getAllProductCategory.rejected, (state) => {
+      builder.addCase(getAllContact.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
       }),
-      builder.addCase(getAllProductCategory.pending, (state) => {
+      builder.addCase(getAllContact.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
@@ -52,4 +52,4 @@ const pCategorySlice = createSlice({
   },
 });
 
-export default pCategorySlice.reducer;
+export default contactSlice.reducer;

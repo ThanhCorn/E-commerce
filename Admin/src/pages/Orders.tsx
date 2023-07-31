@@ -1,9 +1,9 @@
-import { Table } from "antd";
-import type { ColumnsType } from "antd/es/table";
-import { AppDispatch, RootState } from "../app/store";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getAllOrder } from "../features/auth/authSlice";
+import { Table } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import { AppDispatch, RootState } from '../app/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getAllOrder } from '../features/auth/authSlice';
 
 interface DataType {
   key: React.Key;
@@ -15,24 +15,24 @@ interface DataType {
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "No.",
-    dataIndex: "key",
+    title: 'No.',
+    dataIndex: 'key',
   },
   {
-    title: "Name",
-    dataIndex: "name",
+    title: 'Name',
+    dataIndex: 'name',
   },
   {
-    title: "Product",
-    dataIndex: "product",
+    title: 'Product',
+    dataIndex: 'product',
   },
   {
-    title: "Amount",
-    dataIndex: "amount",
+    title: 'Amount',
+    dataIndex: 'amount',
   },
   {
-    title: "Date",
-    dataIndex: "date",
+    title: 'Date',
+    dataIndex: 'date',
   },
 ];
 
@@ -51,11 +51,11 @@ const Orders = () => {
         <ul className="flex" key={j}>
           <li>{index.product.title}</li>
         </ul>
-      )
+      ),
     );
     data1.push({
       key: i,
-      name: orders[i].orderedBy.firstname || "",
+      name: orders[i].orderedBy.firstname || '',
       product: productElements,
       amount: orders[i].paymentIntent.amount,
       date: new Date(orders[i].createdAt).toLocaleString(),

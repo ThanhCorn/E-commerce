@@ -1,13 +1,14 @@
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../features/auth/authSlice";
-import customerReducer from "../features/customers/customerSlice";
-import productReducer from "../features/product/productSlice";
-import brandReducer from "../features/brand/brandSlice";
-import pCategoryReducer from "../features/pCategory/pcategorySlice";
-import bCategoryReducer from "../features/bCategory/bcategorySlice";
-import colorReducer from "../features/color/colorSlice";
-import blogReducer from "../features/blogs/blogSlice";
-import contactReducer from "../features/contact/contactSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from '../features/auth/authSlice';
+import customerReducer from '../features/customers/customerSlice';
+import productReducer from '../features/product/productSlice';
+import brandReducer from '../features/brand/brandSlice';
+import pCategoryReducer from '../features/pCategory/pcategorySlice';
+import bCategoryReducer from '../features/bCategory/bcategorySlice';
+import colorReducer from '../features/color/colorSlice';
+import blogReducer from '../features/blogs/blogSlice';
+import contactReducer from '../features/contact/contactSlice';
+import uploadReducer from '../features/upload/uploadSlice';
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     blogs: blogReducer,
     bCategories: bCategoryReducer,
     contacts: contactReducer,
+    upload: uploadReducer,
   },
 });
 

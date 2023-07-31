@@ -117,16 +117,21 @@ const Home = () => {
         <div className="bg-[#f5f5f7] w-full">
           <div className="max-w-screen-2xl  mx-auto">
             <section className="px-10 h-24 w-full items-center flex justify-between gap-5">
-              {services.map((service,index) => {
-                return  <div className="flex gap-5 items-center" key={index}>
-                <img src={service.image} alt="services" className="h-7 w-8" />
-                <div>
-                  <h6 className="font-bold">{service.title}</h6>
-                  <p className="text-black">{service.tagline}</p>
-                </div>
-              </div>
+              {services.map((service, index) => {
+                return (
+                  <div className="flex gap-5 items-center" key={index}>
+                    <img
+                      src={service.image}
+                      alt="services"
+                      className="h-7 w-8"
+                    />
+                    <div>
+                      <h6 className="font-bold">{service.title}</h6>
+                      <p className="text-black">{service.tagline}</p>
+                    </div>
+                  </div>
+                );
               })}
-              
             </section>
             <section className="px-10 mb-10">
               <div className="bg-white grid grid-cols-4 shadow-lg border-b border-gray-100">

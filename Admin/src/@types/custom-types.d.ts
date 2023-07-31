@@ -1,4 +1,4 @@
-import { IBlogCategory } from "./../../../server/src/models/blogCategory.Model";
+import { IBlogCategory } from './../../../server/src/models/blogCategory.Model';
 export interface IUser {
   _id?: string;
   firstname?: string;
@@ -104,4 +104,11 @@ export interface IOrder {
   orderedBy: string; // The user's MongoDB _id (string type)
   createdAt: Date;
   updatedAt: Date;
+}
+
+// Images
+
+export interface IImages {
+  pubic_id: string;
+  url: string;
 }

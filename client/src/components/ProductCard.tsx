@@ -16,32 +16,36 @@ const ProductCard = (props: IProductCard) => {
 
   return (
     <>
-      <div
-        className="bg-white rounded-md overflow-hidden product-card" 
-
-      >
-        <Link to={` ${
-          location.pathname == "/" ? "/product/:id" : location.pathname == "/product/:id" ? "/product/1" : ":id"
-        }`} className={`${
-          location.pathname == '/product' && props.grid == 1 ? 'flex' : ''
-        } `}>
+      <div className="bg-white rounded-md overflow-hidden product-card">
+        <Link
+          to={` ${
+            location.pathname == '/'
+              ? '/product/:id'
+              : location.pathname == '/product/:id'
+              ? '/product/1'
+              : ':id'
+          }`}
+          className={`${
+            location.pathname == '/product' && props.grid == 1 ? 'flex' : ''
+          } `}
+        >
           <div className="product-images relative">
             <img src={watch} alt="watch" className="mx-auto" />
             <img src={watch1} alt="watch" className="mx-auto" />
             <div className="absolute top-3 right-2  ">
-              <button >
+              <button>
                 <img src={love} alt="love" className="w-5" />
               </button>
             </div>
             <div className="absolute action-bar">
               <div className="flex flex-col gap-2">
-                <button >
+                <button>
                   <img src={prodcompare} alt="prodcompare" className="w-5" />
                 </button>
-                <button >
+                <button>
                   <img src={addCard} alt="add card" />
                 </button>
-                <button >
+                <button>
                   <img src={view} alt="view" />
                 </button>
               </div>

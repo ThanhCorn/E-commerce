@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import productModel from '../models/product.Model';
-import userModel from '../models/user.Model';
-import { Request, Response } from 'express';
-import slugify from 'slugify';
-import { Document, Query } from 'mongoose';
-import { validateMongoDbId } from '../utils/validateMongodbid';
-import { cloudinaryDelete, cloudinaryUpload } from '../utils/cloudinary';
+import productModel from "../models/product.Model";
+import userModel from "../models/user.Model";
+import { Request, Response } from "express";
+import slugify from "slugify";
+import { Document, Query } from "mongoose";
+import { validateMongoDbId } from "../utils/validateMongodbid";
+import { cloudinaryDelete, cloudinaryUpload } from "../utils/cloudinary";
 
 // POST createProduct
 export const createProduct = async (req: Request, res: Response) => {
@@ -18,7 +18,7 @@ export const createProduct = async (req: Request, res: Response) => {
     const newProduct = await productModel.create(req.body);
     return res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -31,7 +31,7 @@ export const getProduct = async (req: Request, res: Response) => {
       return res.status(200).json(findProduct);
     }
   } catch (error) {
-    res.status(400).json({ message: 'Product not found' });
+    res.status(400).json({ message: "Product not found" });
   }
 };
 
@@ -39,30 +39,30 @@ export const getProduct = async (req: Request, res: Response) => {
 export const getAllProduct = async (req: Request, res: Response) => {
   try {
     const queryObj = { ...req.query };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach((el) => delete queryObj[el]);
 
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
     let query: Query<Document[], Document> = productModel.find(
-      JSON.parse(queryStr),
+      JSON.parse(queryStr)
     );
 
     // Sorting
     if (req.query.sort) {
-      const sortBy = (req.query.sort as string).split(',').join(' ');
+      const sortBy = (req.query.sort as string).split(",").join(" ");
       query = query.sort(sortBy);
     } else {
-      query = query.sort('-createdAt');
+      query = query.sort("-createdAt");
     }
 
     // Limiting fields
     if (req.query.fields) {
-      const fields = (req.query.fields as string).split(',').join(' ');
+      const fields = (req.query.fields as string).split(",").join(" ");
       query = query.select(fields);
     } else {
-      query = query.select('-__v');
+      query = query.select("-__v");
     }
 
     // Pagination
@@ -74,7 +74,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
     if (req.query.page) {
       const productCount = await productModel.countDocuments();
       if (skip >= productCount) {
-        throw new Error('This page does not exist.');
+        throw new Error("This page does not exist.");
       }
     }
 
@@ -100,7 +100,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     });
     return res.status(200).json(updateProduct);
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -111,15 +111,15 @@ export const deleteProduct = async (req: Request, res: Response) => {
     const deleteProduct = await productModel.findByIdAndDelete(id);
     if (deleteProduct) {
       return res.status(200).json({
-        message: 'Product deleted successfully',
+        message: "Product deleted successfully",
       });
     } else {
       return res.status(400).json({
-        message: 'Product not found',
+        message: "Product not found",
       });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -130,20 +130,20 @@ export const addToWishlist = async (req: Request, res: Response) => {
   try {
     const user = await userModel.findById(_id);
     const alreadyAdded = await user?.wishlist.find(
-      (id) => id.toString() === productId,
+      (id) => id.toString() === productId
     );
     if (alreadyAdded) {
       const user = await userModel.findByIdAndUpdate(
         _id,
         { $pull: { wishlist: productId } },
-        { new: true },
+        { new: true }
       );
       res.status(200).json(user);
     } else {
       const user = await userModel.findByIdAndUpdate(
         _id,
         { $push: { wishlist: productId } },
-        { new: true },
+        { new: true }
       );
       res.status(200).json(user);
     }
@@ -161,14 +161,14 @@ export const rating = async (req: Request, res: Response) => {
   try {
     const product = await productModel.findById(productId);
     const alreadyRated = await product?.ratings?.find(
-      (userId) => userId.postedBy.toString() === _id.toString(),
+      (userId) => userId.postedBy.toString() === _id.toString()
     );
 
     if (alreadyRated) {
       const updateRating = await productModel.updateOne(
         { ratings: { $elemMatch: alreadyRated } },
-        { $set: { 'ratings.$.star': star, 'ratings.$.comment': comment } },
-        { new: true },
+        { $set: { "ratings.$.star": star, "ratings.$.comment": comment } },
+        { new: true }
       );
     } else {
       const rateProduct = await productModel.findByIdAndUpdate(
@@ -176,7 +176,7 @@ export const rating = async (req: Request, res: Response) => {
         {
           $push: { ratings: { star: star, postedBy: _id, comment: comment } },
         },
-        { new: true },
+        { new: true }
       );
     }
 
@@ -193,17 +193,17 @@ export const rating = async (req: Request, res: Response) => {
         {
           totalRating: averageRating,
         },
-        { new: true },
+        { new: true }
       );
       // You can send a success message or the updated product data here
       res.status(200).json(updateAverageRating);
     } else {
-      res.status(400).json({ message: 'Rating not found' });
+      res.status(400).json({ message: "Rating not found" });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -225,8 +225,8 @@ export const uploadImages = async (req: Request, res: Response) => {
     });
     res.json(images);
   } catch (error) {
-    console.error('Error while uploading images:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error while uploading images:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -234,9 +234,9 @@ export const deleteImages = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const deteled = await cloudinaryDelete(id);
-    res.json({ message: 'Delete successfully' });
+    res.json({ message: "Delete successfully" });
   } catch (error) {
-    console.error('Error while uploading images:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error while uploading images:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

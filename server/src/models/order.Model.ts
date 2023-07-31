@@ -1,4 +1,4 @@
-import { Schema, Document, Model, model, Types } from 'mongoose';
+import { Schema, Document, Model, model, Types } from "mongoose";
 
 // Interface for the product item in the order
 export interface OrderProduct {
@@ -37,7 +37,7 @@ const orderSchema = new Schema<OrderDoc, OrderModel>(
       {
         product: {
           type: Schema.Types.ObjectId,
-          ref: 'Product',
+          ref: "Product",
         },
         count: Number,
         color: String,
@@ -46,26 +46,26 @@ const orderSchema = new Schema<OrderDoc, OrderModel>(
     paymentIntent: {},
     orderStatus: {
       type: String,
-      default: 'Not Processed',
+      default: "Not Processed",
       enum: [
-        'Not Processed',
-        'Cash on Delivery',
-        'Processing',
-        'Dispatched',
-        'Cancelled',
-        'Delivered',
+        "Not Processed",
+        "Cash on Delivery",
+        "Processing",
+        "Dispatched",
+        "Cancelled",
+        "Delivered",
       ],
     },
     orderedBy: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 // Export the model
-const OrderModel = model<OrderDoc, OrderModel>('Order', orderSchema);
+const OrderModel = model<OrderDoc, OrderModel>("Order", orderSchema);
 export default OrderModel;

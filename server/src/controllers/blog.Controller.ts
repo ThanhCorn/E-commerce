@@ -1,7 +1,7 @@
-import blogModel from '../models/blog.Model';
-import { Request, Response } from 'express';
-import { validateMongoDbId } from '../utils/validateMongodbid';
-import { cloudinaryUpload } from '../utils/cloudinary';
+import blogModel from "../models/blog.Model";
+import { Request, Response } from "express";
+import { validateMongoDbId } from "../utils/validateMongodbid";
+import { cloudinaryUpload } from "../utils/cloudinary";
 
 // POST createBlog
 export const createBlog = async (req: Request, res: Response) => {
@@ -36,12 +36,12 @@ export const getBlog = async (req: Request, res: Response) => {
   try {
     const getBlog = await blogModel
       .findById(id)
-      .populate('likes')
-      .populate('dislikes');
+      .populate("likes")
+      .populate("dislikes");
     await blogModel.findByIdAndUpdate(
       id,
       { $inc: { numViews: 1 } },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(getBlog);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,7 +88,7 @@ export const likeTheBlog = async (req: Request, res: Response) => {
   const isLiked = blog?.isLiked;
   // Check if the user already disliked the blog
   const alreadyDisliked = blog?.dislikes.find(
-    (userId) => userId?.toString() === loginUserId?.toString(),
+    (userId) => userId?.toString() === loginUserId?.toString()
   );
   if (alreadyDisliked) {
     const blog = await blogModel.findByIdAndUpdate(
@@ -97,7 +97,7 @@ export const likeTheBlog = async (req: Request, res: Response) => {
         $pull: { dislikes: loginUserId },
         isDisliked: false,
       },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(blog);
   }
@@ -108,7 +108,7 @@ export const likeTheBlog = async (req: Request, res: Response) => {
         $pull: { likes: loginUserId },
         isLiked: false,
       },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(blog);
   } else {
@@ -118,7 +118,7 @@ export const likeTheBlog = async (req: Request, res: Response) => {
         $push: { likes: loginUserId },
         isLiked: true,
       },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(blog);
   }
@@ -136,7 +136,7 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
   const isDisliked = blog?.isDisliked;
   // Check if the user already liked the blog
   const alreadyLiked = blog?.likes.find(
-    (userId) => userId?.toString() === loginUserId?.toString(),
+    (userId) => userId?.toString() === loginUserId?.toString()
   );
   if (alreadyLiked) {
     const blog = await blogModel.findByIdAndUpdate(
@@ -145,7 +145,7 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
         $pull: { likes: loginUserId },
         isLiked: false,
       },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(blog);
   }
@@ -156,7 +156,7 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
         $pull: { dislikes: loginUserId },
         isDisliked: false,
       },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(blog);
   } else {
@@ -166,7 +166,7 @@ export const dislikeTheBlog = async (req: Request, res: Response) => {
         $push: { dislikes: loginUserId },
         isDisliked: true,
       },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(blog);
   }
@@ -196,12 +196,12 @@ export const uploadImages = async (req: Request, res: Response) => {
           return file;
         }),
       },
-      { new: true },
+      { new: true }
     );
 
     return res.status(200).json(findProduct);
   } catch (error) {
-    console.error('Error while uploading images:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error while uploading images:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

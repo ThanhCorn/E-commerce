@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 export interface ICartProduct {
   product?: Schema.Types.ObjectId;
@@ -20,7 +20,7 @@ const cartSchema = new Schema<ICart>(
       {
         product: {
           type: Schema.Types.ObjectId,
-          ref: 'Product',
+          ref: "Product",
         },
         count: Number,
         color: String,
@@ -29,9 +29,9 @@ const cartSchema = new Schema<ICart>(
     ],
     cartTotal: Number,
     totalAfterDiscount: Number,
-    orderedBy: { type: Schema.Types.ObjectId, ref: 'User' },
+    orderedBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export default model<ICart>('Cart', cartSchema);
+export default model<ICart>("Cart", cartSchema);

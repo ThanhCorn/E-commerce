@@ -1,14 +1,14 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 export interface IBlogCategory {
-    title: string;
+  title: string;
 }
 
 const blogCategorySchema = new Schema<IBlogCategory>(
   {
     title: { type: String, required: true, unique: true, index: true },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export default model<IBlogCategory>('BCategory', blogCategorySchema);
+export default model<IBlogCategory>("BCategory", blogCategorySchema);

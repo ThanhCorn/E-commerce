@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 export interface IBrand {
   title: string;
@@ -8,7 +8,7 @@ const brandSchema = new Schema<IBrand>(
   {
     title: { type: String, required: true, unique: true, index: true },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export default model<IBrand>('Brand', brandSchema);
+export default model<IBrand>("Brand", brandSchema);

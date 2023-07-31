@@ -1,4 +1,4 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model, Types } from "mongoose";
 
 export interface IBlog {
   title: string;
@@ -24,16 +24,16 @@ const blogSchema = new Schema<IBlog>(
     numViews: { type: Number, default: 0 },
     isLiked: { type: Boolean, default: false },
     isDisliked: { type: Boolean, default: false },
-    likes: [{ type: Types.ObjectId, ref: 'User' }],
-    dislikes: [{ type: Types.ObjectId, ref: 'User' }],
+    likes: [{ type: Types.ObjectId, ref: "User" }],
+    dislikes: [{ type: Types.ObjectId, ref: "User" }],
     images: [{ public_id: String, url: String }],
-    author: { type: String, default: 'admin' },
+    author: { type: String, default: "admin" },
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
     timestamps: true,
-  },
+  }
 );
 
-export default model<IBlog>('Blog', blogSchema);
+export default model<IBlog>("Blog", blogSchema);

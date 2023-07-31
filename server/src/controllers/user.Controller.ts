@@ -1,16 +1,16 @@
-import { generateToken } from '../utils/jwtToken';
-import { generateRefreshToken } from '../utils/refreshToken';
-import { Request, Response } from 'express';
-import userModel, { IUser } from '../models/user.Model';
-import cartModel, { ICartProduct } from '../models/cart.Model';
-import 'dotenv/config';
-import jwt from 'jsonwebtoken';
-import { EmailData, sendEmail } from './email.Controller';
-import crypto from 'crypto';
-import productModel from '../models/product.Model';
-import CouponModel from '../models/coupon.Model';
-import orderModel from '../models/order.Model';
-import { v4 as uuidv4 } from 'uuid';
+import { generateToken } from "../utils/jwtToken";
+import { generateRefreshToken } from "../utils/refreshToken";
+import { Request, Response } from "express";
+import userModel, { IUser } from "../models/user.Model";
+import cartModel, { ICartProduct } from "../models/cart.Model";
+import "dotenv/config";
+import jwt from "jsonwebtoken";
+import { EmailData, sendEmail } from "./email.Controller";
+import crypto from "crypto";
+import productModel from "../models/product.Model";
+import CouponModel from "../models/coupon.Model";
+import orderModel from "../models/order.Model";
+import { v4 as uuidv4 } from "uuid";
 
 // POST register
 export const registerUser = async (req: Request, res: Response) => {
@@ -19,13 +19,13 @@ export const registerUser = async (req: Request, res: Response) => {
     const existingEmail = await userModel.findOne({ email });
 
     if (existingEmail) {
-      return res.status(409).json({ message: 'Email already exists' });
+      return res.status(409).json({ message: "Email already exists" });
     }
 
     const newUser: IUser = await userModel.create(req.body);
     return res.status(201).json(newUser);
   } catch (error) {
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -36,7 +36,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const user = await userModel.findOne({ email });
     if (!user || !(await user.isPasswordMatch(password))) {
-      return res.status(404).json({ message: 'invalid email or password' });
+      return res.status(404).json({ message: "invalid email or password" });
     }
     const refreshToken = await generateRefreshToken(user?._id);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,9 +45,9 @@ export const loginUser = async (req: Request, res: Response) => {
       {
         refreshToken: refreshToken,
       },
-      { new: true },
+      { new: true }
     );
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
@@ -60,7 +60,7 @@ export const loginUser = async (req: Request, res: Response) => {
       token: generateToken(user?._id),
     });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -70,11 +70,11 @@ export const loginAdmin = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const findAdmin = await userModel.findOne({ email });
-    if (findAdmin?.role !== 'admin') {
-      return res.status(404).json({ message: 'Not Authorized' });
+    if (findAdmin?.role !== "admin") {
+      return res.status(404).json({ message: "Not Authorized" });
     }
     if (!findAdmin || !(await findAdmin.isPasswordMatch(password))) {
-      return res.status(404).json({ message: 'invalid email or password' });
+      return res.status(404).json({ message: "invalid email or password" });
     }
     const refreshToken = await generateRefreshToken(findAdmin?._id);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -83,9 +83,9 @@ export const loginAdmin = async (req: Request, res: Response) => {
       {
         refreshToken: refreshToken,
       },
-      { new: true },
+      { new: true }
     );
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
@@ -98,14 +98,14 @@ export const loginAdmin = async (req: Request, res: Response) => {
       token: generateToken(findAdmin?._id),
     });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 // POST Logout
 export const logoutUser = async (req: Request, res: Response) => {
-  res.clearCookie('refreshToken');
-  return res.status(200).json({ message: 'Logged out' });
+  res.clearCookie("refreshToken");
+  return res.status(200).json({ message: "Logged out" });
 };
 
 // Save User Address
@@ -117,11 +117,11 @@ export const saveAddress = async (req: Request, res: Response) => {
       {
         address: req?.body?.address,
       },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(findUser);
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
   }
 };
 //GET RefreshToken
@@ -129,13 +129,13 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) {
-    return res.status(401).json({ message: 'No Refresh token in Cookies' });
+    return res.status(401).json({ message: "No Refresh token in Cookies" });
   }
 
   try {
     const user = await userModel.findOne({ refreshToken });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     jwt.verify(
@@ -145,12 +145,12 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
       (err: any, decoded: any) => {
         if (err || user.id !== decoded.id) {
           return res.status(403).json({
-            message: 'There is something wrong with the refresh token',
+            message: "There is something wrong with the refresh token",
           });
         }
         const accessToken = generateToken(user._id);
         res.json({ accessToken });
-      },
+      }
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -164,7 +164,7 @@ export const getAllUser = async (req: Request, res: Response) => {
     const getUsers = await userModel.find();
     return res.status(200).json(getUsers);
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -175,7 +175,7 @@ export const getUser = async (req: Request, res: Response) => {
     const getUser = await userModel.findById(id);
     return res.status(200).json(getUser);
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -186,11 +186,11 @@ export const deletedUser = async (req: Request, res: Response) => {
     const deleteUser = await userModel.findByIdAndDelete(id);
     if (deleteUser) {
       return res.status(200).json({
-        message: 'User deleted successfully',
+        message: "User deleted successfully",
       });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -207,11 +207,11 @@ export const updatedUser = async (req: Request, res: Response) => {
         email: req.body?.email,
         role: req.body?.role,
       },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json(updateUser);
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -227,11 +227,11 @@ export const blockUser = async (req: Request, res: Response) => {
       },
       {
         new: true,
-      },
+      }
     );
     res.json(blockuser);
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -247,13 +247,13 @@ export const unblockUser = async (req: Request, res: Response) => {
       },
       {
         new: true,
-      },
+      }
     );
     res.json({
-      message: 'User UnBlocked',
+      message: "User UnBlocked",
     });
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
   }
 };
 
@@ -264,17 +264,17 @@ export const updatedPassword = async (req: Request, res: Response) => {
   try {
     const user = await userModel.findById(_id);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (user && (await user.isPasswordMatch(oldPassword))) {
       user.password = newPassword;
       await user.save();
-      return res.status(200).json({ message: 'Password Updated' });
+      return res.status(200).json({ message: "Password Updated" });
     }
-    return res.status(401).json({ message: 'Password incorrect' });
+    return res.status(401).json({ message: "Password incorrect" });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -284,7 +284,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const user = await userModel.findOne({ email });
     if (!user) {
-      res.status(404).json({ message: 'Email not found' });
+      res.status(404).json({ message: "Email not found" });
     }
     const token = await user?.createPasswordResetToken();
     await user?.save();
@@ -292,8 +292,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
     <a href="http://localhost:5000/api/user/reset-password/${token}">Reset Password</a>`;
     const data: EmailData = {
       to: email,
-      text: 'Hey User',
-      subject: 'Reset Password',
+      text: "Hey User",
+      subject: "Reset Password",
       html: resetUrl,
     };
     sendEmail(data, req, res);
@@ -307,13 +307,13 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   const { token } = req.params;
   const { password } = req.body;
-  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
   const user = await userModel.findOne({
     passwordResetToken: hashedToken,
     passwordResetExpires: { $gt: Date.now() },
   });
   if (!user) {
-    return res.status(400).json({ message: 'Token is invalid or has expired' });
+    return res.status(400).json({ message: "Token is invalid or has expired" });
   }
   user.password = password;
   user.passwordResetToken = undefined;
@@ -325,10 +325,10 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const getWishlist = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
-    const findUser = await userModel.findById(_id).populate('wishlist');
+    const findUser = await userModel.findById(_id).populate("wishlist");
     res.status(200).json(findUser?.wishlist);
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
   }
 };
 
@@ -367,12 +367,12 @@ export const userCart = async (req: Request, res: Response) => {
       {
         cart: newCart?._id,
       },
-      { new: true },
+      { new: true }
     );
     res.status(200).json(newCart);
     console.log(products);
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
   }
 };
 
@@ -381,10 +381,10 @@ export const getUserCart = async (req: Request, res: Response) => {
   try {
     const cart = await cartModel
       .find({ orderedBy: _id })
-      .populate('products.product');
+      .populate("products.product");
     res.status(200).json(cart);
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
   }
 };
 
@@ -395,7 +395,7 @@ export const emptyCart = async (req: Request, res: Response) => {
     const cart = await cartModel.findOneAndRemove({ orderedBy: user?._id });
     res.status(200).json(cart);
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
   }
 };
 
@@ -405,21 +405,21 @@ export const applyCoupon = async (req: Request, res: Response) => {
   try {
     const validCoupon = await CouponModel.findOne({ name: coupon });
     if (!validCoupon) {
-      return res.status(400).json({ message: 'Invalid Coupon' });
+      return res.status(400).json({ message: "Invalid Coupon" });
     }
-    const user = await userModel.findById(_id);
+    const user = await userModel.findOne({ _id });
     const cart = await cartModel.findOne({
       orderedBy: user?._id,
     });
     if (!cart) {
-      return res.status(400).json({ message: 'Cart not found' });
+      return res.status(400).json({ message: "Cart not found" });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { products, cartTotal } = cart;
 
     if (cartTotal === undefined) {
-      return res.status(400).json({ message: 'Cart total is undefined' });
+      return res.status(400).json({ message: "Cart total is undefined" });
     }
 
     const totalAfterDiscount = (
@@ -429,12 +429,12 @@ export const applyCoupon = async (req: Request, res: Response) => {
     const updatedCart = await cartModel.findOneAndUpdate(
       { orderedBy: user?._id },
       { totalAfterDiscount },
-      { new: true },
+      { new: true }
     );
 
     res.status(200).json(updatedCart);
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
   }
 };
 
@@ -442,7 +442,7 @@ export const createOrder = async (req: Request, res: Response) => {
   const { COD, couponApplied } = req.body;
   const { _id } = req.user;
   try {
-    if (!COD) throw new Error('Create cash order failed');
+    if (!COD) throw new Error("Create cash order failed");
     const user = await userModel.findById(_id);
     const userCart = await cartModel.findOne({ orderedBy: user?._id });
     let finalAmout = 0;
@@ -460,13 +460,13 @@ export const createOrder = async (req: Request, res: Response) => {
       orderedBy: user?._id,
       paymentIntent: {
         id: uuidv4(),
-        method: 'COD',
+        method: "COD",
         amount: finalAmout,
-        status: 'Cash on Delivery',
+        status: "Cash on Delivery",
         created: Date.now(),
-        currency: 'usd',
+        currency: "usd",
       },
-      orderStatus: 'Cash on Delivery',
+      orderStatus: "Cash on Delivery",
     }).save();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bulkWriteOperations: any[] = [];
@@ -482,15 +482,15 @@ export const createOrder = async (req: Request, res: Response) => {
         };
         bulkWriteOperations.push(updateOperation);
       } else {
-        throw new Error('Cart product count is undefined');
+        throw new Error("Cart product count is undefined");
       }
     });
 
     // Use nullish coalescing operator to provide an empty array if userCart?.products is falsy
     await productModel.bulkWrite(bulkWriteOperations ?? [], {});
-    res.json({ message: 'success' });
+    res.json({ message: "success" });
   } catch (error) {
-    throw new Error('Interval server error');
+    throw new Error("Interval server error");
   }
 };
 
@@ -499,10 +499,22 @@ export const getOrders = async (req: Request, res: Response) => {
   try {
     const userOrders = await orderModel
       .find({ orderedBy: _id })
-      .populate('products.product');
+      .populate("orderedBy");
     res.status(200).json(userOrders);
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
+  }
+};
+
+export const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const allOrders = await orderModel
+      .find()
+      .populate("orderedBy")
+      .populate("products.product");
+    res.status(200).json(allOrders);
+  } catch (error) {
+    throw new Error("Internal server error");
   }
 };
 
@@ -518,10 +530,10 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
           status: status,
         },
       },
-      { new: true },
+      { new: true }
     );
     res.status(200).json(findOrder);
   } catch (error) {
-    throw new Error('Internal server error');
+    throw new Error("Internal server error");
   }
 };

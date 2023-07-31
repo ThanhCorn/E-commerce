@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import colorModel from '../models/color.Model';
-import { validateMongoDbId } from '../utils/validateMongodbid';
+import { Request, Response } from "express";
+import colorModel from "../models/color.Model";
+import { validateMongoDbId } from "../utils/validateMongodbid";
 
 export const createColor = async (req: Request, res: Response) => {
   try {
@@ -35,7 +35,7 @@ export const deleteColor = async (req: Request, res: Response) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const deleteColor = await colorModel.findByIdAndDelete(id);
     return res.status(200).json({
-      message: 'Delete Color successfully',
+      message: "Delete Color successfully",
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

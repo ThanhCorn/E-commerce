@@ -1,4 +1,4 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model, Types } from "mongoose";
 
 export interface IProduct {
   title: string;
@@ -39,13 +39,13 @@ const productSchema = new Schema<IProduct>(
     ratings: [
       {
         star: { type: Number, default: 0 },
-        postedBy: { type: Types.ObjectId, ref: 'User' },
+        postedBy: { type: Types.ObjectId, ref: "User" },
         comment: String,
       },
     ],
     totalRating: { type: String, default: 0 },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export default model('Product', productSchema);
+export default model<IProduct>("Product", productSchema);

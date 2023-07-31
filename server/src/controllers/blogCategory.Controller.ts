@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import blogCategoryModel from '../models/blogCategory.Model';
-import { validateMongoDbId } from '../utils/validateMongodbid';
+import { Request, Response } from "express";
+import blogCategoryModel from "../models/blogCategory.Model";
+import { validateMongoDbId } from "../utils/validateMongodbid";
 
 export const createBlogCategory = async (req: Request, res: Response) => {
   try {
@@ -23,7 +23,7 @@ export const updateBlogCategory = async (req: Request, res: Response) => {
       req.body,
       {
         new: true,
-      },
+      }
     );
     return res.status(200).json(updateBlogCategory);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,7 +39,7 @@ export const deleteBlogCategory = async (req: Request, res: Response) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const deleteBlogCategory = await blogCategoryModel.findByIdAndDelete(id);
     return res.status(200).json({
-      message: 'Delete category successfully',
+      message: "Delete category successfully",
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import {
   createBlog,
   deleteBlog,
@@ -8,27 +8,27 @@ import {
   likeTheBlog,
   updateBlog,
   uploadImages,
-} from '../controllers/blog.Controller';
-import { isAdmin, verifyToken } from '../middleware/authMiddleware';
-import { blogImgResize, uploadPhoto } from '../middleware/uploadImages';
+} from "../controllers/blog.Controller";
+import { isAdmin, verifyToken } from "../middleware/authMiddleware";
+import { blogImgResize, uploadPhoto } from "../middleware/uploadImages";
 
 const router = express.Router();
 
-router.post('/', verifyToken, isAdmin, createBlog);
-router.put('/likes', verifyToken, likeTheBlog);
-router.put('/dislikes', verifyToken, dislikeTheBlog);
+router.post("/", verifyToken, isAdmin, createBlog);
+router.put("/likes", verifyToken, likeTheBlog);
+router.put("/dislikes", verifyToken, dislikeTheBlog);
 router.put(
-  '/upload/:id',
+  "/upload/:id",
   verifyToken,
   isAdmin,
-  uploadPhoto.array('images',2),
+  uploadPhoto.array("images", 2),
   blogImgResize,
-  uploadImages,
+  uploadImages
 );
 
-router.put('/:id', verifyToken, isAdmin, updateBlog);
-router.get('/:id', getBlog);
-router.get('/', getAllBlog);
-router.delete('/:id', verifyToken, isAdmin, deleteBlog);
+router.put("/:id", verifyToken, isAdmin, updateBlog);
+router.get("/:id", getBlog);
+router.get("/", getAllBlog);
+router.delete("/:id", verifyToken, isAdmin, deleteBlog);
 
 export default router;

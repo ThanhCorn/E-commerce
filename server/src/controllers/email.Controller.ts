@@ -1,6 +1,6 @@
-import nodemailer from 'nodemailer';
-import 'dotenv/config';
-import { Request, Response } from 'express';
+import nodemailer from "nodemailer";
+import "dotenv/config";
+import { Request, Response } from "express";
 
 export interface EmailData {
   to: string;
@@ -14,10 +14,10 @@ export const sendEmail = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   req: Request,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  res: Response,
+  res: Response
 ) => {
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
       user: process.env.MAIL_ID,
       pass: process.env.MAIL_PASSWORD,
@@ -29,9 +29,9 @@ export const sendEmail = async (
 
   transporter.verify((error) => {
     if (error) {
-      console.error('SMTP connection error:', error);
+      console.error("SMTP connection error:", error);
     } else {
-      console.log('SMTP connection is successful');
+      console.log("SMTP connection is successful");
     }
   });
 
@@ -43,7 +43,7 @@ export const sendEmail = async (
     html: data.html, // html body
   });
 
-  console.log('Message sent: %s', info.messageId);
+  console.log("Message sent: %s", info.messageId);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
   //

@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import brandModel from '../models/brand.Model';
-import { validateMongoDbId } from '../utils/validateMongodbid';
+import { Request, Response } from "express";
+import brandModel from "../models/brand.Model";
+import { validateMongoDbId } from "../utils/validateMongodbid";
 
 export const createBrand = async (req: Request, res: Response) => {
   try {
@@ -35,7 +35,7 @@ export const deleteBrand = async (req: Request, res: Response) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const deleteBrand = await brandModel.findByIdAndDelete(id);
     return res.status(200).json({
-      message: 'Delete Brand successfully',
+      message: "Delete Brand successfully",
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

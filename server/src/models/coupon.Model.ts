@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 export interface ICoupon {
   name: string;
@@ -12,7 +12,7 @@ const couponSchema = new Schema<ICoupon>(
     expiry: { type: Date, required: true },
     discount: { type: Number, required: true },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export default model<ICoupon>('Coupon', couponSchema);
+export default model<ICoupon>("Coupon", couponSchema);

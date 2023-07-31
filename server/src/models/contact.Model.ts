@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 export interface IContact {
   name: string;
@@ -16,11 +16,11 @@ const contactSchema = new Schema<IContact>(
     comment: { type: String, required: true },
     status: {
       type: String,
-      default: 'pending',
-      enum: ['pending', 'processing', 'completed', 'rejected'],
+      default: "pending",
+      enum: ["pending", "processing", "completed", "rejected"],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export default model<IContact>('Contact', contactSchema);
+export default model<IContact>("Contact", contactSchema);

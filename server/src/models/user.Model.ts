@@ -1,6 +1,6 @@
-import { Schema, model, Types } from 'mongoose';
-import bcrypt from 'bcrypt';
-import crypto from 'crypto';
+import { Schema, model, Types } from "mongoose";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
 
 export interface IUser {
   _id: Types.ObjectId;
@@ -28,19 +28,19 @@ const userSchema = new Schema<IUser>({
   phone: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, default: 'user' },
+  role: { type: String, default: "user" },
   isBlocked: { type: Boolean, default: false },
-  cart: { type: [{ type: Types.ObjectId, ref: 'Product' }], default: [] },
-  address: { type: String, default: '' },
-  wishlist: [{ type: Types.ObjectId, ref: 'Product' }],
+  cart: { type: [{ type: Types.ObjectId, ref: "Product" }], default: [] },
+  address: { type: String, default: "" },
+  wishlist: [{ type: Types.ObjectId, ref: "Product" }],
   refreshToken: { type: String },
   passwordResetToken: { type: String },
   passwordResetExpires: { type: Date },
   passwordChangedAt: { type: Date },
 });
 
-userSchema.pre('save', function (next) {
-  if (!this.isModified('password')) {
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
     return next();
   }
   const salt = bcrypt.genSaltSync(10);
@@ -53,13 +53,13 @@ userSchema.methods.isPasswordMatch = async function (password: string) {
 };
 
 userSchema.methods.createPasswordResetToken = async function () {
-  const resetToken = crypto.randomBytes(32).toString('hex');
+  const resetToken = crypto.randomBytes(32).toString("hex");
   this.passwordResetToken = crypto
-    .createHash('sha256')
+    .createHash("sha256")
     .update(resetToken)
-    .digest('hex');
+    .digest("hex");
   this.passwordResetExpires = Date.now() + 30 * 60 * 1000; // 10 minutes
   return resetToken;
 };
 
-export default model<IUser>('User', userSchema);
+export default model<IUser>("User", userSchema);

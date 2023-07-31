@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
-import couponModel from '../models/coupon.Model';
+import { Request, Response } from "express";
+import couponModel from "../models/coupon.Model";
 
 export const createCoupon = async (req: Request, res: Response) => {
   try {
@@ -38,7 +38,7 @@ export const deleteCoupon = async (req: Request, res: Response) => {
   try {
     const findCoupon = await couponModel.findByIdAndDelete(id);
     return res.status(200).json({
-      message: 'Delete coupon successfully',
+      message: "Delete coupon successfully",
     });
   } catch (error: any) {
     throw new Error(error.message);

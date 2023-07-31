@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 export const validateMongoDbId = (id: string) => {
   const isValid = mongoose.Types.ObjectId.isValid(id);
-  if (!isValid) throw new Error('This id is not valid or not Found');
+  if (!isValid) throw new Error("This id is not valid or not Found");
 };

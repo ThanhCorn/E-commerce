@@ -109,6 +109,6 @@ export interface IOrder {
 // Images
 
 export interface IImages {
-  pubic_id: string;
-  url: string;
+  public_id?: string;
+  url?: string;
 }

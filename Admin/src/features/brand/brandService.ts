@@ -1,17 +1,29 @@
-import axios from "axios";
-import { base_url } from "../../utils/base_url";
+import axios from 'axios';
+import { base_url } from '../../utils/base_url';
+import { IBrand } from '../../@types/custom-types';
+import { config } from '../../utils/axiosConfig';
 
 const getAllBrand = async () => {
   try {
     const res = await axios.get(`${base_url}/brand`);
     return res.data;
   } catch (error) {
-    throw new Error("Get all brand failed.");
+    throw new Error('Get all brand failed.');
+  }
+};
+
+const createBrand = async (brand: IBrand) => {
+  try {
+    const res = await axios.post(`${base_url}/brand`, brand, config);
+    return res.data;
+  } catch (error) {
+    console.log(error);
   }
 };
 
 const brandService = {
   getAllBrand,
+  createBrand,
 };
 
 export default brandService;

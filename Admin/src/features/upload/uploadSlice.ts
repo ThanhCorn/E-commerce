@@ -3,7 +3,7 @@ import uploadService from './uploadService';
 import { IImages } from '../../@types/custom-types';
 
 interface IUploadState {
-  images: string[];
+  images: IImages[];
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;

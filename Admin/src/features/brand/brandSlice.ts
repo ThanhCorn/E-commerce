@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { IBrand } from '../../@types/custom-types';
-import brandService from './brandService';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { IBrand } from "../../@types/custom-types";
+import brandService from "./brandService";
 
 interface BrandState {
   brands: IBrand[];
-  createBrand: IBrand | undefined;
+  brand: IBrand | undefined;
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
@@ -13,7 +13,7 @@ interface BrandState {
 
 const initialState: BrandState = {
   brands: [],
-  createBrand: undefined,
+  brand: undefined,
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -28,11 +28,11 @@ export const getAllBrand = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  },
+  }
 );
 
 export const createBrands = createAsyncThunk(
-  'product/create-brand',
+  "brand/create-brand",
   async (brand: IBrand, thunkAPI) => {
     try {
       const res = await brandService.createBrand(brand);
@@ -40,10 +40,10 @@ export const createBrands = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  },
+  }
 );
 const brandSlice = createSlice({
-  name: 'brands',
+  name: "brands",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -64,7 +64,7 @@ const brandSlice = createSlice({
         state.isSuccess = false;
       });
     builder.addCase(createBrands.fulfilled, (state, action) => {
-      state.createBrand = action.payload;
+      state.brand = action.payload;
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;

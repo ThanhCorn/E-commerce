@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IBrand } from "../../@types/custom-types";
-import brandService from "./brandService";
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
+import { IBrand } from '../../@types/custom-types';
+import brandService from './brandService';
 
 interface BrandState {
   brands: IBrand[];
@@ -28,11 +28,11 @@ export const getAllBrand = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  }
+  },
 );
 
 export const createBrands = createAsyncThunk(
-  "brand/create-brand",
+  'brand/create-brand',
   async (brand: IBrand, thunkAPI) => {
     try {
       const res = await brandService.createBrand(brand);
@@ -40,10 +40,13 @@ export const createBrands = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  }
+  },
 );
+
+export const resetState = createAction('Reset_All');
+
 const brandSlice = createSlice({
-  name: "brands",
+  name: 'brands',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -79,6 +82,7 @@ const brandSlice = createSlice({
         state.isError = false;
         state.isSuccess = false;
       });
+    builder.addCase(resetState, () => initialState);
   },
 });
 

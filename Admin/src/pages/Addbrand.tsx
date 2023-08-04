@@ -1,43 +1,46 @@
-import { useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../app/store";
-import CustomInput from "../components/CustomInput";
-import { useNavigate } from "react-router-dom";
-import { createBrands } from "../features/brand/brandSlice";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../app/store';
+import CustomInput from '../components/CustomInput';
+import { useNavigate } from 'react-router-dom';
+import { createBrands } from '../features/brand/brandSlice';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { resetState } from '../features/brand/brandSlice';
 
 const schema = Yup.object().shape({
-  title: Yup.string().required("Title is required"),
+  title: Yup.string().required('Title is required'),
 });
 
 const Addbrand = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const { isSuccess, isError, brand } = useSelector(
-    (state: RootState) => state.brand
+    (state: RootState) => state.brand,
   );
   useEffect(() => {
     if (isSuccess && brand) {
-      toast.success("Brand Created Successfully");
+      toast.success('Brand Created Successfully');
+      dispatch(resetState());
+      setTimeout(() => {
+        navigate('/admin/list-brand');
+      }, 3000);
     }
     if (isError) {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong');
     }
   }, [isSuccess, isError, brand]);
 
   const formik = useFormik({
     initialValues: {
-      title: "",
+      title: '',
     },
     validationSchema: schema,
     onSubmit: (values) => {
       dispatch(createBrands(values));
-      setTimeout(() => {
-        navigate("/admin/list-brand");
-      }, 3000);
+      formik.resetForm();
     },
   });
   return (
@@ -54,7 +57,7 @@ const Addbrand = () => {
             type="text"
             placeholder="Enter Brand"
             className="border border-gray-300 bg-white placeholder:text-gray-700 rounded-sm mt-3 h-12"
-            onChange={formik.handleChange("title")}
+            onChange={formik.handleChange('title')}
             value={formik.values.title}
           />
 

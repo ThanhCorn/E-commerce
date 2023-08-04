@@ -14,7 +14,7 @@ import { IColor, IImages } from '../@types/custom-types';
 import Dropzone from 'react-dropzone';
 import { uploadImages } from '../features/upload/uploadSlice';
 import { Select } from 'antd';
-import { createProducts } from '../features/product/productSlice';
+import { createProducts, resetState } from '../features/product/productSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -46,6 +46,10 @@ const Addproduct = () => {
   useEffect(() => {
     if (isSuccess && createdProduct) {
       toast.success('Product Created Successfully');
+      dispatch(resetState());
+      setTimeout(() => {
+        navigate('/admin/list-product');
+      }, 3000);
     }
     if (isError) {
       toast.error('Something went wrong');
@@ -67,10 +71,8 @@ const Addproduct = () => {
     validationSchema: schema,
     onSubmit: (values) => {
       dispatch(createProducts(values));
+      formik.resetForm();
       setSelectedColors([]);
-      setTimeout(() => {
-        navigate('/admin/list-product');
-      }, 3000);
     },
   });
 
@@ -98,6 +100,7 @@ const Addproduct = () => {
   useEffect(() => {
     formik.setFieldValue('images', img);
   }, [uploadedImages]);
+
   const onDrop = (acceptedFiles: File[]) => {
     dispatch(uploadImages(acceptedFiles)).then(() => {
       setUploadedImages(acceptedFiles);

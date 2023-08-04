@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IBlog } from "../../@types/custom-types";
-import blogService from "./blogService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { IBlog } from '../../@types/custom-types';
+import blogService from './blogService';
 
 interface BlogState {
   blogs: IBlog[];
+  blog: IBlog | undefined;
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
@@ -12,6 +13,7 @@ interface BlogState {
 
 const initialState: BlogState = {
   blogs: [],
+  blog: undefined,
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -26,10 +28,22 @@ export const getAllBlog = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  }
+  },
+);
+
+export const createBlog = createAsyncThunk(
+  'blog/create-blog',
+  async (blog: IBlog, thunkAPI) => {
+    try {
+      const res = await blogService.createBlog(blog);
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  },
 );
 const blogSlice = createSlice({
-  name: "blogs",
+  name: 'blogs',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -45,6 +59,22 @@ const blogSlice = createSlice({
         state.isSuccess = false;
       }),
       builder.addCase(getAllBlog.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      });
+    builder.addCase(createBlog.fulfilled, (state, action) => {
+      state.blog = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+    }),
+      builder.addCase(createBlog.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+      }),
+      builder.addCase(createBlog.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;

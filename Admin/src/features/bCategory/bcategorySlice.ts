@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IBlogCategory } from "../../@types/custom-types";
-import bCategoryService from "./bcategoryService";
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
+import { IBlogCategory } from '../../@types/custom-types';
+import bCategoryService from './bcategoryService';
 
 interface BLogCategoryState {
   bCategories: IBlogCategory[];
@@ -28,11 +28,11 @@ export const getAllBlogCategory = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  }
+  },
 );
 
 export const createBlogCategories = createAsyncThunk(
-  "blogCategory/create-category",
+  'blogCategory/create-category',
   async (category: IBlogCategory, thunkAPI) => {
     try {
       const res = await bCategoryService.createBlogCategory(category);
@@ -40,10 +40,12 @@ export const createBlogCategories = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  }
+  },
 );
+
+export const resetState = createAction('Reset_All');
 const pCategorySlice = createSlice({
-  name: "bCategories",
+  name: 'bCategories',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -79,6 +81,7 @@ const pCategorySlice = createSlice({
         state.isError = false;
         state.isSuccess = false;
       });
+    builder.addCase(resetState, () => initialState);
   },
 });
 

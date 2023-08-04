@@ -1,6 +1,6 @@
 import { IProduct } from '../../@types/custom-types.d';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import productService from './productService';
 
 interface ProductSate {
@@ -43,6 +43,8 @@ export const createProducts = createAsyncThunk(
   },
 );
 
+export const resetState = createAction('Reset_All');
+
 export const productSlice = createSlice({
   name: 'products',
   initialState,
@@ -80,6 +82,7 @@ export const productSlice = createSlice({
         state.isError = false;
         state.isSuccess = false;
       });
+    builder.addCase(resetState, () => initialState);
   },
 });
 

@@ -54,6 +54,7 @@ export interface IBlog {
   _id?: string;
   title: string;
   category: string;
+  description: string;
 }
 
 export interface IBlogCategory {
@@ -111,4 +112,27 @@ export interface IOrder {
 export interface IImages {
   public_id?: string;
   url?: string;
+}
+
+export interface IProduct {
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  category: string;
+  quantity: number;
+  brand: string;
+  sold?: number;
+  images?: {
+    public_id: string;
+    url: string;
+  };
+  color?: string[];
+  tags?: string;
+  ratings?: Array<{
+    star: number;
+    postedBy: Types.ObjectId;
+    comment?: string;
+  }>;
+  totalRating?: string;
 }

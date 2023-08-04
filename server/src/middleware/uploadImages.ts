@@ -40,7 +40,6 @@ export const productImgResize = async (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log(req.files);
   if (!req.files || !Array.isArray(req.files)) return next();
 
   try {

@@ -44,6 +44,7 @@ export const createBlogCategories = createAsyncThunk(
 );
 
 export const resetState = createAction('Reset_All');
+
 const pCategorySlice = createSlice({
   name: 'bCategories',
   initialState,

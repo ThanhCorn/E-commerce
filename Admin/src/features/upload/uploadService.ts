@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { base_url } from '../../utils/base_url';
 import { config } from '../../utils/axiosConfig';
-import { IImages } from '../../@types/custom-types';
 
 const uploadImages = async (images: File[]) => {
   try {

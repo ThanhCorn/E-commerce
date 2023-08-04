@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { IBlog } from '../../@types/custom-types';
 import blogService from './blogService';
 
@@ -42,6 +42,9 @@ export const createBlog = createAsyncThunk(
     }
   },
 );
+
+export const resetState = createAction('Reset_All');
+
 const blogSlice = createSlice({
   name: 'blogs',
   initialState,
@@ -79,6 +82,7 @@ const blogSlice = createSlice({
         state.isError = false;
         state.isSuccess = false;
       });
+    builder.addCase(resetState, () => initialState);
   },
 });
 

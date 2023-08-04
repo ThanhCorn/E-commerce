@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IProductCategory } from "../../@types/custom-types";
-import pCategoryService from "./pcategoryService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { IProductCategory } from '../../@types/custom-types';
+import pCategoryService from './pcategoryService';
 
 interface ProductCategoryState {
   pCategories: IProductCategory[];
@@ -28,11 +28,11 @@ export const getAllProductCategory = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  }
+  },
 );
 
 export const createPCategories = createAsyncThunk(
-  "productCategory/create-category",
+  'productCategory/create-category',
   async (category: IProductCategory, thunkAPI) => {
     try {
       const res = await pCategoryService.createPCategory(category);
@@ -40,10 +40,10 @@ export const createPCategories = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  }
+  },
 );
 const pCategorySlice = createSlice({
-  name: "pCategories",
+  name: 'pCategories',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IContact } from "../../@types/custom-types";
-import contactService from "../contact/contactService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { IContact } from '../../@types/custom-types';
+import contactService from '../contact/contactService';
 
 interface ContactState {
   contacts: IContact[];
@@ -26,10 +26,10 @@ export const getAllContact = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  }
+  },
 );
 const contactSlice = createSlice({
-  name: "contacts",
+  name: 'contacts',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

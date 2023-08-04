@@ -1,12 +1,12 @@
-import { Table } from "antd";
-import type { ColumnsType } from "antd/es/table";
-import { AppDispatch, RootState } from "../app/store";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FiEdit } from "react-icons/fi";
-import { AiOutlineDelete } from "react-icons/ai";
-import { getAllBlogCategory } from "../features/bCategory/bcategorySlice";
+import { Table } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import { AppDispatch, RootState } from '../app/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { FiEdit } from 'react-icons/fi';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { getAllBlogCategory } from '../features/bCategory/bcategorySlice';
 
 interface DataType {
   key: React.Key;
@@ -16,23 +16,23 @@ interface DataType {
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "No.",
-    dataIndex: "key",
+    title: 'No.',
+    dataIndex: 'key',
   },
   {
-    title: "Title",
-    dataIndex: "title",
+    title: 'Title',
+    dataIndex: 'title',
   },
   {
-    title: "Action",
-    dataIndex: "action",
+    title: 'Action',
+    dataIndex: 'action',
   },
 ];
 
 const Blogcategorylist = () => {
   const dispatch: AppDispatch = useDispatch();
   const bcategories = useSelector(
-    (state: RootState) => state.bCategories.bCategories
+    (state: RootState) => state.bCategories.bCategories,
   );
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Blogcategorylist = () => {
   for (let i = 0; i < bcategories.length; i++) {
     data1.push({
       key: i,
-      title: bcategories[i].title || "",
+      title: bcategories[i].title || '',
       action: (
         <div className="flex gap-3">
           <Link to="" className="text-blue-600">

@@ -136,3 +136,11 @@ export interface IProduct {
   }>;
   totalRating?: string;
 }
+
+// coupon
+export interface ICoupon {
+  _id?: string;
+  name: string;
+  discount: number;
+  expiry: Date;
+}

@@ -21,9 +21,39 @@ const createBrand = async (brand: IBrand) => {
   }
 };
 
+const getBrand = async (id: string) => {
+  try {
+    const res = await axios.get(`${base_url}/brand/${id}`, config);
+    return res.data;
+  } catch (error) {
+    throw new Error('Get all brand failed.');
+  }
+};
+
+const updateBrand = async (id: string, brand: IBrand) => {
+  try {
+    const res = await axios.put(`${base_url}/brand/${id}`, brand, config);
+    return res.data;
+  } catch (error) {
+    throw new Error('Update brand failed.');
+  }
+};
+
+const deleteBrand = async (id: string) => {
+  try {
+    const res = await axios.delete(`${base_url}/brand/${id}`, config);
+    return res.data;
+  } catch (error) {
+    throw new Error('Delete brand failed.');
+  }
+};
+
 const brandService = {
   getAllBrand,
   createBrand,
+  getBrand,
+  updateBrand,
+  deleteBrand,
 };
 
 export default brandService;

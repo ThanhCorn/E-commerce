@@ -16,8 +16,8 @@ const contactSchema = new Schema<IContact>(
     comment: { type: String, required: true },
     status: {
       type: String,
-      default: "pending",
-      enum: ["pending", "processing", "completed", "rejected"],
+      default: "Submitted",
+      enum: ["Submitted", "Contacted", "In Progress", "Resolved"],
     },
   },
   { timestamps: true }

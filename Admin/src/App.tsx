@@ -23,6 +23,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Addcoupon from "./pages/Addcoupon";
 import Couponlist from "./pages/Couponlist";
+import ViewContact from "./pages/ViewContact";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/admin" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="contact/:id" element={<ViewContact />} />
             <Route path="blog-list" element={<Bloglist />} />
             <Route path="blog" element={<Addblog />} />
             <Route path="blog/:id" element={<Addblog />} />

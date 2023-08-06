@@ -65,11 +65,11 @@ export interface IBlogCategory {
 
 export interface IContact {
   _id?: string;
-  name: string;
-  email: string;
-  phone: string;
-  comment: string;
-  status: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  comment?: string;
+  status?: string;
 }
 
 // Order interface

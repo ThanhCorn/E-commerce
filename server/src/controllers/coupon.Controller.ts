@@ -21,6 +21,16 @@ export const getAllCoupon = async (req: Request, res: Response) => {
   }
 };
 
+export const getCoupon = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const coupon = await couponModel.findById(id);
+    return res.status(200).json(coupon);
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
 export const updateCoupon = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {

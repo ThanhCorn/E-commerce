@@ -6,7 +6,13 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
-import { getAllProductCategory } from "../features/pCategory/pcategorySlice";
+import {
+  deleteProductCategory,
+  getAllProductCategory,
+  resetState,
+} from "../features/pCategory/pcategorySlice";
+import { useState } from "react";
+import CustomModal from "../components/CustomModal";
 
 interface DataType {
   key: React.Key;
@@ -30,12 +36,25 @@ const columns: ColumnsType<DataType> = [
 ];
 
 const Categorylist = () => {
+  const [open, setOpen] = useState(false);
+  const [categoryId, setCategoryId] = useState("");
+
   const dispatch: AppDispatch = useDispatch();
   const categories = useSelector(
     (state: RootState) => state.pCategories.pCategories
   );
 
+  const hideModal = () => {
+    setOpen(false);
+  };
+
+  const showModal = (id: string) => {
+    setOpen(true);
+    setCategoryId(id);
+  };
+
   useEffect(() => {
+    dispatch(resetState());
     dispatch(getAllProductCategory());
   }, [dispatch]);
 
@@ -46,16 +65,28 @@ const Categorylist = () => {
       title: categories[i].title || "",
       action: (
         <div className="flex gap-3">
-          <Link to="" className="text-blue-600">
+          <Link
+            to={`/admin/category/${categories[i]._id}`}
+            className="text-blue-600"
+          >
             <FiEdit size={25} />
           </Link>
-          <Link to="" className="text-red-600">
+          <button
+            onClick={() => showModal(categories[i]._id ?? "")}
+            className="text-red-600"
+          >
             <AiOutlineDelete size={25} />
-          </Link>
+          </button>
         </div>
       ),
     });
   }
+
+  const handleDelete = async (id: string) => {
+    setOpen(false);
+    await dispatch(deleteProductCategory(id));
+    dispatch(getAllProductCategory());
+  };
 
   return (
     <div>
@@ -63,6 +94,12 @@ const Categorylist = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+      <CustomModal
+        hideModal={hideModal}
+        open={open}
+        title="Are you sure to want to delete"
+        performAction={() => handleDelete(categoryId)}
+      />
     </div>
   );
 };

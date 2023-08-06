@@ -1,4 +1,4 @@
-import { IBlogCategory } from './../../../server/src/models/blogCategory.Model';
+import { IBlogCategory } from "./../../../server/src/models/blogCategory.Model";
 export interface IUser {
   _id?: string;
   firstname?: string;
@@ -55,6 +55,7 @@ export interface IBlog {
   title: string;
   category: string;
   description: string;
+  images: IImages[];
 }
 
 export interface IBlogCategory {

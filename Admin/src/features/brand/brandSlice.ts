@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
-import { IBrand } from '../../@types/custom-types';
-import brandService from './brandService';
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
+import { IBrand } from "../../@types/custom-types";
+import brandService from "./brandService";
 
 interface BrandState {
   brands: IBrand[];
   brand: IBrand | undefined;
   updatedBrand: IBrand | undefined;
+  deletedBrand: IBrand | undefined;
   brandName?: string;
   isLoading: boolean;
   isSuccess: boolean;
@@ -17,7 +18,8 @@ const initialState: BrandState = {
   brands: [],
   brand: undefined,
   updatedBrand: undefined,
-  brandName: '',
+  deletedBrand: undefined,
+  brandName: "",
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -32,7 +34,7 @@ export const getAllBrand = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  },
+  }
 );
 
 export const getBrand = createAsyncThunk(
@@ -44,11 +46,11 @@ export const getBrand = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  },
+  }
 );
 
 export const createBrands = createAsyncThunk(
-  'brand/create-brand',
+  "brand/create-brand",
   async (brand: IBrand, thunkAPI) => {
     try {
       const res = await brandService.createBrand(brand);
@@ -56,11 +58,11 @@ export const createBrands = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  },
+  }
 );
 
 export const updateBrand = createAsyncThunk(
-  'brand/update-brand',
+  "brand/update-brand",
   async ({ id, title }: { id: string; title: string }, thunkAPI) => {
     try {
       const res = await brandService.updateBrand(id, {
@@ -70,11 +72,11 @@ export const updateBrand = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  },
+  }
 );
 
 export const deleteBrand = createAsyncThunk(
-  'brand/delete-brand',
+  "brand/delete-brand",
   async (id: string, thunkAPI) => {
     try {
       const res = await brandService.deleteBrand(id);
@@ -82,13 +84,13 @@ export const deleteBrand = createAsyncThunk(
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
-  },
+  }
 );
 
-export const resetState = createAction('Reset_All');
+export const resetState = createAction("Reset_All");
 
 const brandSlice = createSlice({
-  name: 'brands',
+  name: "brands",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -157,7 +159,7 @@ const brandSlice = createSlice({
         state.isSuccess = false;
       });
     builder.addCase(deleteBrand.fulfilled, (state, action) => {
-      state.brands = action.payload;
+      state.deletedBrand = action.payload;
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;

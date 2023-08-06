@@ -1,11 +1,11 @@
 interface ICustomInput {
-  type: string;
+  type: "text" | "password" | "number" | "date" | "email" | "color";
   name?: string;
   className: string;
   placeholder: string;
   id?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
+  value?: string | number;
 }
 
 const CustomInput = (props: ICustomInput) => {

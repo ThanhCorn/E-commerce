@@ -2,11 +2,12 @@ import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AppDispatch, RootState } from "../app/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
-import { getAllBlog } from "../features/blogs/blogSlice";
+import { deleteBlog, getAllBlog } from "../features/blogs/blogSlice";
+import CustomModal from "../components/CustomModal";
 
 interface DataType {
   key: React.Key;
@@ -35,12 +36,23 @@ const columns: ColumnsType<DataType> = [
 ];
 
 const Bloglist = () => {
+  const [open, setOpen] = useState(false);
+  const [blogId, setBlogId] = useState("");
   const dispatch: AppDispatch = useDispatch();
   const blogs = useSelector((state: RootState) => state.blogs.blogs);
 
   useEffect(() => {
     dispatch(getAllBlog());
   }, [dispatch]);
+
+  const showModal = (id: string) => {
+    setOpen(true);
+    setBlogId(id);
+  };
+
+  const hideModal = () => {
+    setOpen(false);
+  };
 
   const data1: DataType[] = [];
   for (let i = 0; i < blogs.length; i++) {
@@ -50,16 +62,25 @@ const Bloglist = () => {
       category: blogs[i].category || "",
       action: (
         <div className="flex gap-3">
-          <Link to="" className="text-blue-600">
+          <Link to={`/admin/blog/${blogs[i]._id}`} className="text-blue-600">
             <FiEdit size={25} />
           </Link>
-          <Link to="" className="text-red-600">
+          <button
+            onClick={() => showModal(blogs[i]._id ?? "")}
+            className="text-red-600"
+          >
             <AiOutlineDelete size={25} />
-          </Link>
+          </button>
         </div>
       ),
     });
   }
+
+  const handleDelete = async (id: string) => {
+    setOpen(false);
+    await dispatch(deleteBlog(id));
+    dispatch(getAllBlog());
+  };
 
   return (
     <div>
@@ -67,6 +88,12 @@ const Bloglist = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+      <CustomModal
+        hideModal={hideModal}
+        open={open}
+        title="Are you sure to want to delete"
+        performAction={() => handleDelete(blogId)}
+      />
     </div>
   );
 };

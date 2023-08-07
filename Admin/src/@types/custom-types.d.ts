@@ -18,23 +18,6 @@ export interface ICustomer {
   role: string;
 }
 
-export interface IProduct {
-  _id?: string;
-  title?: string;
-  price?: number;
-  slug?: string;
-  description?: string;
-  category?: string;
-  quantity?: number;
-  brand?: string;
-  sold?: number;
-  images?: string[];
-  tag?: string[];
-  color?: string[];
-  totalRating?: number;
-  ratings?: [];
-}
-
 export interface IBrand {
   _id?: string;
   title?: string;
@@ -73,8 +56,8 @@ export interface IContact {
 }
 
 // Order interface
-interface OrderProduct {
-  product: string; // The product's MongoDB _id (string type)
+export interface OrderProduct {
+  product: IProduct; // The product's MongoDB _id (string type)
   count: number;
   color: string;
 }
@@ -94,16 +77,17 @@ interface OrderDoc {
   products: OrderProduct[];
   paymentIntent: PaymentIntent;
   orderStatus: string;
-  orderedBy: string; // The user's MongoDB _id (string type)
+  orderedBy: IUser; // The user's MongoDB _id (string type)
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface IOrder {
+  _id?: string;
   products: OrderProduct[];
   paymentIntent: PaymentIntent;
   orderStatus: string;
-  orderedBy: string; // The user's MongoDB _id (string type)
+  orderedBy: IUser; // The user's MongoDB _id (string type)
   createdAt: Date;
   updatedAt: Date;
 }

@@ -24,6 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Addcoupon from "./pages/Addcoupon";
 import Couponlist from "./pages/Couponlist";
 import ViewContact from "./pages/ViewContact";
+import ViewOrder from "./pages/ViewOrder";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
             <Route path="blog-category/:id" element={<Addblogcategory />} />
             <Route path="blog-category-list" element={<Blogcategorylist />} />
             <Route path="orders" element={<Orders />} />
+            <Route path="order/:id" element={<ViewOrder />} />
             <Route path="customers" element={<Customers />} />
             <Route path="list-color" element={<Colorlist />} />
             <Route path="color" element={<Addcolor />} />

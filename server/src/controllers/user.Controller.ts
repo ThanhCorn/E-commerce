@@ -518,6 +518,20 @@ export const getAllOrders = async (req: Request, res: Response) => {
   }
 };
 
+export const getOrderId = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const findOrder = await orderModel
+      .findById(id)
+      .populate("orderedBy")
+      .populate("products.product");
+    res.status(200).json(findOrder);
+  } catch (error) {
+    throw new Error("Internal server error");
+  }
+};
+
 export const updateOrderStatus = async (req: Request, res: Response) => {
   const { status } = req.body;
   const { id } = req.params;

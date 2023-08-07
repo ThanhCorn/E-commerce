@@ -24,6 +24,7 @@ import {
   getOrders,
   updateOrderStatus,
   getAllOrders,
+  getOrderId,
 } from "../controllers/user.Controller";
 import { isAdmin, verifyToken } from "../middleware/authMiddleware";
 import "dotenv/config";
@@ -42,6 +43,7 @@ router.post("/cart/apply-coupon", verifyToken, applyCoupon);
 router.post("/cart/cash-order", verifyToken, createOrder);
 router.get("/get-orders", verifyToken, getOrders);
 router.get("/get-all-orders", verifyToken, isAdmin, getAllOrders);
+router.post("/get-order-by-id/:id", verifyToken, isAdmin, getOrderId);
 router.put("/update-order/:id", verifyToken, isAdmin, updateOrderStatus);
 router.get("/all-users", getAllUser);
 router.get("/refresh", handleRefreshToken);

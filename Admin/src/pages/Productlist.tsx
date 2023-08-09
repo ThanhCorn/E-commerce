@@ -3,7 +3,7 @@ import type { ColumnsType } from "antd/es/table";
 import { AppDispatch, RootState } from "../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAllProduct } from "../features/product/productSlice";
+import { getAllProduct } from "../features/products/productSlice";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
@@ -70,7 +70,10 @@ const Productlist = () => {
       price: products[i].price || 0,
       action: (
         <div className="flex gap-3">
-          <Link to="" className="text-blue-600">
+          <Link
+            to={`/admin/product/${products[i]._id}`}
+            className="text-blue-600"
+          >
             <FiEdit size={25} />
           </Link>
           <Link to="" className="text-red-600">

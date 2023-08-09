@@ -1,21 +1,29 @@
-import ReactStars from 'react-stars';
-import BreadCrumb from '../components/BreadCrumb';
-import Meta from '../components/Meta';
-import watch from '../assets/images/watch.jpg';
-import gr from '../assets/images/gr.svg';
-import gr2 from '../assets/images/gr2.svg';
-import gr3 from '../assets/images/gr3.svg';
-import gr4 from '../assets/images/gr4.svg';
+import ReactStars from "react-stars";
+import BreadCrumb from "../components/BreadCrumb";
+import Meta from "../components/Meta";
+import watch from "../assets/images/watch.jpg";
+import gr from "../assets/images/gr.svg";
+import gr2 from "../assets/images/gr2.svg";
+import gr3 from "../assets/images/gr3.svg";
+import gr4 from "../assets/images/gr4.svg";
 
-import { useState } from 'react';
-import ProductCard from '../components/ProductCard';
-import { useLocation } from 'react-router-dom';
-import Color from '../components/Color';
+import { useEffect, useState } from "react";
+import ProductCard from "../components/ProductCard";
+import { useLocation } from "react-router-dom";
+import Color from "../components/Color";
+import { AppDispatch, RootState } from "../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProduct } from "../features/products/productSlice";
 
 const OurStore = () => {
   const [grid, setGrid] = useState(3);
   const location = useLocation();
-  console.log(location.pathname);
+  const dispatch: AppDispatch = useDispatch();
+  const getProducts = useSelector((state: RootState) => state.product.products);
+
+  useEffect(() => {
+    dispatch(getAllProduct());
+  }, []);
 
   return (
     <>
@@ -160,7 +168,7 @@ const OurStore = () => {
                           count={5}
                           size={24}
                           value={3}
-                          color2={'#ffd700'}
+                          color2={"#ffd700"}
                         />
                         <b>$300</b>
                       </div>
@@ -177,7 +185,7 @@ const OurStore = () => {
                           count={5}
                           size={24}
                           value={3}
-                          color2={'#ffd700'}
+                          color2={"#ffd700"}
                         />
                         <b>$300</b>
                       </div>
@@ -239,17 +247,12 @@ const OurStore = () => {
               </div>
               <div
                 className={`product-list mt-5 rounded-lg gap-3  ${
-                  location.pathname == '/product'
+                  location.pathname == "/product"
                     ? `grid grid-cols-${grid}`
-                    : 'grid grid-cols-3'
+                    : "grid grid-cols-3"
                 }`}
               >
-                <ProductCard grid={grid} />
-                <ProductCard grid={grid} />
-                <ProductCard grid={grid} />
-                <ProductCard grid={grid} />
-                <ProductCard grid={grid} />
-                <ProductCard grid={grid} />
+                <ProductCard data={getProducts} grid={grid} />
               </div>
             </div>
           </div>

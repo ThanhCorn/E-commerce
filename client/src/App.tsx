@@ -1,24 +1,26 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import OurStore from './pages/OurStore';
-import Blog from './pages/Blog';
-import CompareProduct from './pages/CompareProduct';
-import Wishlist from './pages/Wishlist';
-import Login from './pages/Login';
-import ForgotPassword from './pages/ForgotPassword';
-import Signup from './pages/Signup';
-import ResetPassword from './pages/ResetPassword';
-import SingleBlog from './pages/SingleBlog';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import RefundPolicy from './pages/RefundPolicy';
-import ShippingPolicy from './pages/ShippingPolicy';
-import TermAndConditions from './pages/TermAndConditions';
-import SingleProduct from './pages/SingleProduct';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import OurStore from "./pages/OurStore";
+import Blog from "./pages/Blog";
+import CompareProduct from "./pages/CompareProduct";
+import Wishlist from "./pages/Wishlist";
+import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import Signup from "./pages/Signup";
+import ResetPassword from "./pages/ResetPassword";
+import SingleBlog from "./pages/SingleBlog";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import RefundPolicy from "./pages/RefundPolicy";
+import ShippingPolicy from "./pages/ShippingPolicy";
+import TermAndConditions from "./pages/TermAndConditions";
+import SingleProduct from "./pages/SingleProduct";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -47,6 +49,7 @@ function App() {
             <Route path="/term-conditions" element={<TermAndConditions />} />
           </Route>
         </Routes>
+        <ToastContainer position="top-right" />
       </BrowserRouter>
     </>
   );

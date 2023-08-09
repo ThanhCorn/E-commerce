@@ -4,8 +4,8 @@ import crypto from "crypto";
 
 export interface IUser {
   _id: Types.ObjectId;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   phone: string;
   email: string;
   password: string;
@@ -23,8 +23,8 @@ export interface IUser {
 }
 
 const userSchema = new Schema<IUser>({
-  firstname: { type: String, required: true },
-  lastname: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
   phone: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },

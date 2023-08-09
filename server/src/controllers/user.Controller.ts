@@ -53,8 +53,8 @@ export const loginUser = async (req: Request, res: Response) => {
     });
     res.status(200).json({
       _id: user?._id,
-      firstname: user?.firstname,
-      lastname: user?.lastname,
+      firstname: user?.firstName,
+      lastname: user?.lastName,
       email: user?.email,
       phone: user?.phone,
       token: generateToken(user?._id),
@@ -91,8 +91,8 @@ export const loginAdmin = async (req: Request, res: Response) => {
     });
     res.status(200).json({
       _id: findAdmin?._id,
-      firstname: findAdmin?.firstname,
-      lastname: findAdmin?.lastname,
+      firstname: findAdmin?.firstName,
+      lastname: findAdmin?.lastName,
       email: findAdmin?.email,
       phone: findAdmin?.phone,
       token: generateToken(findAdmin?._id),

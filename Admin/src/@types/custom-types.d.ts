@@ -100,19 +100,17 @@ export interface IImages {
 }
 
 export interface IProduct {
+  _id?: string;
   title: string;
-  slug: string;
+  slug?: string;
   description: string;
   price: number;
   category: string;
   quantity: number;
   brand: string;
   sold?: number;
-  images?: {
-    public_id: string;
-    url: string;
-  };
-  color?: string[];
+  images: IImages[];
+  color: string[];
   tags?: string;
   ratings?: Array<{
     star: number;

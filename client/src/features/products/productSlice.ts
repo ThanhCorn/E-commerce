@@ -5,6 +5,7 @@ import productService from "./productService";
 
 interface ProductSate {
   products: IProduct[];
+  product?: IProduct;
   addToWishlist?: IUser;
   isLoading: boolean;
   isSuccess: boolean;
@@ -13,6 +14,7 @@ interface ProductSate {
 
 const initialState: ProductSate = {
   products: [],
+  product: undefined,
   addToWishlist: undefined,
   isLoading: false,
   isSuccess: false,
@@ -24,6 +26,18 @@ export const getAllProduct = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await productService.getAllProduct();
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const getSingleProduct = createAsyncThunk(
+  "product/get-product-by-id",
+  async (id: string, thunkAPI) => {
+    try {
+      const res = await productService.getSingleProduct(id);
       return res;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -46,7 +60,7 @@ export const addToWishlist = createAsyncThunk(
 export const resetState = createAction("Reset_All");
 
 export const productSlice = createSlice({
-  name: "products",
+  name: "product",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -62,6 +76,22 @@ export const productSlice = createSlice({
         state.isSuccess = false;
       }),
       builder.addCase(getAllProduct.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      });
+    builder.addCase(getSingleProduct.fulfilled, (state, action) => {
+      state.product = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+    }),
+      builder.addCase(getSingleProduct.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+      }),
+      builder.addCase(getSingleProduct.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;

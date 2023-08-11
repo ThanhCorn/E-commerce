@@ -14,15 +14,25 @@ import Color from "../components/Color";
 import { AppDispatch, RootState } from "../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "../features/products/productSlice";
+import { getUserProductWishlist } from "../features/user/userSlice";
+import { IProduct } from "../@types/declare";
 
 const OurStore = () => {
   const [grid, setGrid] = useState(3);
   const location = useLocation();
   const dispatch: AppDispatch = useDispatch();
   const getProducts = useSelector((state: RootState) => state.product.products);
+  const userWishlist = useSelector(
+    (state: RootState) => state.auth.userWishlist
+  );
+  let wishlist: string[] = [];
+  if (userWishlist) {
+    wishlist = userWishlist.map((item: IProduct) => item._id);
+  }
 
   useEffect(() => {
     dispatch(getAllProduct());
+    dispatch(getUserProductWishlist());
   }, []);
 
   return (
@@ -252,7 +262,11 @@ const OurStore = () => {
                     : "grid grid-cols-3"
                 }`}
               >
-                <ProductCard data={getProducts} grid={grid} />
+                <ProductCard
+                  data={getProducts}
+                  grid={grid}
+                  wishlist={wishlist}
+                />
               </div>
             </div>
           </div>

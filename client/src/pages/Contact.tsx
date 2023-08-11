@@ -1,9 +1,39 @@
-import BreadCrumb from '../components/BreadCrumb';
-import Meta from '../components/Meta';
-import { AiOutlineHome, AiOutlineMail } from 'react-icons/ai';
-import { BiInfoCircle, BiPhoneCall } from 'react-icons/bi';
+import BreadCrumb from "../components/BreadCrumb";
+import Meta from "../components/Meta";
+import { AiOutlineHome, AiOutlineMail } from "react-icons/ai";
+import { BiInfoCircle, BiPhoneCall } from "react-icons/bi";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { createContact } from "../features/contact/contactSlice";
+
+const schema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string()
+    .nullable()
+    .email("Invalid email")
+    .required("Email is required"),
+  phone: Yup.string().required("Phone is required"),
+  comment: Yup.string().required("Comment is required"),
+});
 
 const Contact = () => {
+  const dispatch: AppDispatch = useDispatch();
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      phone: "",
+      comment: "",
+    },
+    validationSchema: schema,
+    onSubmit: (values) => {
+      dispatch(createContact(values));
+      formik.resetForm();
+    },
+  });
   return (
     <>
       <Meta title="Contact Us" />
@@ -16,30 +46,74 @@ const Contact = () => {
             width="600"
             height="450"
             style={{
-              border: '0',
-              width: '100%',
-              height: '500px',
-              paddingTop: '50px',
-              marginBottom: '30px',
+              border: "0",
+              width: "100%",
+              height: "500px",
+              paddingTop: "50px",
+              marginBottom: "30px",
             }}
             loading="lazy"
           ></iframe>
           <div className="grid grid-cols-2 bg-white  mb-10 rounded-xl gap-5">
             <div className="col-span-1 ml-10 mt-5">
               <h2 className="text-2xl font-bold mb-5">Contact</h2>
-              <form action="" className="flex flex-col gap-5">
+              <form
+                action=""
+                className="flex flex-col gap-3"
+                onSubmit={formik.handleSubmit}
+              >
+                <div>
+                  {formik.errors.name && formik.touched.name && (
+                    <p className="text-red-500 text-sm">{formik.errors.name}</p>
+                  )}
+                </div>
                 <div className=" ">
-                  <input type="text" className=" input" placeholder="Name" />
+                  <input
+                    type="text"
+                    className=" input"
+                    placeholder="Name"
+                    value={formik.values.name}
+                    onChange={formik.handleChange("name")}
+                  />
+                </div>
+                <div>
+                  {formik.errors.email && formik.touched.email && (
+                    <p className="text-red-500 text-sm">
+                      {formik.errors.email}
+                    </p>
+                  )}
                 </div>
                 <div className="">
-                  <input type="email" className=" input" placeholder="Email" />
+                  <input
+                    type="email"
+                    className=" input"
+                    placeholder="Email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange("email")}
+                  />
+                </div>
+                <div>
+                  {formik.errors.phone && formik.touched.phone && (
+                    <p className="text-red-500 text-sm">
+                      {formik.errors.phone}
+                    </p>
+                  )}
                 </div>
                 <div className="">
                   <input
                     type="tel"
                     className=" input"
                     placeholder="Phone Number"
+                    value={formik.values.phone}
+                    onChange={formik.handleChange("phone")}
                   />
+                </div>
+                <div>
+                  {formik.errors.comment && formik.touched.comment && (
+                    <p className="text-red-500 text-sm">
+                      {formik.errors.comment}
+                    </p>
+                  )}
                 </div>
                 <div className="">
                   <textarea
@@ -49,10 +123,14 @@ const Contact = () => {
                     rows={5}
                     className=" bg-gray-100 py-2 pl-2   w-full rounded-lg flex placeholder:items-center"
                     placeholder="Comments"
+                    value={formik.values.comment}
+                    onChange={formik.handleChange("comment")}
                   ></textarea>
                 </div>
                 <div className="pb-10">
-                  <button className="button">Submit</button>
+                  <button className="button" type="submit">
+                    Submit
+                  </button>
                 </div>
               </form>
             </div>

@@ -15,7 +15,7 @@ export interface IProduct {
   brand: string;
   sold?: number;
   images?: IImages[];
-  color?: string[];
+  color: Types.ObjectId[];
   tags?: string;
   ratings?: Array<{
     star: number;
@@ -37,7 +37,7 @@ const productSchema = new Schema<IProduct>(
     sold: { type: Number, default: 0 },
     tags: { type: String, default: "" },
     images: [{ public_id: String, url: String }],
-    color: [],
+    color: [{ type: Types.ObjectId, ref: "Color" }],
     ratings: [
       {
         star: { type: Number, default: 0 },

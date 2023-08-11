@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import brandModel from '../models/brand.Model';
-import { validateMongoDbId } from '../utils/validateMongodbid';
+import { Request, Response } from "express";
+import brandModel from "../models/brand.Model";
+import { validateMongoDbId } from "../utils/validateMongodbid";
 
 export const createBrand = async (req: Request, res: Response) => {
   try {

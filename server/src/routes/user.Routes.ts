@@ -19,12 +19,14 @@ import {
   userCart,
   getUserCart,
   emptyCart,
-  applyCoupon,
-  createOrder,
+  // applyCoupon,
+  // createOrder,
   getOrders,
   updateOrderStatus,
   getAllOrders,
   getOrderId,
+  removeItemFromCart,
+  updateQuantityItem,
 } from "../controllers/user.Controller";
 import { isAdmin, verifyToken } from "../middleware/authMiddleware";
 import "dotenv/config";
@@ -39,8 +41,14 @@ router.put("/password", verifyToken, updatedPassword);
 router.post("/login", loginUser);
 router.post("/admin-login", loginAdmin);
 router.post("/cart", verifyToken, userCart);
-router.post("/cart/apply-coupon", verifyToken, applyCoupon);
-router.post("/cart/cash-order", verifyToken, createOrder);
+router.delete(
+  "/update-item-cart/:cartItemId/:newQuantity",
+  verifyToken,
+  updateQuantityItem
+);
+router.delete("/delete-item-cart/:cartItemId", verifyToken, removeItemFromCart);
+// router.post("/cart/apply-coupon", verifyToken, applyCoupon);
+// router.post("/cart/cash-order", verifyToken, createOrder);
 router.get("/get-orders", verifyToken, getOrders);
 router.get("/get-all-orders", verifyToken, isAdmin, getAllOrders);
 router.post("/get-order-by-id/:id", verifyToken, isAdmin, getOrderId);

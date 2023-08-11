@@ -1,16 +1,16 @@
-import { generateToken } from "../utils/jwtToken";
-import { generateRefreshToken } from "../utils/refreshToken";
-import { Request, Response } from "express";
-import userModel, { IUser } from "../models/user.Model";
-import cartModel, { ICartProduct } from "../models/cart.Model";
 import "dotenv/config";
-import jwt from "jsonwebtoken";
-import { EmailData, sendEmail } from "./email.Controller";
-import crypto from "crypto";
-import productModel from "../models/product.Model";
-import CouponModel from "../models/coupon.Model";
+import cartModel from "../models/cart.Model";
+import userModel, { IUser } from "../models/user.Model";
 import orderModel from "../models/order.Model";
-import { v4 as uuidv4 } from "uuid";
+import { Request, Response } from "express";
+import { EmailData, sendEmail } from "./email.Controller";
+import { generateRefreshToken } from "../utils/refreshToken";
+import { generateToken } from "../utils/jwtToken";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+// import productModel from "../models/product.Model";
+// import CouponModel from "../models/coupon.Model";
+// import { v4 as uuidv4 } from "uuid";
 
 // POST register
 export const registerUser = async (req: Request, res: Response) => {
@@ -334,43 +334,49 @@ export const getWishlist = async (req: Request, res: Response) => {
 
 export const userCart = async (req: Request, res: Response) => {
   const { _id } = req.user;
-  const { cart } = req.body;
+  const { productId, color, quantity, price } = req.body;
   try {
-    const products = [];
-    const user = await userModel.findById(_id);
-    const alreadyAdded = await cartModel.findOne({ orderedBy: user?._id });
-    if (alreadyAdded) {
-      const removeCart = await cartModel.findOneAndRemove({
-        orderedBy: user?._id,
-      });
-      res.status(200).json(removeCart);
-    }
-    let cartTotal = 0;
-    for (let i = 0; i < cart.length; i++) {
-      const product = await productModel.findById(cart[i]._id);
-
-      products.push({
-        product: product?._id,
-        count: cart[i].count,
-        color: cart[i].color,
-        price: product?.price,
-      });
-      cartTotal = cartTotal + product!.price * cart[i].count;
-    }
     const newCart = await cartModel.create({
-      products,
-      cartTotal,
-      orderedBy: user?._id,
+      userId: _id,
+      productId,
+      color,
+      quantity,
+      price,
     });
-    await userModel.findByIdAndUpdate(
-      user?._id,
-      {
-        cart: newCart?._id,
-      },
-      { new: true }
-    );
     res.status(200).json(newCart);
-    console.log(products);
+  } catch (error) {
+    throw new Error("Internal server error");
+  }
+};
+
+export const removeItemFromCart = async (req: Request, res: Response) => {
+  const { _id } = req.user;
+  const { cartItemId } = req.params;
+  try {
+    const cartItem = await cartModel.findOneAndRemove({
+      userId: _id,
+      _id: cartItemId,
+    });
+    res.status(200).json(cartItem);
+  } catch (error) {
+    throw new Error("Internal server error");
+  }
+};
+
+export const updateQuantityItem = async (req: Request, res: Response) => {
+  const { _id } = req.user;
+  const { cartItemId, newQuantity } = req.params;
+  try {
+    const updatedItem = await cartModel.findOne({
+      userId: _id,
+      _id: cartItemId,
+    });
+    if (updatedItem) {
+      updatedItem.quantity = Number(newQuantity);
+      await updatedItem.save();
+    }
+
+    res.status(200).json(updatedItem);
   } catch (error) {
     throw new Error("Internal server error");
   }
@@ -380,8 +386,9 @@ export const getUserCart = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
     const cart = await cartModel
-      .find({ orderedBy: _id })
-      .populate("products.product");
+      .find({ userId: _id })
+      .populate("productId")
+      .populate("color");
     res.status(200).json(cart);
   } catch (error) {
     throw new Error("Internal server error");
@@ -392,107 +399,107 @@ export const emptyCart = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
     const user = await userModel.findOne(_id);
-    const cart = await cartModel.findOneAndRemove({ orderedBy: user?._id });
+    const cart = await cartModel.findOneAndRemove({ userId: user?._id });
     res.status(200).json(cart);
   } catch (error) {
     throw new Error("Internal server error");
   }
 };
 
-export const applyCoupon = async (req: Request, res: Response) => {
-  const { coupon } = req.body;
-  const { _id } = req.user;
-  try {
-    const validCoupon = await CouponModel.findOne({ name: coupon });
-    if (!validCoupon) {
-      return res.status(400).json({ message: "Invalid Coupon" });
-    }
-    const user = await userModel.findOne({ _id });
-    const cart = await cartModel.findOne({
-      orderedBy: user?._id,
-    });
-    if (!cart) {
-      return res.status(400).json({ message: "Cart not found" });
-    }
+// export const applyCoupon = async (req: Request, res: Response) => {
+//   const { coupon } = req.body;
+//   const { _id } = req.user;
+//   try {
+//     const validCoupon = await CouponModel.findOne({ name: coupon });
+//     if (!validCoupon) {
+//       return res.status(400).json({ message: "Invalid Coupon" });
+//     }
+//     const user = await userModel.findOne({ _id });
+//     const cart = await cartModel.findOne({
+//       orderedBy: user?._id,
+//     });
+//     if (!cart) {
+//       return res.status(400).json({ message: "Cart not found" });
+//     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { products, cartTotal } = cart;
+//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//     const { products, cartTotal } = cart;
 
-    if (cartTotal === undefined) {
-      return res.status(400).json({ message: "Cart total is undefined" });
-    }
+//     if (cartTotal === undefined) {
+//       return res.status(400).json({ message: "Cart total is undefined" });
+//     }
 
-    const totalAfterDiscount = (
-      cartTotal -
-      (cartTotal * validCoupon?.discount) / 100
-    ).toFixed(2);
-    const updatedCart = await cartModel.findOneAndUpdate(
-      { orderedBy: user?._id },
-      { totalAfterDiscount },
-      { new: true }
-    );
+//     const totalAfterDiscount = (
+//       cartTotal -
+//       (cartTotal * validCoupon?.discount) / 100
+//     ).toFixed(2);
+//     const updatedCart = await cartModel.findOneAndUpdate(
+//       { orderedBy: user?._id },
+//       { totalAfterDiscount },
+//       { new: true }
+//     );
 
-    res.status(200).json(updatedCart);
-  } catch (error) {
-    throw new Error("Internal server error");
-  }
-};
+//     res.status(200).json(updatedCart);
+//   } catch (error) {
+//     throw new Error("Internal server error");
+//   }
+// };
 
-export const createOrder = async (req: Request, res: Response) => {
-  const { COD, couponApplied } = req.body;
-  const { _id } = req.user;
-  try {
-    if (!COD) throw new Error("Create cash order failed");
-    const user = await userModel.findById(_id);
-    const userCart = await cartModel.findOne({ orderedBy: user?._id });
-    let finalAmout = 0;
-    if (couponApplied && userCart?.totalAfterDiscount) {
-      finalAmout = userCart.totalAfterDiscount;
-    } else {
-      if (userCart?.cartTotal) {
-        finalAmout = userCart?.cartTotal;
-      }
-    }
+// export const createOrder = async (req: Request, res: Response) => {
+//   const { COD, couponApplied } = req.body;
+//   const { _id } = req.user;
+//   try {
+//     if (!COD) throw new Error("Create cash order failed");
+//     const user = await userModel.findById(_id);
+//     const userCart = await cartModel.findOne({ orderedBy: user?._id });
+//     let finalAmout = 0;
+//     if (couponApplied && userCart?.totalAfterDiscount) {
+//       finalAmout = userCart.totalAfterDiscount;
+//     } else {
+//       if (userCart?.cartTotal) {
+//         finalAmout = userCart?.cartTotal;
+//       }
+//     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const newOrder = await new orderModel({
-      products: userCart?.products,
-      orderedBy: user?._id,
-      paymentIntent: {
-        id: uuidv4(),
-        method: "COD",
-        amount: finalAmout,
-        status: "Cash on Delivery",
-        created: Date.now(),
-        currency: "usd",
-      },
-      orderStatus: "Cash on Delivery",
-    }).save();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const bulkWriteOperations: any[] = [];
+//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//     const newOrder = await new orderModel({
+//       products: userCart?.products,
+//       orderedBy: user?._id,
+//       paymentIntent: {
+//         id: uuidv4(),
+//         method: "COD",
+//         amount: finalAmout,
+//         status: "Cash on Delivery",
+//         created: Date.now(),
+//         currency: "usd",
+//       },
+//       orderStatus: "Cash on Delivery",
+//     }).save();
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     const bulkWriteOperations: any[] = [];
 
-    // Construct bulk write operations and push them into the array
-    userCart?.products?.forEach((item: ICartProduct) => {
-      if (item.count) {
-        const updateOperation = {
-          updateOne: {
-            filter: { _id: item.product },
-            update: { $inc: { quantity: -item.count, sold: +item.count } },
-          },
-        };
-        bulkWriteOperations.push(updateOperation);
-      } else {
-        throw new Error("Cart product count is undefined");
-      }
-    });
+//     // Construct bulk write operations and push them into the array
+//     userCart?.products?.forEach((item: ICartProduct) => {
+//       if (item.count) {
+//         const updateOperation = {
+//           updateOne: {
+//             filter: { _id: item.product },
+//             update: { $inc: { quantity: -item.count, sold: +item.count } },
+//           },
+//         };
+//         bulkWriteOperations.push(updateOperation);
+//       } else {
+//         throw new Error("Cart product count is undefined");
+//       }
+//     });
 
-    // Use nullish coalescing operator to provide an empty array if userCart?.products is falsy
-    await productModel.bulkWrite(bulkWriteOperations ?? [], {});
-    res.json({ message: "success" });
-  } catch (error) {
-    throw new Error("Interval server error");
-  }
-};
+//     // Use nullish coalescing operator to provide an empty array if userCart?.products is falsy
+//     await productModel.bulkWrite(bulkWriteOperations ?? [], {});
+//     res.json({ message: "success" });
+//   } catch (error) {
+//     throw new Error("Interval server error");
+//   }
+// };
 
 export const getOrders = async (req: Request, res: Response) => {
   const { _id } = req.user;

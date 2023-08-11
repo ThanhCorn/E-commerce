@@ -1,19 +1,31 @@
-const Color = () => {
+import { IColor } from "../@types/declare";
+
+interface ColorProps {
+  colorData: IColor[];
+  setColor: (_id: string) => void;
+}
+
+const Color = (props: ColorProps) => {
+  const { colorData, setColor } = props;
+  console.log("colordata", colorData);
   return (
     <>
       <ul>
-        <li className="inline-block mr-2">
-          <div className="w-4 h-4 rounded-full bg-red-600"></div>
-        </li>
-        <li className="inline-block mr-2">
-          <div className="w-4 h-4 rounded-full bg-red-600"></div>
-        </li>
-        <li className="inline-block mr-2">
-          <div className="w-4 h-4 rounded-full bg-red-600"></div>
-        </li>
-        <li className="inline-block mr-2">
-          <div className="w-4 h-4 rounded-full bg-red-600"></div>
-        </li>
+        {colorData &&
+          colorData.map((color, index) => {
+            return (
+              <li
+                onClick={() => setColor(color._id)}
+                key={index}
+                className="inline-block mr-2"
+              >
+                <div
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: color.title }}
+                ></div>
+              </li>
+            );
+          })}
       </ul>
     </>
   );

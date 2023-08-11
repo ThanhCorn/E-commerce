@@ -1,22 +1,33 @@
-import ReactStars from 'react-stars';
-import watch from '../assets/images/watch.jpg';
-import { Link } from 'react-router-dom';
-import addCard from '../assets/images/add-card.svg';
-import view from '../assets/images/view.svg';
-import prodcompare from '../assets/images/prodcompare.svg';
-import love from '../assets/images/love.svg';
+import ReactStars from "react-stars";
+import { Link } from "react-router-dom";
+import addCard from "../assets/images/add-card.svg";
+import view from "../assets/images/view.svg";
+import prodcompare from "../assets/images/prodcompare.svg";
 
-const SpecialProduct = () => {
+interface ISpecialProductProps {
+  id: string;
+  title: string;
+  brand: string;
+  totalRating: number;
+  price: number;
+  sold: number;
+  quantity: number;
+  image: string;
+}
+
+const SpecialProduct = (props: ISpecialProductProps) => {
+  const { id, title, brand, totalRating, price, sold, quantity, image } = props;
+  console.log(quantity);
   return (
     <>
       <div className="bg-white rounded-md overflow-hidden product-card flex pb-5">
         <div className="relative">
-          <img src={watch} alt="watch" className="w-[350px] h-[250px]" />
-          <div className="absolute top-3 right-2 ">
-            <Link to="">
-              <img src={love} alt="love" className="w-5" />
-            </Link>
-          </div>
+          <img
+            src={image}
+            alt="watch"
+            className="min-w-[200px] h-[250px] object-contain"
+          />
+
           <div className="absolute action-bar">
             <div className="flex flex-col gap-2">
               <Link to="">
@@ -32,14 +43,19 @@ const SpecialProduct = () => {
           </div>
         </div>
 
-        <div className="mx-3">
-          <h5 className="text-orange-600">Havels</h5>
+        <div className="mx-3 py-2">
+          <h5 className="text-orange-600">{brand}</h5>
           <h4 className="font-bold text-sm mt-2 overflow-hidden line-clamp-2">
-            Kids Headphones Bulk 10 Pack Multi Colored For Students{' '}
+            {title}
           </h4>
-          <ReactStars count={5} size={24} value={3} color2={'#ffd700'} />
+          <ReactStars
+            count={5}
+            size={24}
+            value={totalRating}
+            color2={"#ffd700"}
+          />
           <p className="text-black font-normal mb-3">
-            <span className="text-red-600 text-lg">$100</span>
+            <span className="text-red-600 text-lg">${price}</span>
             <span className="line-through ml-3">$200</span>
           </p>
           <div className="flex items-center">
@@ -53,17 +69,20 @@ const SpecialProduct = () => {
             </div>
           </div>
           <div className="">
-            <p className="text-black my-2 ">Products: 5</p>
+            <p className="text-black my-2 ">Products: {quantity}</p>
             <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
               <div
+                aria-aria-valuemin={quantity}
+                aria-valuemax={sold + quantity}
+                aria-valuenow={quantity / quantity + sold * 100}
                 className="bg-blue-600 h-2.5 rounded-full dark:bg-blue-500"
-                style={{ width: '45%' }}
+                style={{ width: quantity / quantity + sold * 100 + "%" }}
               ></div>
             </div>
           </div>
           <div className="">
-            <Link to="">
-              <p className="button">Add to Cart</p>
+            <Link to={`/product/${id}`}>
+              <p className="button">View Product</p>
             </Link>
           </div>
         </div>

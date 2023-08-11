@@ -12,38 +12,37 @@ import { addToWishlist } from "../features/products/productSlice";
 
 interface IProductCard {
   grid: number | boolean;
-  data: IProduct[];
+  data?: IProduct[];
+  wishlist: string[];
+  tagsProduct?: "popular" | "special" | "features";
 }
 const ProductCard = (props: IProductCard) => {
+  const { wishlist, tagsProduct } = props;
   const location = useLocation();
   const dispatch: AppDispatch = useDispatch();
   const { data } = props;
   const updatedData = useSelector(
     (state: RootState) => state.product.addToWishlist
   );
-  console.log(updatedData?.wishlist);
 
   const addToWishList = (id: string) => {
     dispatch(addToWishlist(id));
   };
 
+  const filteredProducts =
+    tagsProduct && data
+      ? data.filter((item) => item?.tags?.includes(tagsProduct))
+      : data;
+
   return (
     <>
-      {data?.map((item, index) => {
+      {filteredProducts?.map((item, index) => {
         return (
           <div
             key={index}
             className="bg-white rounded-md overflow-hidden product-card"
           >
-            <Link
-              to=""
-              // to={` ${
-              //   location.pathname == "/"
-              //     ? "/product/:id"
-              //     : location.pathname == "/product/:id"
-              //     ? "/product/1"
-              //     : ":id"
-              // }`}
+            <div
               className={`w-full z-0 ${
                 location.pathname == "/product" && props.grid == 1 ? "flex" : ""
               } `}
@@ -61,7 +60,8 @@ const ProductCard = (props: IProductCard) => {
                 />
                 <div className="absolute top-3 right-2  ">
                   <button onClick={() => addToWishList(item._id)}>
-                    {updatedData?.wishlist.includes(item._id) ? (
+                    {updatedData?.wishlist.includes(item._id) ||
+                    wishlist.includes(item._id) ? (
                       <img src={loveFill} alt="love" className="w-5 z-50" />
                     ) : (
                       <img src={love} alt="love" className="w-5 z-50" />
@@ -80,9 +80,9 @@ const ProductCard = (props: IProductCard) => {
                     <button>
                       <img src={addCard} alt="add card" />
                     </button>
-                    <button>
+                    <Link to={`/product/${item._id}`}>
                       <img src={view} alt="view" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -107,7 +107,7 @@ const ProductCard = (props: IProductCard) => {
                 </p>
                 <p className="text-black font-normal mb-5">${item.price}</p>
               </div>
-            </Link>
+            </div>
           </div>
         );
       })}

@@ -1,35 +1,20 @@
 import { Schema, model } from "mongoose";
 
-export interface ICartProduct {
-  product?: Schema.Types.ObjectId;
-  count?: number;
-  color?: string;
-  price?: number;
-}
-
 export interface ICart {
-  products?: ICartProduct[];
-  cartTotal?: number;
-  totalAfterDiscount?: number;
-  orderedBy?: Schema.Types.ObjectId;
+  userId?: Schema.Types.ObjectId;
+  productId?: Schema.Types.ObjectId[];
+  quantity?: number;
+  color?: Schema.Types.ObjectId[];
+  price: number;
 }
 
 const cartSchema = new Schema<ICart>(
   {
-    products: [
-      {
-        product: {
-          type: Schema.Types.ObjectId,
-          ref: "Product",
-        },
-        count: Number,
-        color: String,
-        price: Number,
-      },
-    ],
-    cartTotal: Number,
-    totalAfterDiscount: Number,
-    orderedBy: { type: Schema.Types.ObjectId, ref: "User" },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    productId: { type: Schema.Types.ObjectId, ref: "Product" },
+    quantity: { type: Number, required: true },
+    color: { type: Schema.Types.ObjectId, ref: "Color" },
+    price: { type: Number, required: true },
   },
   { timestamps: true }
 );

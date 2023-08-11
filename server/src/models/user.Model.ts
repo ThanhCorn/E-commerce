@@ -30,7 +30,7 @@ const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
   role: { type: String, default: "user" },
   isBlocked: { type: Boolean, default: false },
-  cart: { type: [{ type: Types.ObjectId, ref: "Product" }], default: [] },
+  cart: [{ type: Types.ObjectId, ref: "Cart" }],
   address: { type: String, default: "" },
   wishlist: [{ type: Types.ObjectId, ref: "Product" }],
   refreshToken: { type: String },

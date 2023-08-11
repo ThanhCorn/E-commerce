@@ -1,22 +1,31 @@
-import { Link } from 'react-router-dom';
-import blog1 from '../assets/images/blog-1.jpg';
+import { Link } from "react-router-dom";
 
-const BlogCard = () => {
+interface BlogCardProps {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+}
+
+const BlogCard = (props: BlogCardProps) => {
+  const { id, title, description, image, date } = props;
   return (
     <>
-      <div className="bg-white w-full">
-        <img src={blog1} alt="blog" className="rounded-t-lg w-full" />
-        <div className="mx-3 mt-3 mb-5">
-          <p className="text-black text-xs font-light">23 JULY, 2023</p>
-          <h5 className="mt-2 font-bold">
-            A Beautiful Sunday Morning Renaissance
-          </h5>
-          <p className="blog-description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi
-            itaque rerum magnam modi architecto tenetur laudantium ex rem
-            numquam sit.
-          </p>
-          <Link to="/blog/:id" className="button">
+      <div className="bg-white w-full h-[530px] mb-5 rounded-md">
+        <img
+          src={image}
+          alt="blog"
+          className="rounded-t-lg w-full h-[300px] object-contain mb-10"
+        />
+        <div className="mx-3  mb-5 px-2">
+          <p className="text-black text-xs font-normal">{date}</p>
+          <h5 className="mt-2 font-bold text-xl">{title}</h5>
+          <p
+            className="blog-description text-white"
+            dangerouslySetInnerHTML={{ __html: description }}
+          ></p>
+          <Link to={`/blog/${id}`} className="button mb-5">
             Read More
           </Link>
         </div>

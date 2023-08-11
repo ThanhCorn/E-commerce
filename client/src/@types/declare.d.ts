@@ -1,3 +1,32 @@
+export interface IContact {
+  _id?: string;
+  name: string;
+  email: string;
+  phone: string;
+  comment: string;
+  status?: string;
+}
+
+export interface IColor {
+  _id: string;
+  title: string;
+}
+
+export interface IBlog {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  numViews: number;
+  isLiked: boolean;
+  isDisliked: boolean;
+  likes: IUser[];
+  dislikes: IUser[];
+  author: string;
+  images: IImages[];
+  createAt: Date;
+}
+
 export interface IUser {
   _id: string;
   firstName: string;
@@ -23,9 +52,9 @@ export interface IProduct {
   category: string;
   quantity: number;
   brand: string;
-  sold?: number;
+  sold: number;
   images: IImages[];
-  color?: string[];
+  color: IColor[];
   tags?: string;
   ratings?: Array<{
     star: number;
@@ -33,4 +62,12 @@ export interface IProduct {
     comment?: string;
   }>;
   totalRating?: string;
+}
+
+export interface ICart {
+  _id?: string;
+  productId?: string;
+  quantity: number;
+  color?: string;
+  price: number;
 }

@@ -1,35 +1,60 @@
-import { Link } from 'react-router-dom';
-import Marquee from 'react-fast-marquee';
-import mainBanner from '../assets/images/main-banner-1.jpg';
-import catBanner1 from '../assets/images/catbanner-01.jpg';
-import catBanner2 from '../assets/images/catbanner-02.jpg';
-import catBanner3 from '../assets/images/catbanner-03.jpg';
-import catBanner4 from '../assets/images/catbanner-04.jpg';
-import camera from '../assets/images/camera.jpg';
-import laptop from '../assets/images/laptop.jpg';
-import headPhone from '../assets/images/headphone.jpg';
-import acc from '../assets/images/acc.jpg';
-import speaker from '../assets/images/speaker.jpg';
-import homeapp from '../assets/images/homeapp.jpg';
-import tv from '../assets/images/tv.jpg';
-import tablet from '../assets/images/tab.jpg';
-import brand1 from '../assets/images/brand-01.png';
-import brand2 from '../assets/images/brand-02.png';
-import brand3 from '../assets/images/brand-03.png';
-import brand4 from '../assets/images/brand-04.png';
-import brand5 from '../assets/images/brand-05.png';
-import brand6 from '../assets/images/brand-06.png';
-import brand7 from '../assets/images/brand-07.png';
-import brand8 from '../assets/images/brand-08.png';
-import BlogCard from '../components/BlogCard';
-import ProductCard from '../components/ProductCard';
-import SpecialProduct from '../components/SpecialProduct';
-import famousWatch from '../assets/images/famous-watch.jpg';
-import macbook from '../assets/images/macbook.jpg';
-import speakerApple from '../assets/images/speakerApple.jpg';
-import iphone from '../assets/images/iphone.jpg';
-import { services } from '../utils/data';
+import { Link } from "react-router-dom";
+import Marquee from "react-fast-marquee";
+import mainBanner from "../assets/images/main-banner-1.jpg";
+import catBanner1 from "../assets/images/catbanner-01.jpg";
+import catBanner2 from "../assets/images/catbanner-02.jpg";
+import catBanner3 from "../assets/images/catbanner-03.jpg";
+import catBanner4 from "../assets/images/catbanner-04.jpg";
+import camera from "../assets/images/camera.jpg";
+import laptop from "../assets/images/laptop.jpg";
+import headPhone from "../assets/images/headphone.jpg";
+import acc from "../assets/images/acc.jpg";
+import speaker from "../assets/images/speaker.jpg";
+import homeapp from "../assets/images/homeapp.jpg";
+import tv from "../assets/images/tv.jpg";
+import tablet from "../assets/images/tab.jpg";
+import brand1 from "../assets/images/brand-01.png";
+import brand2 from "../assets/images/brand-02.png";
+import brand3 from "../assets/images/brand-03.png";
+import brand4 from "../assets/images/brand-04.png";
+import brand5 from "../assets/images/brand-05.png";
+import brand6 from "../assets/images/brand-06.png";
+import brand7 from "../assets/images/brand-07.png";
+import brand8 from "../assets/images/brand-08.png";
+import BlogCard from "../components/BlogCard";
+import ProductCard from "../components/ProductCard";
+import SpecialProduct from "../components/SpecialProduct";
+import famousWatch from "../assets/images/famous-watch.jpg";
+import macbook from "../assets/images/macbook.jpg";
+import speakerApple from "../assets/images/speakerApple.jpg";
+import iphone from "../assets/images/iphone.jpg";
+import { services } from "../utils/data";
+import { getAllBlog } from "../features/blogs/blogSlice";
+import { useEffect } from "react";
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
+import { getAllProduct } from "../features/products/productSlice";
+import { IProduct } from "../@types/declare";
+import { getUserProductWishlist } from "../features/user/userSlice";
+
 const Home = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const getBlogs = useSelector((state: RootState) => state.blog.blogs);
+  const getProducts = useSelector((state: RootState) => state.product.products);
+  const userWishlist = useSelector(
+    (state: RootState) => state.auth.userWishlist
+  );
+  let wishlist: string[] = [];
+  if (userWishlist) {
+    wishlist = userWishlist.map((item: IProduct) => item._id);
+  }
+
+  useEffect(() => {
+    dispatch(getAllBlog());
+    dispatch(getAllProduct());
+    dispatch(getUserProductWishlist());
+  }, []);
   return (
     <>
       <section className="w-full h-full flex flex-col">
@@ -230,11 +255,12 @@ const Home = () => {
             <section className="px-10 mb-12">
               <h3 className="text-xl font-bold mb-3">Featured Collection</h3>
               <div className="grid grid-flow-col grid-cols-5 gap-5 mx-auto">
-                <ProductCard grid={false} />
-                <ProductCard grid={false} />
-                <ProductCard grid={false} />
-                <ProductCard grid={false} />
-                <ProductCard grid={false} />
+                <ProductCard
+                  data={getProducts}
+                  tagsProduct="features"
+                  grid={false}
+                  wishlist={wishlist}
+                />
               </div>
             </section>
             <section className="px-10 mb-12">
@@ -272,7 +298,7 @@ const Home = () => {
                       16-inch Retina display with True Tone
                     </p>
                   </div>
-                </div>{' '}
+                </div>{" "}
                 <div className="relative bg-white rounded-lg  h-[400px] w-[300px]">
                   <img
                     src={iphone}
@@ -289,7 +315,7 @@ const Home = () => {
                       mo.*
                     </p>
                   </div>
-                </div>{' '}
+                </div>{" "}
                 <div className="relative bg-white rounded-lg h-[400px] w-[300px]">
                   <img
                     src={speakerApple}
@@ -373,26 +399,55 @@ const Home = () => {
             <section className="special-product px-10 mb-12">
               <h3 className="text-xl font-bold mb-3">Special Products</h3>
               <div className="grid grid-flow-row grid-cols-3 auto-fit gap-5 mx-auto">
-                <SpecialProduct />
-                <SpecialProduct />
-                <SpecialProduct />
+                {getProducts &&
+                  getProducts.map((product, index) => {
+                    if (product.tags === "special") {
+                      return (
+                        <SpecialProduct
+                          key={index}
+                          id={product._id}
+                          price={product.price}
+                          quantity={product.quantity}
+                          sold={product.sold}
+                          title={product.title}
+                          brand={product.brand}
+                          totalRating={Number(product.totalRating)}
+                          image={product.images[0].url}
+                        />
+                      );
+                    }
+                  })}
               </div>
             </section>
             <section className="popular-product px-10 mb-12">
               <h3 className="text-xl font-bold mb-3">Our Popular Products</h3>
               <div className="grid grid-flow-row grid-cols-3 auto-fit gap-5 mx-auto">
-                <SpecialProduct />
-                <SpecialProduct />
-                <SpecialProduct />
+                <ProductCard
+                  data={getProducts}
+                  tagsProduct="popular"
+                  grid={false}
+                  wishlist={wishlist}
+                />
               </div>
             </section>
             <section className="blog-card px-10 mb-52">
               <h3 className="text-xl font-bold mb-3">Our Latest News</h3>
               <div className="flex justify-between gap-10">
-                <BlogCard />
-                <BlogCard />
-                <BlogCard />
-                <BlogCard />
+                {getBlogs.map((blog, index) => {
+                  return (
+                    <div key={index} className="h-full">
+                      <BlogCard
+                        id={blog._id}
+                        title={blog.title}
+                        description={blog.description}
+                        date={moment(blog.createAt).format(
+                          "MMMM Do YYYY, h:mm:ss a"
+                        )}
+                        image={blog.images[0].url}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </section>
           </div>

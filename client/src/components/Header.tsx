@@ -1,23 +1,43 @@
-import { Link, NavLink } from 'react-router-dom';
-import { BsSearch } from 'react-icons/bs';
-import compareSVG from '../assets/images/compare.svg';
-import wishlistSVG from '../assets/images/wishlist.svg';
-import userSVG from '../assets/images/user.svg';
-import cartSVG from '../assets/images/cart.svg';
-import menuSVG from '../assets/images/menu.svg';
-import { useState } from 'react';
+import { Link, NavLink } from "react-router-dom";
+import { BsSearch } from "react-icons/bs";
+import compareSVG from "../assets/images/compare.svg";
+import wishlistSVG from "../assets/images/wishlist.svg";
+import userSVG from "../assets/images/user.svg";
+import cartSVG from "../assets/images/cart.svg";
+import menuSVG from "../assets/images/menu.svg";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
+import { getCart } from "../features/user/userSlice";
 
 const Header = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const userCart = useSelector((state: RootState) => state.auth.userCart);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    dispatch(getCart());
+  }, []);
+
+  useEffect(() => {
+    if (userCart) {
+      let sum = 0;
+      for (let i = 0; i < userCart?.length; i++) {
+        sum += userCart[i].price * userCart[i].quantity;
+      }
+      setTotal(sum);
+    }
+  }, [userCart]);
 
   const toggleDropdown = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const options = [
-    { id: 1, label: 'Option 1' },
-    { id: 2, label: 'Option 2' },
-    { id: 3, label: 'Option 3' },
+    { id: 1, label: "Option 1" },
+    { id: 2, label: "Option 2" },
+    { id: 3, label: "Option 3" },
   ];
   return (
     <>
@@ -77,7 +97,7 @@ const Header = () => {
                 <Link to="/wishlist" className="flex items-center">
                   <img src={wishlistSVG} alt="wishlist" className="mr-3 ml-2" />
                   <p>
-                    {' '}
+                    {" "}
                     Favourite <br /> Wishlist
                   </p>
                 </Link>
@@ -95,9 +115,9 @@ const Header = () => {
                   <img src={cartSVG} alt="cart" className="mr-3" />
                   <div className="flex flex-col">
                     <span className="bg-white text-black text-center rounded-xl w-[90%]">
-                      0
+                      {userCart?.length}
                     </span>
-                    <p>$ 500</p>
+                    <p>${total}</p>
                   </div>
                 </Link>
               </div>

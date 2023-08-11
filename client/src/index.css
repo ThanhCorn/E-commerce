@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -13,7 +13,7 @@ html {
 
 @layer base {
   html {
-    font-family: 'Rubik', sans-serif;
+    font-family: "Rubik", sans-serif;
   }
   a {
     text-decoration: none;
@@ -85,9 +85,19 @@ html {
 .main-product-image img {
   width: 100% !important;
   height: 500px !important;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .price {
   font-weight: 600;
+}
+
+.blog-description > p {
+  color: #000;
+  font-size: 14px;
+  font-weight: 100;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }

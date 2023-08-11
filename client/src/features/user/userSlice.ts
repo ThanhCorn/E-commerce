@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IProduct, IUser } from "../../@types/declare";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
+import { ICart, IProduct, IUser } from "../../@types/declare";
 import userService from "./userService";
 import {
   addUserToLocalStorage,
   getUserFromLocalStorage,
 } from "../../utils/localStorage";
+import { toast } from "react-toastify";
 
 interface UserState {
   createUser: IUser | null;
+  userCart?: ICart[];
   userLogin: IUser | null;
+  deleteItemFromCart?: ICart;
+  updateItemFromCart?: ICart;
   userWishlist?: IProduct[];
   isLoading: boolean;
   isError: boolean;
@@ -19,6 +23,9 @@ interface UserState {
 const initialState: UserState = {
   userLogin: getUserFromLocalStorage(),
   userWishlist: undefined,
+  userCart: [],
+  deleteItemFromCart: undefined,
+  updateItemFromCart: undefined,
   createUser: null,
   isLoading: false,
   isError: false,
@@ -64,6 +71,58 @@ export const getUserProductWishlist = createAsyncThunk(
   }
 );
 
+export const addToCart = createAsyncThunk(
+  "auth/add-to-cart",
+  async (data: ICart, thunkAPI) => {
+    try {
+      const res = await userService.addToCart(data);
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export const getCart = createAsyncThunk(
+  "auth/get-cart",
+  async (_, thunkAPI) => {
+    try {
+      const res = await userService.getCart();
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export const removeItemCart = createAsyncThunk(
+  "auth/remove-item-cart",
+  async (cartItemId: string, thunkAPI) => {
+    try {
+      const res = await userService.removeItemFromCart(cartItemId);
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+export const updateQuantityItem = createAsyncThunk(
+  "auth/update-quantity-item",
+  async (data: { cartItemId: string; newQuantity: number }, thunkAPI) => {
+    try {
+      const res = await userService.updateQuantityItem(
+        data.cartItemId,
+        data.newQuantity
+      );
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export const resetState = createAction("ResetAll");
+
 const userSlice = createSlice({
   name: "auth",
   initialState,
@@ -106,6 +165,59 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     });
+    builder.addCase(addToCart.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(addToCart.fulfilled, (state, action) => {
+      state.userCart = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+      toast.success("Product added to cart");
+    });
+    builder.addCase(addToCart.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(getCart.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getCart.fulfilled, (state, action) => {
+      state.userCart = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+    });
+    builder.addCase(getCart.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(removeItemCart.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(removeItemCart.fulfilled, (state, action) => {
+      state.deleteItemFromCart = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+      toast.success("Product removed from cart");
+    });
+    builder.addCase(removeItemCart.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(updateQuantityItem.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateQuantityItem.fulfilled, (state, action) => {
+      state.updateItemFromCart = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+      toast.success("Product updated from cart");
+    });
+    builder.addCase(updateQuantityItem.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+
+    builder.addCase(resetState, () => initialState);
   },
 });
 

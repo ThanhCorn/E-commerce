@@ -10,9 +10,11 @@ import {
   updateQuantityItem,
 } from "../features/user/userSlice";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Cart = () => {
   const userCart = useSelector((state: RootState) => state.auth.userCart);
+  const userLogin = useSelector((state: RootState) => state.auth.userLogin);
   const [productUpdateDetail, setProductUpdateDetail] = useState({
     cartItemId: "",
     newQuantity: 0,
@@ -52,6 +54,18 @@ const Cart = () => {
       setTotal(sum);
     }
   }, [userCart]);
+  console.log(userCart);
+
+  const handleCheckout = async () => {
+    console.log(userCart);
+    const res = await axios.post(
+      "http://localhost:5000/api/stripe/create-checkout-session",
+      { cartItems: userCart, userId: userLogin?._id }
+    );
+    if (res) {
+      window.location.href = res.data.url;
+    }
+  };
 
   return (
     <div>
@@ -174,9 +188,12 @@ const Cart = () => {
               <h5 className="text-gray-400 font-normal mb-5">
                 Taxes and shipping calculated at checkout
               </h5>
-              <Link to="/checkout" className="button flex justify-center">
+              <button
+                onClick={() => handleCheckout()}
+                className="button flex justify-center"
+              >
                 Check Out
-              </Link>
+              </button>
             </div>
           </div>
         </div>

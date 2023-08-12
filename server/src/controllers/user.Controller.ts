@@ -395,111 +395,32 @@ export const getUserCart = async (req: Request, res: Response) => {
   }
 };
 
-export const emptyCart = async (req: Request, res: Response) => {
+export const createOrder = async (req: Request, res: Response) => {
   const { _id } = req.user;
+  const {
+    shippingInfo,
+    orderItems,
+    totalPrice,
+    totalAfterDiscount,
+    paymentInfo,
+  } = req.body;
   try {
-    const user = await userModel.findOne(_id);
-    const cart = await cartModel.findOneAndRemove({ userId: user?._id });
-    res.status(200).json(cart);
+    const newOrder = await orderModel.create({
+      user: _id,
+      shippingInfo,
+      orderItems,
+      totalPrice,
+      totalAfterDiscount,
+      paymentInfo,
+    });
+    res.status(200).json({
+      order: newOrder,
+      success: true,
+    });
   } catch (error) {
     throw new Error("Internal server error");
   }
 };
-
-// export const applyCoupon = async (req: Request, res: Response) => {
-//   const { coupon } = req.body;
-//   const { _id } = req.user;
-//   try {
-//     const validCoupon = await CouponModel.findOne({ name: coupon });
-//     if (!validCoupon) {
-//       return res.status(400).json({ message: "Invalid Coupon" });
-//     }
-//     const user = await userModel.findOne({ _id });
-//     const cart = await cartModel.findOne({
-//       orderedBy: user?._id,
-//     });
-//     if (!cart) {
-//       return res.status(400).json({ message: "Cart not found" });
-//     }
-
-//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//     const { products, cartTotal } = cart;
-
-//     if (cartTotal === undefined) {
-//       return res.status(400).json({ message: "Cart total is undefined" });
-//     }
-
-//     const totalAfterDiscount = (
-//       cartTotal -
-//       (cartTotal * validCoupon?.discount) / 100
-//     ).toFixed(2);
-//     const updatedCart = await cartModel.findOneAndUpdate(
-//       { orderedBy: user?._id },
-//       { totalAfterDiscount },
-//       { new: true }
-//     );
-
-//     res.status(200).json(updatedCart);
-//   } catch (error) {
-//     throw new Error("Internal server error");
-//   }
-// };
-
-// export const createOrder = async (req: Request, res: Response) => {
-//   const { COD, couponApplied } = req.body;
-//   const { _id } = req.user;
-//   try {
-//     if (!COD) throw new Error("Create cash order failed");
-//     const user = await userModel.findById(_id);
-//     const userCart = await cartModel.findOne({ orderedBy: user?._id });
-//     let finalAmout = 0;
-//     if (couponApplied && userCart?.totalAfterDiscount) {
-//       finalAmout = userCart.totalAfterDiscount;
-//     } else {
-//       if (userCart?.cartTotal) {
-//         finalAmout = userCart?.cartTotal;
-//       }
-//     }
-
-//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//     const newOrder = await new orderModel({
-//       products: userCart?.products,
-//       orderedBy: user?._id,
-//       paymentIntent: {
-//         id: uuidv4(),
-//         method: "COD",
-//         amount: finalAmout,
-//         status: "Cash on Delivery",
-//         created: Date.now(),
-//         currency: "usd",
-//       },
-//       orderStatus: "Cash on Delivery",
-//     }).save();
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//     const bulkWriteOperations: any[] = [];
-
-//     // Construct bulk write operations and push them into the array
-//     userCart?.products?.forEach((item: ICartProduct) => {
-//       if (item.count) {
-//         const updateOperation = {
-//           updateOne: {
-//             filter: { _id: item.product },
-//             update: { $inc: { quantity: -item.count, sold: +item.count } },
-//           },
-//         };
-//         bulkWriteOperations.push(updateOperation);
-//       } else {
-//         throw new Error("Cart product count is undefined");
-//       }
-//     });
-
-//     // Use nullish coalescing operator to provide an empty array if userCart?.products is falsy
-//     await productModel.bulkWrite(bulkWriteOperations ?? [], {});
-//     res.json({ message: "success" });
-//   } catch (error) {
-//     throw new Error("Interval server error");
-//   }
-// };
 
 export const getOrders = async (req: Request, res: Response) => {
   const { _id } = req.user;

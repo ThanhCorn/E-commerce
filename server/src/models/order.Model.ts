@@ -1,30 +1,25 @@
 import { Schema, Document, Model, model, Types } from "mongoose";
 
-// Interface for the product item in the order
-export interface OrderProduct {
-  product: Types.ObjectId;
-  count: number;
-  color: string;
-}
-
-// Interface for the payment intent
-interface PaymentIntent {
-  id: string;
-  method: string;
-  amount: number;
-  status: string;
-  created: Date;
-  currency: string;
-}
-
 // Interface for the order document
 interface OrderDoc extends Document {
-  products: OrderProduct[];
-  paymentIntent: PaymentIntent;
-  orderStatus: string;
-  orderedBy: Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  userId: Schema.Types.ObjectId;
+  shippingInfo: {
+    address: object;
+  };
+  paymentIntentId: string;
+  orderItems: [
+    {
+      product: string;
+      color: string;
+      quantity: number;
+      price: number;
+    }
+  ];
+  paidAt?: Date;
+  totalPrice: number;
+  totalAfterDiscount?: number;
+  orderStatus?: string;
+  paymentStatus: string;
 }
 
 // Interface for the order model
@@ -33,32 +28,58 @@ export interface OrderModel extends Model<OrderDoc> {}
 // Declare the Schema of the Mongo model
 const orderSchema = new Schema<OrderDoc, OrderModel>(
   {
-    products: [
+    userId: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    shippingInfo: {
+      address: {
+        type: Object,
+        required: true,
+      },
+    },
+    paymentIntentId: {
+      type: String,
+      required: true,
+    },
+    orderItems: [
       {
-        product: {
-          type: Schema.Types.ObjectId,
-          ref: "Product",
+        productId: {
+          type: String,
+          required: true,
         },
-        count: Number,
-        color: String,
+        color: {
+          type: String,
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
       },
     ],
-    paymentIntent: {},
+    paidAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
+    totalAfterDiscount: {
+      type: Number,
+    },
     orderStatus: {
       type: String,
-      default: "Not Processed",
-      enum: [
-        "Not Processed",
-        "Cash on Delivery",
-        "Processing",
-        "Dispatched",
-        "Cancelled",
-        "Delivered",
-      ],
+      default: "Ordered",
     },
-    orderedBy: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+    paymentStatus: {
+      type: String,
     },
   },
   {

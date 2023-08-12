@@ -15,6 +15,7 @@ interface UserState {
   deleteItemFromCart?: ICart;
   updateItemFromCart?: ICart;
   userWishlist?: IProduct[];
+
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
@@ -25,8 +26,10 @@ const initialState: UserState = {
   userWishlist: undefined,
   userCart: [],
   deleteItemFromCart: undefined,
+
   updateItemFromCart: undefined,
   createUser: null,
+
   isLoading: false,
   isError: false,
   isSuccess: false,

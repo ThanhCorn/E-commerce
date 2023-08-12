@@ -18,9 +18,9 @@ import {
   saveAddress,
   userCart,
   getUserCart,
-  emptyCart,
+  // emptyCart,
   // applyCoupon,
-  // createOrder,
+  createOrder,
   getOrders,
   updateOrderStatus,
   getAllOrders,
@@ -48,7 +48,7 @@ router.delete(
 );
 router.delete("/delete-item-cart/:cartItemId", verifyToken, removeItemFromCart);
 // router.post("/cart/apply-coupon", verifyToken, applyCoupon);
-// router.post("/cart/cash-order", verifyToken, createOrder);
+router.post("/cart/create-order", verifyToken, createOrder);
 router.get("/get-orders", verifyToken, getOrders);
 router.get("/get-all-orders", verifyToken, isAdmin, getAllOrders);
 router.post("/get-order-by-id/:id", verifyToken, isAdmin, getOrderId);
@@ -60,7 +60,7 @@ router.get("/wishlist", verifyToken, getWishlist);
 router.get("/cart", verifyToken, getUserCart);
 
 router.get("/:id", getUser);
-router.delete("/empty-cart", verifyToken, emptyCart);
+// router.delete("/empty-cart", verifyToken, emptyCart);
 router.delete("/:id", verifyToken, isAdmin, deletedUser);
 
 router.put("/edit-user", verifyToken, updatedUser);

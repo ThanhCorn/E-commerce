@@ -21,6 +21,7 @@ const SingleProduct = () => {
   const [color, setColor] = useState("");
   const [quantity, setQuantity] = useState(1);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [orderedProduct, setOrderedProduct] = useState(true);
   const dispatch: AppDispatch = useDispatch();
   const productById = useSelector((state: RootState) => state.product.product);

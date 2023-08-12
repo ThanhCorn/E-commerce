@@ -77,6 +77,7 @@ const updateQuantityItem = async (cartItemId: string, newQuantity: number) => {
     throw new Error("Update quantity item failed");
   }
 };
+
 const userService = {
   registerUser,
   loginUser,

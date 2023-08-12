@@ -15,6 +15,7 @@ const Header = () => {
   const userCart = useSelector((state: RootState) => state.auth.userCart);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [total, setTotal] = useState(0);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
     dispatch(getCart());
@@ -103,11 +104,21 @@ const Header = () => {
                 </Link>
               </div>
               <div className="w-[120px]">
-                <Link to="/login" className="flex items-center">
-                  <img src={userSVG} alt="user" className="" />
-                  <p className="w-[100px] flex flex-col">
-                    Log in <br /> My Account
-                  </p>
+                <Link to={user ? "" : "/login"} className="flex items-center">
+                  <img src={userSVG} alt="user" className="mr-3" />
+                  {user ? (
+                    <>
+                      <p className="w-[100px] flex flex-col">
+                        Welcome <br /> {user?.email.split("@")[0]}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="w-[100px] flex flex-col">
+                        Log in <br /> My Account
+                      </p>
+                    </>
+                  )}
                 </Link>
               </div>
               <div className="w-[90px]">

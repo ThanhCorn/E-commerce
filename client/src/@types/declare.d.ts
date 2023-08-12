@@ -66,8 +66,15 @@ export interface IProduct {
 
 export interface ICart {
   _id?: string;
-  productId?: string;
+  productId?: string | IProduct;
   quantity: number;
-  color?: string;
+  color?: IColor | string;
   price: number;
+}
+
+export interface IDataPayment {
+  firstName: string;
+  lastName: string;
+  totalPrice: number;
+  totalAfterDiscount?: number;
 }

@@ -120,6 +120,7 @@ router.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   async (req: Request, res: Request) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let data: any;
     let eventType;
     if (endpointSecret) {
@@ -153,6 +154,7 @@ router.post(
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createOrder = async (customer: any, data: any) => {
   const Items = JSON.parse(customer.metadata.cart);
   console.log(Items);

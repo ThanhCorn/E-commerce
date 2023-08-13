@@ -1,6 +1,18 @@
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AppDispatch } from "../app/store";
+import { useDispatch } from "react-redux";
+import { emptyCart, resetState } from "../features/user/userSlice";
+import { useEffect } from "react";
 
 const Checkout = () => {
+  const dispatch: AppDispatch = useDispatch();
+  useEffect(() => {
+    dispatch(emptyCart());
+    setTimeout(() => {
+      dispatch(resetState());
+    }, 3000);
+  }, []);
+
   return (
     <>
       <div className="store-wrapper w-full max-h-full bg-[#f5f5f7] pb-52">

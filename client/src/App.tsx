@@ -21,6 +21,9 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoutes from "./routing/PrivateRoutes";
+import MyOrders from "./pages/MyOrders";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -34,12 +37,35 @@ function App() {
             <Route path="/product" element={<OurStore />} />
             <Route path="/product/:id" element={<SingleProduct />} />
             <Route path="/blogs" element={<Blog />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/cart"
+              element={
+                <PrivateRoutes>
+                  <Cart />
+                </PrivateRoutes>
+              }
+            />
             <Route path="/cart/checkout-success" element={<Checkout />} />
             <Route path="/blog/:id" element={<SingleBlog />} />
             <Route path="/compare-product" element={<CompareProduct />} />
-            <Route path="/wishlist" element={<Wishlist />} />
+            <Route
+              path="/wishlist"
+              element={
+                <PrivateRoutes>
+                  <Wishlist />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="/my-orders"
+              element={
+                <PrivateRoutes>
+                  <MyOrders />
+                </PrivateRoutes>
+              }
+            />
             <Route path="/login" element={<Login />} />
+            <Route path="/my-profile" element={<Profile />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/signup" element={<Signup />} />

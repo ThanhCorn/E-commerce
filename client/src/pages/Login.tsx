@@ -24,6 +24,9 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess && userLogin) {
       toast.success("Login Successfully");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
     }
   }, [isSuccess, userLogin]);
 
@@ -34,7 +37,6 @@ const Login = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
       dispatch(loginUser(values));
       formik.resetForm();
     },

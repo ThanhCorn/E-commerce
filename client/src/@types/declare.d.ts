@@ -28,14 +28,14 @@ export interface IBlog {
 }
 
 export interface IUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  phone: string;
-  email: string;
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  password?: string;
+  phone?: string;
+  email?: string;
   token?: string;
-  wishlist: IProduct[];
+  wishlist?: IProduct[];
 }
 
 export interface IImages {
@@ -77,4 +77,32 @@ export interface IDataPayment {
   lastName: string;
   totalPrice: number;
   totalAfterDiscount?: number;
+}
+
+export interface IOrder {
+  _id?: string;
+  userId: string;
+  shippingInfo: {
+    address: {
+      city: string;
+      country: string;
+      address: string;
+      postal_code: string;
+      line1: string;
+      line2: string;
+    };
+  };
+  paymentIntentId: string;
+  orderItems: [
+    {
+      productId: IProduct;
+      color: IColor;
+      quantity: number;
+      price: number;
+    }
+  ];
+  totalPrice: number;
+  orderStatus: string;
+  paymentStatus: string;
+  paidAt?: Date;
 }

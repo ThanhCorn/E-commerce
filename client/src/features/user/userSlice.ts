@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import { ICart, IProduct, IUser } from "../../@types/declare";
+import { ICart, IOrder, IProduct, IUser } from "../../@types/declare";
 import userService from "./userService";
 import {
   addUserToLocalStorage,
@@ -11,11 +11,12 @@ import { toast } from "react-toastify";
 interface UserState {
   createUser: IUser | null;
   userCart?: ICart[];
+  userState?: IUser;
   userLogin: IUser | null;
   deleteItemFromCart?: ICart;
   updateItemFromCart?: ICart;
   userWishlist?: IProduct[];
-
+  userOrder?: IOrder[];
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
@@ -24,9 +25,10 @@ interface UserState {
 const initialState: UserState = {
   userLogin: getUserFromLocalStorage(),
   userWishlist: undefined,
+  userState: undefined,
   userCart: [],
   deleteItemFromCart: undefined,
-
+  userOrder: undefined,
   updateItemFromCart: undefined,
   createUser: null,
 
@@ -55,6 +57,27 @@ export const loginUser = createAsyncThunk(
   ) => {
     try {
       const res = await userService.loginUser({ email, password });
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export const getInfoUser = createAsyncThunk("auth/get-info-user", async () => {
+  try {
+    const res = await userService.getInfoUser();
+    return res;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+});
+
+export const updateInfoUser = createAsyncThunk(
+  "auth/edit-user",
+  async (data: IUser, thunkAPI) => {
+    try {
+      const res = await userService.updateInfoUser(data);
       return res;
     } catch (error: any) {
       return thunkAPI.rejectWithValue({ error: error.message });
@@ -117,6 +140,30 @@ export const updateQuantityItem = createAsyncThunk(
         data.cartItemId,
         data.newQuantity
       );
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export const getUserOrders = createAsyncThunk(
+  "auth/get-user-orders",
+  async (_, thunkAPI) => {
+    try {
+      const res = await userService.getUserOrders();
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export const emptyCart = createAsyncThunk(
+  "auth/empty-cart",
+  async (_, thunkAPI) => {
+    try {
+      const res = await userService.emptyCart();
       return res;
     } catch (error: any) {
       return thunkAPI.rejectWithValue({ error: error.message });
@@ -216,6 +263,53 @@ const userSlice = createSlice({
       toast.success("Product updated from cart");
     });
     builder.addCase(updateQuantityItem.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(getUserOrders.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getUserOrders.fulfilled, (state, action) => {
+      state.userOrder = action.payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+    });
+    builder.addCase(getUserOrders.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(emptyCart.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(emptyCart.fulfilled, (state) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+    });
+    builder.addCase(emptyCart.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(getInfoUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getInfoUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.userState = action.payload;
+    });
+    builder.addCase(getInfoUser.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(updateInfoUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateInfoUser.fulfilled, (state) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      toast.success("User updated");
+    });
+    builder.addCase(updateInfoUser.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });

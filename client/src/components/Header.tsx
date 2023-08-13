@@ -9,13 +9,14 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { getCart } from "../features/user/userSlice";
+import { getUserFromLocalStorage } from "../utils/localStorage";
 
 const Header = () => {
   const dispatch: AppDispatch = useDispatch();
   const userCart = useSelector((state: RootState) => state.auth.userCart);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [total, setTotal] = useState(0);
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user = getUserFromLocalStorage();
 
   useEffect(() => {
     dispatch(getCart());
@@ -29,7 +30,7 @@ const Header = () => {
       }
       setTotal(sum);
     }
-  }, [userCart]);
+  }, [userCart, user]);
 
   const toggleDropdown = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -40,6 +41,11 @@ const Header = () => {
     { id: 2, label: "Option 2" },
     { id: 3, label: "Option 3" },
   ];
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
   return (
     <>
       <div className="bg-primary">
@@ -104,7 +110,10 @@ const Header = () => {
                 </Link>
               </div>
               <div className="w-[120px]">
-                <Link to={user ? "" : "/login"} className="flex items-center">
+                <Link
+                  to={user ? "/my-profile" : "/login"}
+                  className="flex items-center"
+                >
                   <img src={userSVG} alt="user" className="mr-3" />
                   {user ? (
                     <>
@@ -197,14 +206,29 @@ const Header = () => {
                 OUR STORE
               </NavLink>
               <NavLink
+                to="/my-orders"
+                className="text-xs mr-4 text-white font-thin "
+              >
+                MY ORDERS
+              </NavLink>
+              <NavLink
                 to="/blogs"
                 className="text-xs mr-4 text-white font-thin "
               >
                 BLOGS
               </NavLink>
-              <NavLink to="/contact" className="text-xs  text-white font-thin ">
+              <NavLink
+                to="/contact"
+                className="text-xs mr-4 text-white font-thin "
+              >
                 CONTACT
               </NavLink>
+              <button
+                onClick={handleLogout}
+                className="text-xs  text-white font-thin "
+              >
+                LOGOUT
+              </button>
             </div>
           </div>
         </div>

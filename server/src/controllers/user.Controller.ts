@@ -52,13 +52,26 @@ export const loginUser = async (req: Request, res: Response) => {
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
-      _id: user?._id,
-      firstname: user?.firstName,
-      lastname: user?.lastName,
-      email: user?.email,
-      phone: user?.phone,
+      _id: user._id,
+      firstname: user.firstName,
+      lastname: user.lastName,
+      email: user.email,
+      phone: user.phone,
       token: generateToken(user?._id),
     });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getInfoUser = async (req: Request, res: Response) => {
+  const { _id } = req.user;
+  try {
+    const user = await userModel.findOne({ _id });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -201,8 +214,8 @@ export const updatedUser = async (req: Request, res: Response) => {
     const updateUser = await userModel.findByIdAndUpdate(
       _id,
       {
-        firstname: req.body?.firstname,
-        lastname: req.body?.lastname,
+        firstName: req.body?.firstName,
+        lastName: req.body?.lastName,
         phone: req.body?.phone,
         email: req.body?.email,
         role: req.body?.role,
@@ -395,40 +408,24 @@ export const getUserCart = async (req: Request, res: Response) => {
   }
 };
 
-export const createOrder = async (req: Request, res: Response) => {
+export const getOrderByUserId = async (req: Request, res: Response) => {
   const { _id } = req.user;
-  const {
-    shippingInfo,
-    orderItems,
-    totalPrice,
-    totalAfterDiscount,
-    paymentInfo,
-  } = req.body;
   try {
-    const newOrder = await orderModel.create({
-      user: _id,
-      shippingInfo,
-      orderItems,
-      totalPrice,
-      totalAfterDiscount,
-      paymentInfo,
-    });
-    res.status(200).json({
-      order: newOrder,
-      success: true,
-    });
+    const userOrders = await orderModel
+      .find({ userId: _id })
+      .populate("orderItems.color")
+      .populate("orderItems.productId");
+    res.status(200).json(userOrders);
   } catch (error) {
     throw new Error("Internal server error");
   }
 };
 
-export const getOrders = async (req: Request, res: Response) => {
+export const emptyCart = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
-    const userOrders = await orderModel
-      .find({ orderedBy: _id })
-      .populate("orderedBy");
-    res.status(200).json(userOrders);
+    const empty = await cartModel.deleteMany({ userId: _id });
+    res.status(200).json(empty);
   } catch (error) {
     throw new Error("Internal server error");
   }
@@ -441,20 +438,6 @@ export const getAllOrders = async (req: Request, res: Response) => {
       .populate("orderedBy")
       .populate("products.product");
     res.status(200).json(allOrders);
-  } catch (error) {
-    throw new Error("Internal server error");
-  }
-};
-
-export const getOrderId = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  console.log(id);
-  try {
-    const findOrder = await orderModel
-      .findById(id)
-      .populate("orderedBy")
-      .populate("products.product");
-    res.status(200).json(findOrder);
   } catch (error) {
     throw new Error("Internal server error");
   }

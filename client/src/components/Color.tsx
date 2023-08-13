@@ -7,7 +7,7 @@ interface ColorProps {
 
 const Color = (props: ColorProps) => {
   const { colorData, setColor } = props;
-  console.log("colordata", colorData);
+
   return (
     <>
       <ul>
@@ -17,7 +17,7 @@ const Color = (props: ColorProps) => {
               <li
                 onClick={() => setColor(color._id)}
                 key={index}
-                className="inline-block mr-2"
+                className="inline-block mr-2 cursor-pointer "
               >
                 <div
                   className="w-4 h-4 rounded-full"

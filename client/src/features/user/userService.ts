@@ -27,6 +27,24 @@ const loginUser = async ({
   }
 };
 
+const getInfoUser = async () => {
+  try {
+    const res = await axios.get(`${base_url}/user/info-user`, config);
+    return res.data;
+  } catch (error) {
+    throw new Error("Get info user failed");
+  }
+};
+
+const updateInfoUser = async (data: IUser) => {
+  try {
+    const res = await axios.put(`${base_url}/user/edit-user`, data, config);
+    return res.data;
+  } catch (error) {
+    throw new Error("Update info user failed");
+  }
+};
+
 const getUserProductWishlist = async () => {
   try {
     const res = await axios.get(`${base_url}/user/wishlist`, config);
@@ -78,6 +96,24 @@ const updateQuantityItem = async (cartItemId: string, newQuantity: number) => {
   }
 };
 
+const getUserOrders = async () => {
+  try {
+    const res = await axios.get(`${base_url}/user/get-order-by-id`, config);
+    return res.data;
+  } catch (error) {
+    throw new Error("Get user orders failed");
+  }
+};
+
+const emptyCart = async () => {
+  try {
+    const res = await axios.delete(`${base_url}/user/empty-cart`, config);
+    return res.data;
+  } catch (error) {
+    throw new Error("Empty cart failed");
+  }
+};
+
 const userService = {
   registerUser,
   loginUser,
@@ -86,6 +122,10 @@ const userService = {
   getCart,
   removeItemFromCart,
   updateQuantityItem,
+  getUserOrders,
+  emptyCart,
+  getInfoUser,
+  updateInfoUser,
 };
 
 export default userService;

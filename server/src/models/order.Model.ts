@@ -9,8 +9,8 @@ interface OrderDoc extends Document {
   paymentIntentId: string;
   orderItems: [
     {
-      product: string;
-      color: string;
+      productId: Schema.Types.ObjectId;
+      color: Schema.Types.ObjectId;
       quantity: number;
       price: number;
     }
@@ -46,12 +46,14 @@ const orderSchema = new Schema<OrderDoc, OrderModel>(
     orderItems: [
       {
         productId: {
-          type: String,
+          type: Types.ObjectId,
           required: true,
+          ref: "Product",
         },
         color: {
-          type: String,
+          type: Types.ObjectId,
           required: true,
+          ref: "Color",
         },
         quantity: {
           type: Number,

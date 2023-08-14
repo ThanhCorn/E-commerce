@@ -43,6 +43,21 @@ export interface IImages {
   url: string;
 }
 
+interface Rating {
+  star: number;
+  postedBy: Types.ObjectId;
+  comment?: string;
+}
+
+export interface IDataSort {
+  brand: string;
+  category: string;
+  maxPrice: number;
+  minPrice: number;
+  sort: string;
+  tag: string;
+}
+
 export interface IProduct {
   _id: string;
   title: string;
@@ -55,12 +70,8 @@ export interface IProduct {
   sold: number;
   images: IImages[];
   color: IColor[];
-  tags?: string;
-  ratings?: Array<{
-    star: number;
-    postedBy: Types.ObjectId;
-    comment?: string;
-  }>;
+  tags: string;
+  ratings?: Rating[];
   totalRating?: string;
 }
 

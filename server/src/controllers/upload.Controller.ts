@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response } from 'express';
-import { cloudinaryDelete, cloudinaryUpload } from '../utils/cloudinary';
+import { Request, Response } from "express";
+import { cloudinaryDelete, cloudinaryUpload } from "../utils/cloudinary";
 
 export const uploadImages = async (req: Request, res: Response) => {
   console.log(req.files);
@@ -21,8 +21,8 @@ export const uploadImages = async (req: Request, res: Response) => {
     });
     res.json(images);
   } catch (error) {
-    console.error('Error while uploading images:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error while uploading images:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -30,9 +30,9 @@ export const deleteImages = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const deteled = await cloudinaryDelete(id);
-    res.json({ message: 'Delete successfully' });
+    res.json({ message: "Delete successfully" });
   } catch (error) {
-    console.error('Error while uploading images:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error while uploading images:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

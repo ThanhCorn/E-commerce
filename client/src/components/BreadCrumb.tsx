@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 interface IBreadCrumb {
-  title: string;
+  title: string | undefined;
 }
 
 const BreadCrumb = ({ title }: IBreadCrumb) => {

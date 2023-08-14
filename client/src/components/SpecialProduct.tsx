@@ -17,7 +17,6 @@ interface ISpecialProductProps {
 
 const SpecialProduct = (props: ISpecialProductProps) => {
   const { id, title, brand, totalRating, price, sold, quantity, image } = props;
-  console.log(quantity);
   return (
     <>
       <div className="bg-white rounded-md overflow-hidden product-card flex pb-5">

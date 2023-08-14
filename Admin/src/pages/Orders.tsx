@@ -3,7 +3,7 @@ import type { ColumnsType } from "antd/es/table";
 import { AppDispatch, RootState } from "../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
-import { getAllOrder } from "../features/auth/authSlice";
+import { getAllOrder, updateOrderStatus } from "../features/auth/authSlice";
 import { Link } from "react-router-dom";
 
 interface DataType {
@@ -11,7 +11,8 @@ interface DataType {
   name: string;
   product: JSX.Element;
   amount: number;
-  date: string;
+  date: Date;
+  status: JSX.Element;
 }
 
 const columns: ColumnsType<DataType> = [
@@ -35,12 +36,15 @@ const columns: ColumnsType<DataType> = [
     title: "Date",
     dataIndex: "date",
   },
+  {
+    title: "Status",
+    dataIndex: "status",
+  },
 ];
 
 const Orders = () => {
   const dispatch: AppDispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.auth.orders);
-  console.log(orders);
 
   useEffect(() => {
     if (orders.length === 0) {
@@ -53,19 +57,46 @@ const Orders = () => {
     for (let i = 0; i < orders.length; i++) {
       newData.push({
         key: i,
-        name:
-          orders[i].orderedBy.firstname + " " + orders[i].orderedBy.lastname,
+        name: orders[i]?.userId?.firstName + " " + orders[i]?.userId?.lastName,
         product: (
           <Link to={`/admin/order/${orders[i]._id}`} className="text-blue-500">
             View Order
           </Link>
         ),
-        amount: orders[i].paymentIntent.amount,
-        date: new Date(orders[i].createdAt).toLocaleString(),
+        amount: orders[i].totalPrice,
+        date: orders[i].paidAt,
+        status: (
+          <>
+            <select
+              name=""
+              id=""
+              value={orders[i].orderStatus}
+              className="border border-gray-300 px-2 py-2 rounded-md w-full"
+              onChange={(e) => handleUpdate(orders[i]._id, e.target.value)}
+            >
+              <option value="Ordered">Ordered</option>
+              <option value="Processed">Processed</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+            </select>
+          </>
+        ),
       });
     }
     return newData;
   }, [orders]);
+
+  const handleUpdate = (id: string, orderStatus: string) => {
+    if (id) {
+      dispatch(
+        updateOrderStatus({
+          id,
+          status: orderStatus,
+        })
+      );
+      dispatch(getAllOrder());
+    }
+  };
 
   return (
     <div>

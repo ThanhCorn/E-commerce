@@ -1,7 +1,7 @@
 import { IColor } from "../@types/declare";
 
 interface ColorProps {
-  colorData: IColor[];
+  colorData?: IColor[];
   setColor: (_id: string) => void;
 }
 

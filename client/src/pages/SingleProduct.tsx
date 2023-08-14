@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import {
   getAllProduct,
   getSingleProduct,
+  rateProduct,
 } from "../features/products/productSlice";
 import { addToCart, getUserProductWishlist } from "../features/user/userSlice";
 import { IProduct } from "../@types/declare";
@@ -53,6 +54,22 @@ const SingleProduct = () => {
     document.execCommand("copy");
     textField.remove();
   };
+  const [star, setStar] = useState<number>(0);
+  const [comment, setComment] = useState("");
+  const addRatingProduct = () => {
+    if (star === 0) {
+      toast.error("Please select a rating");
+    }
+    if (comment === "") {
+      toast.error("Please write a comment");
+    } else if (id) {
+      dispatch(rateProduct({ productId: id, star: star, comment: comment }));
+      setTimeout(() => {
+        dispatch(getSingleProduct(id));
+      }, 1000);
+    }
+    return false;
+  };
 
   const uploadCart = () => {
     if (color === "") {
@@ -71,8 +88,8 @@ const SingleProduct = () => {
 
   return (
     <>
-      <Meta title="Product Name" />
-      <BreadCrumb title="Product Name" />
+      <Meta title={productById?.title} />
+      <BreadCrumb title={productById?.title} />
       <div className="store-wrapper w-full max-h-full bg-[#f5f5f7] pb-52">
         <div className="max-w-screen-2xl mx-auto">
           {/* Main Product */}
@@ -286,80 +303,61 @@ const SingleProduct = () => {
               Write A Review
             </p>
             <div className="mx-5">
-              <form action="" className="flex flex-col gap-5">
-                <div className="">
-                  <p className="text-gray-400 font-normal">Name</p>
-                  <input
-                    type="text"
-                    className="input bg-white border border-gray-300"
-                    placeholder="Enter Your Name"
-                  />
-                </div>
-                <div className="">
-                  <p className="text-gray-400 font-normal">Email</p>
+              <div className="">
+                <p className="text-gray-400 font-normal">Rating</p>
+                <ReactStars
+                  count={5}
+                  size={24}
+                  value={0}
+                  color2={"#ffd700"}
+                  onChange={(e) => setStar(e)}
+                />
+              </div>
 
-                  <input
-                    type="email"
-                    className="input bg-white border border-gray-300"
-                    placeholder="anhthatdeptrai@gmail.com"
-                  />
-                </div>
-                <div className="">
-                  <p className="text-gray-400 font-normal">Rating</p>
-                  <ReactStars
-                    count={5}
-                    size={24}
-                    value={0}
-                    color2={"#ffd700"}
-                  />
-                </div>
-                <div className="">
-                  <p className="text-gray-400 font-normal">Review Title</p>
+              <div className="">
+                <p className="text-gray-400 font-normal">
+                  Body of Review (1500)
+                </p>
 
-                  <input
-                    type="text"
-                    className="input bg-white border border-gray-300"
-                    placeholder="Give your review a title"
-                  />
-                </div>
-                <div className="">
-                  <p className="text-gray-400 font-normal">
-                    Body of Review (1500)
-                  </p>
-
-                  <textarea
-                    name=""
-                    id=""
-                    cols={30}
-                    rows={5}
-                    className="px-3 py-3 border border-gray-300 w-full rounded-xl"
-                    placeholder="Comments"
-                  ></textarea>
-                </div>
-                <div className="flex justify-end pb-10">
-                  <button className="button">Submit Preview</button>
-                </div>
-              </form>
+                <textarea
+                  name=""
+                  id=""
+                  cols={30}
+                  rows={5}
+                  className="px-3 py-3 border border-gray-300 w-full rounded-xl"
+                  placeholder="Comments"
+                  onChange={(e) => setComment(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="flex justify-end pb-10">
+                <button className="button" onClick={addRatingProduct}>
+                  Submit Preview
+                </button>
+              </div>
             </div>
             <div className="border-[1px] border-gray-300 mx-5"></div>
 
-            <div className="text-gray-400 mx-5 my-5 font-normal text-lg">
-              <div className="review">
-                <div className="flex gap-3 items-center mb-3">
-                  <h6 className="text-lg font-bold text-black">Ngoc Thanh</h6>
-                  <ReactStars
-                    count={5}
-                    size={24}
-                    value={3}
-                    color2={"#ffd700"}
-                  />
-                </div>
-                <p className="text-black font-normal">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Molestias sed temporibus libero quaerat magni nesciunt quam
-                  tenetur excepturi dolorem fuga!
-                </p>
-              </div>
+            <div className="text-gray-400 mx-3 my-5 font-normal text-lg">
+              {productById &&
+                productById?.ratings?.map((item, index) => {
+                  return (
+                    <div key={index} className="review">
+                      <div className="flex gap-3 items-center mb-3">
+                        <h6 className="text-lg font-bold text-black"></h6>
+                        <ReactStars
+                          count={5}
+                          size={24}
+                          value={item?.star}
+                          color2={"#ffd700"}
+                          edit={false}
+                        />
+                      </div>
+                      <p className="text-black font-normal ml-4">
+                        {item?.comment}
+                      </p>
+                    </div>
+                  );
+                })}
             </div>
           </div>
           <section className="popular-product px-10 mb-12">

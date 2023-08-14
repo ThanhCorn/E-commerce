@@ -1,7 +1,7 @@
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet";
 
 interface IMeta {
-  title: string;
+  title: string | undefined;
 }
 
 const Meta = (props: IMeta) => {

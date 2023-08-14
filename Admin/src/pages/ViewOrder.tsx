@@ -3,7 +3,7 @@ import type { ColumnsType } from "antd/es/table";
 import { AppDispatch, RootState } from "../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
-import { getOrderById, resetState } from "../features/auth/authSlice";
+import { getOrderParam, resetState } from "../features/auth/authSlice";
 import { useNavigate, useParams } from "react-router-dom";
 
 interface DataType {
@@ -12,7 +12,7 @@ interface DataType {
   brand: string;
   count: number;
   color: string;
-  date: string;
+  date: Date;
 }
 
 const columns: ColumnsType<DataType> = [
@@ -47,33 +47,34 @@ const ViewOrder = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const orderById = useSelector((state: RootState) => state.auth.orderById);
+  const orderByIdParam = useSelector(
+    (state: RootState) => state.auth.orderByIdParam
+  );
   useEffect(() => {
     if (id) {
       dispatch(resetState());
-      dispatch(getOrderById(id));
+      dispatch(getOrderParam(id));
     }
   }, [id]);
+  console.log(orderByIdParam);
 
   const data1 = useMemo(() => {
     const newData: DataType[] = [];
-    if (orderById && orderById.products) {
-      const products = orderById.products;
-
-      for (let i = 0; i < products.length; i++) {
+    if (orderByIdParam) {
+      orderByIdParam?.orderItems?.forEach((item, index) => {
         newData.push({
-          key: i,
-          name: products[i].product.title,
-          brand: products[i].product.brand,
-          count: products[i].count,
-          color: products[i].color,
-          date: new Date(orderById.createdAt).toLocaleString(),
+          key: index + 1,
+          name: item.productId.title,
+          brand: item.productId.brand,
+          count: item.quantity,
+          color: item.color.title as string,
+          date: orderByIdParam.paidAt,
         });
-      }
+      });
     }
 
     return newData;
-  }, [orderById]);
+  }, [orderByIdParam]);
 
   const goBack = () => {
     navigate(-1);
@@ -99,25 +100,23 @@ const ViewOrder = () => {
           <div className="flex justify-between items-center">
             <div className="flex flex-col text-center">
               <span className="mb-3 text-lg font-semibold">Order Id</span>
-              <span>{orderById?._id}</span>
+              <span>{orderByIdParam?._id}</span>
             </div>
             <div className="flex flex-col text-center">
               <span className="mb-3 text-lg font-semibold">Order Status</span>
-              <span>{orderById.orderStatus}</span>
+              <span>{orderByIdParam.paymentStatus}</span>
             </div>
             <div className="flex flex-col text-center">
               <span className="mb-3 text-lg font-semibold">Payment Intent</span>
-              <span>
-                ${orderById.paymentIntent ? orderById.paymentIntent.amount : ""}
-              </span>
+              <span>${orderByIdParam.totalPrice}</span>
             </div>
             <div className="flex flex-col text-center">
               <span className="mb-3 text-lg font-semibold">Order By</span>
               <span>
-                {orderById.orderedBy
-                  ? orderById?.orderedBy.firstname +
+                {orderByIdParam.userId
+                  ? orderByIdParam?.userId.firstName +
                     " " +
-                    orderById?.orderedBy.lastname
+                    orderByIdParam?.userId.lastName
                   : ""}
               </span>
             </div>

@@ -29,9 +29,7 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(resetState());
-    setTimeout(() => {
-      dispatch(getInfoUser());
-    }, 1000);
+    dispatch(getInfoUser());
   }, [dispatch]);
 
   const formik = useFormik({
@@ -42,6 +40,7 @@ const Profile = () => {
       phone: userState?.phone,
     },
     validationSchema: schema,
+    enableReinitialize: true,
     onSubmit: (values) => {
       dispatch(updateInfoUser(values));
       setIsEdit(false);

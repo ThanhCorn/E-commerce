@@ -17,6 +17,7 @@ interface UserState {
   updateItemFromCart?: ICart;
   userWishlist?: IProduct[];
   userOrder?: IOrder[];
+  emailForgotPassword?: string;
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
@@ -31,7 +32,7 @@ const initialState: UserState = {
   userOrder: undefined,
   updateItemFromCart: undefined,
   createUser: null,
-
+  emailForgotPassword: undefined,
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -164,6 +165,34 @@ export const emptyCart = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await userService.emptyCart();
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk(
+  "auth/forgot-password",
+  async (email: string, thunkAPI) => {
+    try {
+      const res = await userService.forgotPassword(email);
+      return res;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/reset-password",
+  async (
+    { password, token }: { password: string; token: string },
+    thunkAPI
+  ) => {
+    try {
+      const res = await userService.resetPassword(password, token);
+
       return res;
     } catch (error: any) {
       return thunkAPI.rejectWithValue({ error: error.message });
@@ -310,6 +339,30 @@ const userSlice = createSlice({
       toast.success("User updated");
     });
     builder.addCase(updateInfoUser.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(forgotPassword.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(forgotPassword.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.emailForgotPassword = action.payload;
+    });
+    builder.addCase(forgotPassword.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(resetPassword.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(resetPassword.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.userState = action.payload;
+    });
+    builder.addCase(resetPassword.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });

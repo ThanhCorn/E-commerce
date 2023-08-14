@@ -302,7 +302,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     const token = await user?.createPasswordResetToken();
     await user?.save();
     const resetUrl = `Hi, please click on the link to reset your password. This link is valid for 10 minutes only. 
-    <a href="http://localhost:5000/api/user/reset-password/${token}">Reset Password</a>`;
+    <a href="http://localhost:5173/reset-password/${token}">Reset Password</a>`;
     const data: EmailData = {
       to: email,
       text: "Hey User",
@@ -408,6 +408,20 @@ export const getUserCart = async (req: Request, res: Response) => {
   }
 };
 
+export const getOrderById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const userOrders = await orderModel
+      .find({ _id: id })
+      .populate("userId")
+      .populate("orderItems.color")
+      .populate("orderItems.productId");
+    res.status(200).json(userOrders);
+  } catch (error) {
+    throw new Error("Internal server error");
+  }
+};
+
 export const getOrderByUserId = async (req: Request, res: Response) => {
   const { _id } = req.user;
   try {
@@ -433,10 +447,8 @@ export const emptyCart = async (req: Request, res: Response) => {
 
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const allOrders = await orderModel
-      .find()
-      .populate("orderedBy")
-      .populate("products.product");
+    const allOrders = await orderModel.find().populate("userId");
+
     res.status(200).json(allOrders);
   } catch (error) {
     throw new Error("Internal server error");
@@ -451,9 +463,6 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
       id,
       {
         orderStatus: status,
-        paymentIntent: {
-          status: status,
-        },
       },
       { new: true }
     );
@@ -461,4 +470,171 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
   } catch (error) {
     throw new Error("Internal server error");
   }
+};
+
+export const getMonthOrderIncome = async (req: Request, res: Response) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const d = new Date();
+  let endDate = "";
+  d.setDate(1);
+  for (let index = 0; index < 11; index++) {
+    d.setMonth(d.getMonth() - 1);
+    endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
+  }
+  const data = await orderModel.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $lte: new Date(),
+          $gte: new Date(endDate),
+        },
+      },
+    },
+
+    {
+      $group: {
+        _id: { month: "$month" },
+        amount: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
+  res.status(200).json(data);
+};
+
+export const getMonthOrderCount = async (req: Request, res: Response) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const d = new Date();
+  let endDate = "";
+  d.setDate(1);
+  for (let index = 0; index < 11; index++) {
+    d.setMonth(d.getMonth() - 1);
+    endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
+  }
+  const data = await orderModel.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $lte: new Date(),
+          $gte: new Date(endDate),
+        },
+      },
+    },
+
+    {
+      $group: {
+        _id: { month: "$month" },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+  res.status(200).json(data);
+};
+export const getYearlyIncome = async (req: Request, res: Response) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const d = new Date();
+  let endDate = "";
+  d.setDate(1);
+  for (let index = 0; index < 11; index++) {
+    d.setMonth(d.getMonth() - 1);
+    endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
+  }
+  const data = await orderModel.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $lte: new Date(),
+          $gte: new Date(endDate),
+        },
+      },
+    },
+
+    {
+      $group: {
+        _id: null,
+        count: { $sum: 1 },
+        amount: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
+  res.status(200).json(data);
+};
+export const getYearlyTotalOrders = async (req: Request, res: Response) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const d = new Date();
+  let endDate = "";
+  d.setDate(1);
+  for (let index = 0; index < 11; index++) {
+    d.setMonth(d.getMonth() - 1);
+    endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
+  }
+  const data = await orderModel.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $lte: new Date(),
+          $gte: new Date(endDate),
+        },
+      },
+    },
+
+    {
+      $group: {
+        _id: null,
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+  res.status(200).json(data);
 };

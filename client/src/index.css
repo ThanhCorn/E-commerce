@@ -101,3 +101,21 @@ html {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
+
+.rbt-input-main {
+  width: 100%;
+  border: none;
+}
+
+.rbt-input-main:focus {
+  outline: none;
+}
+
+.rbt-menu {
+  margin-top: 5px;
+  padding: 0 20px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  width: 100%;
+  background: white;
+}

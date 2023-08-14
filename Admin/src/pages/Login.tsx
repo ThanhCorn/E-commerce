@@ -1,5 +1,5 @@
 import CustomInput from "../components/CustomInput";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,9 +18,7 @@ const SignupSchema = Yup.object().shape({
 const Login = () => {
   const dispatch: AppDispatch = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { isSuccess, errorMessage } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -31,14 +29,17 @@ const Login = () => {
     validationSchema: SignupSchema,
     onSubmit: (values) => {
       dispatch(login(values));
+      localStorage.setItem("user", JSON.stringify(user));
     },
   });
 
   useEffect(() => {
-    if (isSuccess) {
-      navigate("/admin");
+    if (user) {
+      setTimeout(() => {
+        navigate("/admin");
+      }, 1000);
     }
-  });
+  }, [user]);
 
   return (
     <>
@@ -47,9 +48,6 @@ const Login = () => {
           <h3 className="text-center text-2xl font-semibold">Login</h3>
           <p className="text-center my-3">Login to your account to continue</p>
           <form action="" onSubmit={formik.handleSubmit}>
-            <div className="error">
-              {errorMessage == "Rejected" ? "You are not admin" : ""}
-            </div>
             <div className="error">
               {formik.errors.email && formik.touched.email && (
                 <p className="text-red-500 text-sm">{formik.errors.email}</p>
@@ -78,9 +76,7 @@ const Login = () => {
               onChange={formik.handleChange("password")}
               value={formik.values.password}
             />
-            <div className="text-end mb-3 underline text-sm text-blue-600">
-              <Link to="/forgot-password">Forgot Password?</Link>
-            </div>
+
             <div className="bg-yellow-300 px-2 text-center text-gray-400 h-[40px] flex items-center justify-center ">
               <button className="w-full">Login</button>
             </div>

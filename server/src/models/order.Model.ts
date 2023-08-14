@@ -17,6 +17,7 @@ interface OrderDoc extends Document {
   ];
   paidAt?: Date;
   totalPrice: number;
+  month: number;
   totalAfterDiscount?: number;
   orderStatus?: string;
   paymentStatus: string;
@@ -68,6 +69,10 @@ const orderSchema = new Schema<OrderDoc, OrderModel>(
     paidAt: {
       type: Date,
       default: Date.now(),
+    },
+    month: {
+      type: Number,
+      default: new Date().getMonth(),
     },
     totalPrice: {
       type: Number,

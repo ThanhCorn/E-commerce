@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import compareSVG from "../assets/images/compare.svg";
 import wishlistSVG from "../assets/images/wishlist.svg";
@@ -10,12 +10,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { getCart } from "../features/user/userSlice";
 import { getUserFromLocalStorage } from "../utils/localStorage";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+
+interface ProdOptions {
+  id: number;
+  prod: string;
+  name: string;
+}
 
 const Header = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [paginate, setPaginate] = useState(true);
   const dispatch: AppDispatch = useDispatch();
   const userCart = useSelector((state: RootState) => state.auth.userCart);
+  const productState = useSelector(
+    (state: RootState) => state.product.products
+  );
+  const [productOptions, setProductOptions] = useState<ProdOptions[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
   const user = getUserFromLocalStorage();
 
   useEffect(() => {
@@ -31,6 +46,15 @@ const Header = () => {
       setTotal(sum);
     }
   }, [userCart, user]);
+
+  useEffect(() => {
+    const data: ProdOptions[] = [];
+    for (let index = 0; index < productState.length; index++) {
+      const ele = productState[index];
+      data.push({ id: index, prod: ele._id, name: ele.title });
+    }
+    setProductOptions(data);
+  }, [productState]);
 
   const toggleDropdown = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -76,11 +100,20 @@ const Header = () => {
           </div>
           <div className="col-span-5">
             <div className="relative text-gray-600 flex items-center w-full  ">
-              <input
+              <Typeahead
+                id="pagination-example"
+                onPaginate={() => console.log("Results paginated")}
+                options={productOptions}
+                onChange={(selected) => {
+                  if (selected && selected.length > 0) {
+                    const selectedProduct = selected[0] as ProdOptions; // Cast the selected item to ProdOptions
+                    navigate(`/product/${selectedProduct.prod}`);
+                  }
+                }}
+                paginate={paginate}
+                labelKey={"name"}
+                placeholder="Search for product..."
                 className="border-2 border-gray-300 bg-white h-8 px-5 pr-16 w-full rounded-lg text-sm focus:outline-none "
-                type="search"
-                name="search"
-                placeholder="Search product Here..."
               />
               <button
                 type="submit"

@@ -114,6 +114,28 @@ const emptyCart = async () => {
   }
 };
 
+const forgotPassword = async (email: string) => {
+  try {
+    const res = await axios.post(`${base_url}/user/forgot-password-token`, {
+      email,
+    });
+    return res.data;
+  } catch (error) {
+    throw new Error("Forgot password failed");
+  }
+};
+
+const resetPassword = async (password: string, token: string) => {
+  try {
+    const res = await axios.put(`${base_url}/user/reset-password/${token}`, {
+      password,
+    });
+    return res.data;
+  } catch (error) {
+    throw new Error("Reset password failed");
+  }
+};
+
 const userService = {
   registerUser,
   loginUser,
@@ -126,6 +148,8 @@ const userService = {
   emptyCart,
   getInfoUser,
   updateInfoUser,
+  forgotPassword,
+  resetPassword,
 };
 
 export default userService;

@@ -1,8 +1,6 @@
 import ReactStars from "react-stars";
 import { Link, useLocation } from "react-router-dom";
-import addCard from "../assets/images/add-card.svg";
 import view from "../assets/images/view.svg";
-import prodcompare from "../assets/images/prodcompare.svg";
 import love from "../assets/images/love.svg";
 import loveFill from "../assets/images/love-fill.svg";
 import { IProduct } from "../@types/declare";
@@ -70,16 +68,16 @@ const ProductCard = (props: IProductCard) => {
                 </div>
                 <div className="absolute action-bar">
                   <div className="flex flex-col gap-2">
-                    <button>
+                    {/* <button>
                       <img
                         src={prodcompare}
                         alt="prodcompare"
                         className="w-5"
                       />
-                    </button>
-                    <button>
+                    </button> */}
+                    {/* <button>
                       <img src={addCard} alt="add card" />
-                    </button>
+                    </button> */}
                     <Link to={`/product/${item._id}`}>
                       <img src={view} alt="view" />
                     </Link>

@@ -1,8 +1,8 @@
 import { IBlogCategory } from "./../../../server/src/models/blogCategory.Model";
 export interface IUser {
   _id?: string;
-  firstname?: string;
-  lastname?: string;
+  firstName?: string;
+  lastName?: string;
   phone?: string;
   email?: string;
   token?: string;
@@ -10,8 +10,8 @@ export interface IUser {
 
 export interface ICustomer {
   _id?: string;
-  firstname?: string;
-  lastname?: string;
+  firstName?: string;
+  lastName?: string;
   phone?: string;
   email?: string;
   token?: string;
@@ -83,13 +83,31 @@ interface OrderDoc {
 }
 
 export interface IOrder {
-  _id?: string;
-  products: OrderProduct[];
-  paymentIntent: PaymentIntent;
+  _id: string;
+  userId: IUser;
+  shippingInfo: {
+    address: {
+      city: string;
+      country: string;
+      state: string;
+      postal_code: string;
+      line1: string;
+      line2: string;
+    };
+  };
+  paymentIntentId: string;
+  orderItems: [
+    {
+      productId: IProduct;
+      color: IColor;
+      quantity: number;
+      price: number;
+    }
+  ];
+  totalPrice: number;
   orderStatus: string;
-  orderedBy: IUser; // The user's MongoDB _id (string type)
-  createdAt: Date;
-  updatedAt: Date;
+  paymentStatus: string;
+  paidAt: Date;
 }
 
 // Images
@@ -126,4 +144,26 @@ export interface ICoupon {
   name: string;
   discount: number;
   expiry: Date;
+}
+
+export interface IMonthIncome {
+  _id: {
+    month: number;
+  };
+  amount: number;
+}
+export interface IMonthOrderCount {
+  _id: {
+    month: number;
+  };
+  count: number;
+}
+export interface IYearIncome {
+  _id: null;
+  count: number;
+  amount: number;
+}
+export interface IYearOrderCount {
+  _id: null;
+  count: number;
 }

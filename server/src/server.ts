@@ -27,7 +27,12 @@ connectDB();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://e-commerce-frontend-vert.vercel.app/"],
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 
 // Serve static files

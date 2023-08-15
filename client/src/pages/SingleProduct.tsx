@@ -295,7 +295,7 @@ const SingleProduct = () => {
                     />
                     <p className="text-black font-normal">Based on 2 Reviews</p>
                   </div>
-                  {orderedProduct && (
+                  {orderedProduct ? (
                     <div>
                       <a
                         href=""
@@ -304,6 +304,10 @@ const SingleProduct = () => {
                         Write a Review
                       </a>
                     </div>
+                  ) : (
+                    <button onClick={() => setOrderedProduct(true)}>
+                      Order Now
+                    </button>
                   )}
                 </div>
               </div>

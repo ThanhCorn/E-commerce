@@ -25,34 +25,15 @@ connectDB();
 
 // Middleware
 
-app.use(function (req, res, next) {
-  //Enabling CORS
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
-  );
-  next();
-});
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: "https://e-commerce-frontend-vert.vercel.app",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    optionsSuccessStatus: 204, // Set the status code for preflight requests
-  })
-);
+app.use(cors());
 app.use(cookieParser());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-const apiUrl = process.env.REACT_APP_API_URL;
 // Routes
 app.use(`/api/user`, userRouter);
 app.use(`/api/product`, productRouter);

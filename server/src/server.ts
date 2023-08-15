@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["https://e-commerce-frontend-vert.vercel.app/"],
+    origin: ["https://e-commerce-frontend-vert.vercel.app"],
     credentials: true,
   })
 );

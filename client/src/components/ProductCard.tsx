@@ -101,7 +101,7 @@ const ProductCard = (props: IProductCard) => {
                     props.grid == 1 ? "block" : "hidden"
                   }`}
                 >
-                  {item?.description}
+                  {item.description.replace(/<\/?p>/g, "")}
                 </p>
                 <p className="text-black font-normal mb-5">${item.price}</p>
               </div>

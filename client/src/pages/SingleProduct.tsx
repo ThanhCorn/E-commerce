@@ -37,7 +37,16 @@ const SingleProduct = () => {
     wishlist = userWishlist.map((item: IProduct) => item._id);
   }
   useEffect(() => {
-    dispatch(getAllProduct());
+    dispatch(
+      getAllProduct({
+        sort: "",
+        minPrice: 0,
+        maxPrice: 10000,
+        tag: "",
+        category: "",
+        brand: "",
+      })
+    );
     dispatch(getUserProductWishlist());
 
     if (id) {

@@ -50,12 +50,12 @@ interface Rating {
 }
 
 export interface IDataSort {
-  brand: string;
-  category: string;
-  maxPrice: number;
-  minPrice: number;
-  sort: string;
-  tag: string;
+  brand?: string;
+  category?: string;
+  maxPrice?: number;
+  minPrice?: number;
+  sort?: string;
+  tag?: string;
 }
 
 export interface IProduct {

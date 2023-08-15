@@ -71,7 +71,7 @@ const SpecialProduct = (props: ISpecialProductProps) => {
             <p className="text-black my-2 ">Products: {quantity}</p>
             <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
               <div
-                aria-aria-valuemin={quantity}
+                aria-valuemin={quantity}
                 aria-valuemax={sold + quantity}
                 aria-valuenow={quantity / quantity + sold * 100}
                 className="bg-blue-600 h-2.5 rounded-full dark:bg-blue-500"

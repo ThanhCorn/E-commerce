@@ -1,6 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
-import compareSVG from "../assets/images/compare.svg";
 import wishlistSVG from "../assets/images/wishlist.svg";
 import userSVG from "../assets/images/user.svg";
 import cartSVG from "../assets/images/cart.svg";
@@ -90,7 +89,7 @@ const Header = () => {
 
         {/* Header Upper */}
 
-        <div className="max-w-screen-2xl grid grid-cols-12 mx-auto h-20 items-center ">
+        <div className="max-w-screen-2xl grid grid-cols-10 mx-auto h-20 items-center ">
           <div className="col-span-2 ml-10">
             <h1>
               <Link to="" className="text-sm lg:text-2xl lg:text-white ">
@@ -98,7 +97,7 @@ const Header = () => {
               </Link>
             </h1>
           </div>
-          <div className="col-span-5">
+          <div className="col-span-4">
             <div className="relative text-gray-600 flex items-center w-full  ">
               <Typeahead
                 id="pagination-example"
@@ -123,16 +122,8 @@ const Header = () => {
               </button>
             </div>
           </div>
-          <div className="col-span-5 flex justify-between mr-10 ml-auto">
-            <div className="flex items-center  gap-5 ">
-              <div className="w-[100px]">
-                <Link to="/compare-product" className="flex items-center">
-                  <img src={compareSVG} alt="compare" className="mr-3 ml-3" />
-                  <p>
-                    Compare <br /> Product
-                  </p>
-                </Link>
-              </div>
+          <div className="col-span-4 flex justify-between mr-10 ml-auto">
+            <div className="flex items-center  gap-10 ">
               <div className="w-[120px]">
                 <Link to="/wishlist" className="flex items-center">
                   <img src={wishlistSVG} alt="wishlist" className="mr-3 ml-2" />

@@ -73,7 +73,6 @@ const Addproduct = () => {
       formik.setFieldValue("category", productById.category);
       formik.setFieldValue("brand", productById.brand);
       formik.setFieldValue("tags", productById.tags);
-      formik.setFieldValue("color", productById.color);
       formik.setFieldValue("quantity", productById.quantity);
       const convertImagesToFilesAndSetState = async () => {
         const files = await convertImagesToFiles(productById.images);
@@ -180,6 +179,8 @@ const Addproduct = () => {
     updatedImages.splice(index, 1);
     setUploadedImages(updatedImages);
   };
+
+  console.log(productById);
 
   return (
     <div>
@@ -293,11 +294,15 @@ const Addproduct = () => {
           <Select
             mode="multiple"
             placeholder="Please select colors"
-            value={productById ? productById.color : selectedColors}
+            value={
+              productById
+                ? productById?.color?.map((item) => item.title)
+                : selectedColors
+            }
             onChange={handleSelectedColor}
             options={multiColor.map((color) => ({
               label: color.title,
-              value: color.title,
+              value: color._id,
             }))}
           />
           <div>

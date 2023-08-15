@@ -28,8 +28,11 @@ const MyOrders = () => {
             <h4 className=" font-semibold ">Total Amount</h4>
             <h4 className=" font-semibold ">Status</h4>
           </div>
-          {userOrders?.map((order) => (
-            <div className="mx-10 pt-10 grid grid-flow-col gap-5 grid-cols-8 bg-gray-300 rounded-md mt-5 px-2 py-2">
+          {userOrders?.map((order, index) => (
+            <div
+              key={index}
+              className="mx-10 pt-10 grid grid-flow-col gap-5 grid-cols-8 bg-gray-300 rounded-md mt-5 px-2 py-2"
+            >
               <h4 className=" font-semibold text-gray-400 col-span-2">
                 {order._id}
               </h4>

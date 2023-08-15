@@ -231,6 +231,7 @@ const userSlice = createSlice({
     builder.addCase(loginUser.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
+      toast.error("Email or password is incorrect");
     });
     builder.addCase(getUserProductWishlist.pending, (state) => {
       state.isLoading = true;
@@ -333,10 +334,22 @@ const userSlice = createSlice({
     builder.addCase(updateInfoUser.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(updateInfoUser.fulfilled, (state) => {
+    builder.addCase(updateInfoUser.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isSuccess = true;
       toast.success("User updated");
+      const currentUser = getUserFromLocalStorage();
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          _id: action.payload._id,
+          email: action.payload.email,
+          firstName: action.payload.firstName,
+          lastName: action.payload.lastName,
+          phone: action.payload.phone,
+          token: currentUser?.token,
+        })
+      );
     });
     builder.addCase(updateInfoUser.rejected, (state) => {
       state.isLoading = false;

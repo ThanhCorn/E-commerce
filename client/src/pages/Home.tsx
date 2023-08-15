@@ -52,7 +52,16 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getAllBlog());
-    dispatch(getAllProduct());
+    dispatch(
+      getAllProduct({
+        sort: "",
+        minPrice: 0,
+        maxPrice: 10000,
+        tag: "",
+        category: "",
+        brand: "",
+      })
+    );
     dispatch(getUserProductWishlist());
   }, []);
   return (
@@ -73,7 +82,7 @@ const Home = () => {
                   From $999.00 or $41.62/mo. <br />
                   for 24 mo. Footnote*
                 </p>
-                <Link to="" className="button">
+                <Link to="/product" className="button">
                   Buy Now
                 </Link>
               </div>

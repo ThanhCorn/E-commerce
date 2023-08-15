@@ -30,7 +30,7 @@ export interface IProductCategory {
 
 export interface IColor {
   _id?: string;
-  title?: string;
+  title: string;
 }
 
 export interface IBlog {
@@ -113,8 +113,14 @@ export interface IOrder {
 // Images
 
 export interface IImages {
-  public_id?: string;
-  url?: string;
+  public_id: string;
+  url: string;
+}
+
+interface Rating {
+  star: number;
+  postedBy: Types.ObjectId;
+  comment?: string;
 }
 
 export interface IProduct {
@@ -128,13 +134,9 @@ export interface IProduct {
   brand: string;
   sold?: number;
   images: IImages[];
-  color: string[];
-  tags?: string;
-  ratings?: Array<{
-    star: number;
-    postedBy: Types.ObjectId;
-    comment?: string;
-  }>;
+  color: IColor[];
+  tags: string;
+  ratings?: Rating[];
   totalRating?: string;
 }
 

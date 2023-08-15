@@ -34,10 +34,10 @@ const Profile = () => {
 
   const formik = useFormik({
     initialValues: {
-      firstName: userState?.firstName,
-      lastName: userState?.lastName,
-      email: userState?.email,
-      phone: userState?.phone,
+      firstName: userState?.firstName || "",
+      lastName: userState?.lastName || "",
+      email: userState?.email || "",
+      phone: userState?.phone || "",
     },
     validationSchema: schema,
     enableReinitialize: true,

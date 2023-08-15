@@ -4,16 +4,15 @@ import { config } from "../../utils/axiosConfig";
 import { IDataSort } from "../../@types/declare";
 
 const getAllProduct = async (data: IDataSort) => {
-  console.log(data);
   try {
     const res = await axios.get(
-      `${base_url}/product?${data.brand !== "" ? `brand=${data.brand}&` : ""}${
-        data.tag !== "" ? `tags=${data.tag}&` : ""
-      }${data.category !== "" ? `category=${data.category}&` : ""}${
-        data.sort !== "" ? `sort=${data.sort}&` : ""
-      }${data.minPrice !== 0 ? `price[gte]=${data.minPrice}&` : ""}${
-        data.maxPrice !== 0 ? `price[lte]=${data.maxPrice}&` : ""
-      }`
+      `${base_url}/product?${
+        data?.brand !== "" ? `brand=${data?.brand}&` : ""
+      }${data?.tag !== "" ? `tags=${data?.tag}&` : ""}${
+        data?.category !== "" ? `category=${data?.category}&` : ""
+      }${data?.sort !== "" ? `sort=${data?.sort}&` : ""}${
+        data?.minPrice !== 0 ? `price[gte]=${data?.minPrice}&` : ""
+      }${data?.maxPrice !== 0 ? `price[lte]=${data?.maxPrice}&` : ""}`
     );
     return res.data;
   } catch (error) {

@@ -217,7 +217,9 @@ const OurStore = () => {
                   </select>
                 </div>
                 <div className="mr-3 items-center w-[50%] h-full flex gap-5 justify-end">
-                  <p className="text-black font-normal">21 Products</p>
+                  <p className="text-black font-normal">
+                    {getProducts.length} products
+                  </p>
                   <div className="flex items-center gap-3">
                     <div
                       className="cursor-pointer px-2 bg-gray-200 py-2 rounded-lg"

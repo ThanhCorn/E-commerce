@@ -18,8 +18,8 @@ import { IProduct } from "../@types/declare";
 import { toast } from "react-toastify";
 
 const SingleProduct = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [color, setColor] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  const [color, setColor] = useState<any>("");
   const [quantity, setQuantity] = useState(1);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,7 +86,8 @@ const SingleProduct = () => {
     } else {
       dispatch(
         addToCart({
-          productId: productById?._id,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          productId: productById?._id as any,
           quantity,
           color,
           price: productById?.price || 0,

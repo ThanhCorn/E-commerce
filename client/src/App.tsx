@@ -5,7 +5,6 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import OurStore from "./pages/OurStore";
 import Blog from "./pages/Blog";
-import CompareProduct from "./pages/CompareProduct";
 import Wishlist from "./pages/Wishlist";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -47,7 +46,6 @@ function App() {
             />
             <Route path="/cart/checkout-success" element={<Checkout />} />
             <Route path="/blog/:id" element={<SingleBlog />} />
-            <Route path="/compare-product" element={<CompareProduct />} />
             <Route
               path="/wishlist"
               element={

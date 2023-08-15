@@ -24,7 +24,6 @@ const Wishlist = () => {
     }, 500);
   };
 
-  console.log(userWishlist);
   return (
     <div>
       <Meta title="Wishlist" />

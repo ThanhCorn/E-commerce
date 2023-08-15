@@ -77,9 +77,9 @@ export interface IProduct {
 
 export interface ICart {
   _id?: string;
-  productId?: string | IProduct;
+  productId: IProduct;
   quantity: number;
-  color?: IColor | string;
+  color: IColor;
   price: number;
 }
 

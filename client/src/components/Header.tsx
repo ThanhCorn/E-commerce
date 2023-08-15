@@ -19,8 +19,6 @@ interface ProdOptions {
 }
 
 const Header = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [paginate, setPaginate] = useState(true);
   const dispatch: AppDispatch = useDispatch();
   const userCart = useSelector((state: RootState) => state.auth.userCart);
   const productState = useSelector(
@@ -109,7 +107,6 @@ const Header = () => {
                     navigate(`/product/${selectedProduct.prod}`);
                   }
                 }}
-                paginate={paginate}
                 labelKey={"name"}
                 placeholder="Search for product..."
                 className="border-2 border-gray-300 bg-white h-8 px-5 pr-16 w-full rounded-lg text-sm focus:outline-none "

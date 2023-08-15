@@ -35,17 +35,17 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 const apiUrl = process.env.REACT_APP_API_URL;
 // Routes
-app.use(`${apiUrl}/user`, userRouter);
-app.use(`${apiUrl}/product`, productRouter);
-app.use(`${apiUrl}/blog`, blogRouter);
-app.use(`${apiUrl}/category`, categoryRouter);
-app.use(`${apiUrl}/blog-category`, blogCategoryRouter);
-app.use(`${apiUrl}/brand`, brandRouter);
-app.use(`${apiUrl}/coupon`, couponRouter);
-app.use(`${apiUrl}/color`, colorRouter);
-app.use(`${apiUrl}/contact`, contactRouter);
-app.use(`${apiUrl}/upload`, uploadRouter);
-app.use(`${apiUrl}/stripe`, stripeRouter);
+app.use(`/api/user`, userRouter);
+app.use(`/api/product`, productRouter);
+app.use(`/api/blog`, blogRouter);
+app.use(`/api/category`, categoryRouter);
+app.use(`/api/blog-category`, blogCategoryRouter);
+app.use(`/api/brand`, brandRouter);
+app.use(`/api/coupon`, couponRouter);
+app.use(`/api/color`, colorRouter);
+app.use(`/api/contact`, contactRouter);
+app.use(`/api/upload`, uploadRouter);
+app.use(`/api/stripe`, stripeRouter);
 // Error handling middleware
 app.use(notFound);
 app.use(errorHandler);

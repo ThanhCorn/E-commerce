@@ -32,6 +32,13 @@ const ProductCard = (props: IProductCard) => {
       ? data.filter((item) => item?.tags?.includes(tagsProduct))
       : data;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let dataWishlist: any = [];
+
+  if (updatedData?.wishlist) {
+    dataWishlist = updatedData?.wishlist;
+  }
+
   return (
     <>
       {filteredProducts?.map((item, index) => {
@@ -58,8 +65,8 @@ const ProductCard = (props: IProductCard) => {
                 />
                 <div className="absolute top-3 right-2  ">
                   <button onClick={() => addToWishList(item._id)}>
-                    {updatedData?.wishlist.includes(item._id) ||
-                    wishlist.includes(item._id) ? (
+                    {wishlist.includes(item._id) ||
+                    dataWishlist.includes(item._id) ? (
                       <img src={loveFill} alt="love" className="w-5 z-50" />
                     ) : (
                       <img src={love} alt="love" className="w-5 z-50" />

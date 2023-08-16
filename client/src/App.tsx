@@ -63,7 +63,14 @@ function App() {
               }
             />
             <Route path="/login" element={<Login />} />
-            <Route path="/my-profile" element={<Profile />} />
+            <Route
+              path="/my-profile"
+              element={
+                <PrivateRoutes>
+                  <Profile />
+                </PrivateRoutes>
+              }
+            />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/signup" element={<Signup />} />

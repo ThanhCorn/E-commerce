@@ -1,4 +1,3 @@
-import { IBlogCategory } from "./../../../server/src/models/blogCategory.Model";
 export interface IUser {
   _id?: string;
   firstName?: string;

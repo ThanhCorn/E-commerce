@@ -11,6 +11,7 @@ import {
 } from "../features/user/userSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { base_url } from "../utils/base_url";
 
 const Cart = () => {
   const userCart = useSelector((state: RootState) => state.auth.userCart);
@@ -58,10 +59,10 @@ const Cart = () => {
 
   const handleCheckout = async () => {
     console.log(userCart);
-    const res = await axios.post(
-      "http://localhost:5000/api/stripe/create-checkout-session",
-      { cartItems: userCart, userId: userLogin?._id }
-    );
+    const res = await axios.post(`${base_url}/stripe/create-checkout-session`, {
+      cartItems: userCart,
+      userId: userLogin?._id,
+    });
     if (res) {
       window.location.href = res.data.url;
     }

@@ -98,8 +98,8 @@ router.post("/create-checkout-session", async (req: Request, res: Response) => {
       phone_number_collection: {
         enabled: true,
       },
-      success_url: `https://e-commerce-frontend-vert.vercel.app/cart/checkout-success`,
-      cancel_url: `https://e-commerce-frontend-vert.vercel.app`,
+      success_url: `${process.env.CLIENT_URL as string}/checkout-success`,
+      cancel_url: `${process.env.CLIENT_URL as string}`,
     });
 
     res.send({

@@ -63,18 +63,16 @@ const Dashboard = () => {
   const monthlyOrderCountState = useSelector(
     (state: RootState) => state.auth.monthOrderCount
   );
-  const yearlyInComeState = useSelector(
-    (state: RootState) => state.auth.yearIncome
-  );
+  const { yearIncome } = useSelector((state: RootState) => state.auth);
   const orders = useSelector((state: RootState) => state.auth.orders);
 
   useEffect(() => {
+    dispatch(getYearlyOrder());
+    dispatch(getYearlyOrderCount());
     dispatch(getAllOrder());
     dispatch(getMonthlyOrder());
     dispatch(getMonthlyOrderCount());
-    dispatch(getYearlyOrder());
-    dispatch(getYearlyOrderCount());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -108,7 +106,7 @@ const Dashboard = () => {
     }
     setDataMonthlyOrderCount(monthlyOrderCount);
     setDataMonthly(data);
-  }, [monthlyInComeState, monthlyOrderCountState]);
+  }, [monthlyInComeState, monthlyOrderCountState, yearIncome]);
 
   const columns: ColumnsType<DataType> = [
     {
@@ -184,9 +182,21 @@ const Dashboard = () => {
     ],
   };
 
+  const handleLoadData = () => {
+    window.location.reload();
+  };
+
   return (
     <div>
-      <h3 className="text-2xl font-semibold mb-5">Dashboard</h3>
+      <div className="flex justify-between mb-3">
+        <h3 className="text-2xl font-semibold mb-5">Dashboard</h3>
+        <button
+          onClick={handleLoadData}
+          className="px-2 bg-blue-500 rounded-md text-white hover:bg-blue-600"
+        >
+          Load Data
+        </button>
+      </div>
       <div className="flex items-center justify-between gap-5 ">
         <div className="bg-white w-1/2 shadow-xl px-4 py-6">
           <div className="flex items-center justify-between mb-5 font-normal text-lg text-gray-400">
@@ -194,7 +204,7 @@ const Dashboard = () => {
             <FaEllipsisV />
           </div>
           <div className="flex items-center justify-between">
-            <b className="text-3xl">${yearlyInComeState[0]?.amount}</b>
+            <b className="text-3xl">${yearIncome[0]?.amount}</b>
             <div className="flex flex-col">
               <h4 className="flex items-center gap-1 justify-end text-green-500 font-bold text-lg">
                 <PiTrendUpThin size={24} />
@@ -211,7 +221,7 @@ const Dashboard = () => {
             <FaEllipsisV />
           </div>
           <div className="flex items-center justify-between">
-            <b className="text-3xl">{yearlyInComeState[0]?.count}</b>
+            <b className="text-3xl">{yearIncome[0]?.count}</b>
             <div className="flex flex-col">
               <h4 className="flex items-center gap-1 justify-end text-green-500 font-bold text-lg">
                 <PiTrendUpThin size={24} />
@@ -239,11 +249,6 @@ const Dashboard = () => {
       <h3 className="text-xl font-semibold my-5">Recent Orders</h3>
       <div>
         <Table columns={columns} dataSource={data1} />
-      </div>
-      <h3 className="text-xl font-semibold my-5">Recent Reviews</h3>
-      <div className="">
-        <div></div>
-        <div></div>
       </div>
     </div>
   );

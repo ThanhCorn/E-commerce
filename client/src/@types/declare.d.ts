@@ -115,5 +115,6 @@ export interface IOrder {
   totalPrice: number;
   orderStatus: string;
   paymentStatus: string;
-  paidAt?: Date;
+  paidAt: Date;
+  createdAt: Date;
 }

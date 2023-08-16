@@ -80,7 +80,7 @@ const OurStore = () => {
                         [...new Set(categories)].map((item, index) => {
                           return (
                             <li
-                              className="opacity-80 cursor-pointer"
+                              className="opacity-80 cursor-pointer hover:text-blue-500"
                               onClick={() => setCategory(item)}
                               key={index}
                             >
@@ -125,7 +125,7 @@ const OurStore = () => {
                       [...new Set(tags)].map((item, index) => {
                         return (
                           <span
-                            className="text-xs bg-gray-400 px-2 py-2 rounded-lg font-bold opacity-75"
+                            className="text-xs bg-gray-400 px-2 py-2 rounded-lg font-bold opacity-75 hover:bg-blue-500 hover:text-white cursor-pointer"
                             key={index}
                             onClick={() => setTag(item)}
                           >
@@ -144,7 +144,7 @@ const OurStore = () => {
                       [...new Set(brands)].map((item, index) => {
                         return (
                           <span
-                            className="text-xs bg-gray-400 px-2 py-2 rounded-lg font-bold opacity-75"
+                            className="text-xs bg-gray-400 px-2 py-2 rounded-lg font-bold opacity-75 hover:bg-blue-500 hover:text-white cursor-pointer"
                             key={index}
                             onClick={() => setBrand(item)}
                           >

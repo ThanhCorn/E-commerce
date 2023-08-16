@@ -67,9 +67,18 @@ const ProductCard = (props: IProductCard) => {
                   <button onClick={() => addToWishList(item._id)}>
                     {wishlist.includes(item._id) ||
                     dataWishlist.includes(item._id) ? (
-                      <img src={loveFill} alt="love" className="w-5 z-50" />
+                      <img
+                        src={loveFill}
+                        alt="love"
+                        className="w-5 z-50 hover:scale-110 transition-all duration-300 ease-in-out"
+                      />
                     ) : (
-                      <img src={love} alt="love" className="w-5 z-50" />
+                      <img
+                        src={love}
+                        alt="love"
+                        className="w-5 z-50
+                      hover:scale-110 transition-all duration-300 ease-in-out "
+                      />
                     )}
                   </button>
                 </div>
@@ -86,7 +95,11 @@ const ProductCard = (props: IProductCard) => {
                       <img src={addCard} alt="add card" />
                     </button> */}
                     <Link to={`/product/${item._id}`}>
-                      <img src={view} alt="view" />
+                      <img
+                        src={view}
+                        alt="view"
+                        className="hover:scale-110 transition-all duration-300 ease-in-out"
+                      />
                     </Link>
                   </div>
                 </div>

@@ -34,18 +34,20 @@ app.use(cookieParser());
 // Serve static files
 app.use(express.static(path.join(__dirname, "..", "public")));
 
+const apiURL = "https://e-commerce-api-thanhcorn.vercel.app";
+
 // Routes
-app.use(`/api/user`, userRouter);
-app.use(`/api/product`, productRouter);
-app.use(`/api/blog`, blogRouter);
-app.use(`/api/category`, categoryRouter);
-app.use(`/api/blog-category`, blogCategoryRouter);
-app.use(`/api/brand`, brandRouter);
-app.use(`/api/coupon`, couponRouter);
-app.use(`/api/color`, colorRouter);
-app.use(`/api/contact`, contactRouter);
-app.use(`/api/upload`, uploadRouter);
-app.use(`/api/stripe`, stripeRouter);
+app.use(`${apiURL}/api/user`, userRouter);
+app.use(`${apiURL}/api/product`, productRouter);
+app.use(`${apiURL}/api/blog`, blogRouter);
+app.use(`${apiURL}/api/category`, categoryRouter);
+app.use(`${apiURL}/api/blog-category`, blogCategoryRouter);
+app.use(`${apiURL}/api/brand`, brandRouter);
+app.use(`${apiURL}/api/coupon`, couponRouter);
+app.use(`${apiURL}/api/color`, colorRouter);
+app.use(`${apiURL}/api/contact`, contactRouter);
+app.use(`${apiURL}/api/upload`, uploadRouter);
+app.use(`${apiURL}/api/stripe`, stripeRouter);
 // Error handling middleware
 app.use(notFound);
 app.use(errorHandler);

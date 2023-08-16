@@ -1,18 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
-    proxy: {
-      "/api": {
-        target: "https://www.mocky.io", // Replace this with the actual server URL
-        changeOrigin: true,
-      },
-    },
-  },
-  build: {
-    outDir: "../server/public",
-    chunkSizeWarningLimit: 1000,
-  },
 });

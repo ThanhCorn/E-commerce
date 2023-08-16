@@ -72,7 +72,7 @@ const orderSchema = new Schema<OrderDoc, OrderModel>(
     },
     month: {
       type: Number,
-      default: new Date().getMonth(),
+      default: new Date().getMonth() + 1,
     },
     totalPrice: {
       type: Number,

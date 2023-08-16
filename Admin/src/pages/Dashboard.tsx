@@ -94,13 +94,13 @@ const Dashboard = () => {
       "November",
       "December",
     ];
-    for (let i = 0; i < monthlyInComeState?.length; i++) {
+    for (let i = 0; i <= monthlyInComeState?.length; i++) {
       data.push({
         type: monthNames[monthlyInComeState[i]?._id?.month],
         income: monthlyInComeState[i]?.amount,
       });
     }
-    for (let i = 0; i < monthlyOrderCountState?.length; i++) {
+    for (let i = 0; i <= monthlyOrderCountState?.length; i++) {
       monthlyOrderCount.push({
         type: monthNames[monthlyOrderCountState[i]?._id?.month],
         sales: monthlyOrderCountState[i]?.count,

@@ -491,7 +491,7 @@ export const getMonthOrderIncome = async (req: Request, res: Response) => {
   let endDate = "";
   d.setDate(1);
   for (let index = 0; index < 11; index++) {
-    d.setMonth(d.getMonth() - 1);
+    d.setMonth(d.getMonth());
     endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
   }
   const data = await orderModel.aggregate([
@@ -533,7 +533,7 @@ export const getMonthOrderCount = async (req: Request, res: Response) => {
   let endDate = "";
   d.setDate(1);
   for (let index = 0; index < 11; index++) {
-    d.setMonth(d.getMonth() - 1);
+    d.setMonth(d.getMonth());
     endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
   }
   const data = await orderModel.aggregate([
@@ -574,7 +574,7 @@ export const getYearlyIncome = async (req: Request, res: Response) => {
   let endDate = "";
   d.setDate(1);
   for (let index = 0; index < 11; index++) {
-    d.setMonth(d.getMonth() - 1);
+    d.setMonth(d.getMonth());
     endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
   }
   const data = await orderModel.aggregate([
@@ -616,7 +616,7 @@ export const getYearlyTotalOrders = async (req: Request, res: Response) => {
   let endDate = "";
   d.setDate(1);
   for (let index = 0; index < 11; index++) {
-    d.setMonth(d.getMonth() - 1);
+    d.setMonth(d.getMonth());
     endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
   }
   const data = await orderModel.aggregate([

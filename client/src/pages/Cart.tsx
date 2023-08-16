@@ -55,10 +55,8 @@ const Cart = () => {
       setTotal(sum);
     }
   }, [userCart]);
-  console.log(userCart);
 
   const handleCheckout = async () => {
-    console.log(userCart);
     const res = await axios.post(`${base_url}/stripe/create-checkout-session`, {
       cartItems: userCart,
       userId: userLogin?._id,

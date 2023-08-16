@@ -215,9 +215,11 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
     });
-    builder.addCase(registerUser.rejected, (state) => {
+    builder.addCase(registerUser.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
+      const message = action.payload as { error: string };
+      toast.error(message.error);
     });
     builder.addCase(loginUser.pending, (state) => {
       state.isLoading = true;

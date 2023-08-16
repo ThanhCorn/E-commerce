@@ -66,7 +66,7 @@ const Productlist = () => {
       title: products[i].title || "",
       brand: products[i].brand || "",
       category: products[i].category || "",
-      color: products[i].color,
+      color: products[i].color.map((c) => c.title),
       price: products[i].price || 0,
       action: (
         <div className="flex gap-3">

@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "../features/products/productSlice";
 import { getUserProductWishlist } from "../features/user/userSlice";
 import { IProduct } from "../@types/declare";
+import { getUserFromLocalStorage } from "../utils/localStorage";
 
 const OurStore = () => {
   const [grid, setGrid] = useState(3);
@@ -33,8 +34,10 @@ const OurStore = () => {
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(10000);
   const [sort, setSort] = useState<string>("");
+  const existingUser = getUserFromLocalStorage();
 
   let wishlist: string[] = [];
+
   if (userWishlist) {
     wishlist = userWishlist.map((item: IProduct) => item._id);
   }
@@ -55,13 +58,17 @@ const OurStore = () => {
   }, [getProducts]);
 
   useEffect(() => {
-    getAllProducts();
-  }, [dispatch, sort, minPrice, maxPrice, category, brand, tag]);
-
-  const getAllProducts = () => {
-    dispatch(getAllProduct({ sort, minPrice, maxPrice, category, brand, tag }));
-    dispatch(getUserProductWishlist());
-  };
+    if (existingUser) {
+      dispatch(
+        getAllProduct({ sort, minPrice, maxPrice, category, brand, tag })
+      );
+      dispatch(getUserProductWishlist());
+    } else {
+      dispatch(
+        getAllProduct({ sort, minPrice, maxPrice, category, brand, tag })
+      );
+    }
+  }, [sort, minPrice, maxPrice, category, brand, tag]);
 
   return (
     <>

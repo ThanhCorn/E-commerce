@@ -16,6 +16,7 @@ import {
 import { addToCart, getUserProductWishlist } from "../features/user/userSlice";
 import { IProduct } from "../@types/declare";
 import { toast } from "react-toastify";
+import { getUserFromLocalStorage } from "../utils/localStorage";
 
 const SingleProduct = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
@@ -31,24 +32,39 @@ const SingleProduct = () => {
     (state: RootState) => state.auth.userWishlist
   );
   const { id } = useParams<{ id: string }>();
+  const existingUser = getUserFromLocalStorage();
 
   let wishlist: string[] = [];
-  if (userWishlist) {
-    wishlist = userWishlist.map((item: IProduct) => item._id);
-  }
   useEffect(() => {
-    dispatch(
-      getAllProduct({
-        sort: "",
-        minPrice: 0,
-        maxPrice: 10000,
-        tag: "",
-        category: "",
-        brand: "",
-      })
-    );
-    dispatch(getUserProductWishlist());
-
+    if (userWishlist) {
+      wishlist = userWishlist.map((item: IProduct) => item._id);
+    }
+  }, []);
+  useEffect(() => {
+    if (existingUser) {
+      dispatch(
+        getAllProduct({
+          sort: "",
+          minPrice: 0,
+          maxPrice: 10000,
+          tag: "",
+          category: "",
+          brand: "",
+        })
+      );
+      dispatch(getUserProductWishlist());
+    } else {
+      dispatch(
+        getAllProduct({
+          sort: "",
+          minPrice: 0,
+          maxPrice: 10000,
+          tag: "",
+          category: "",
+          brand: "",
+        })
+      );
+    }
     if (id) {
       dispatch(getSingleProduct(id));
     }

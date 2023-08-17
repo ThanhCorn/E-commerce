@@ -19,7 +19,7 @@ const SpecialProduct = (props: ISpecialProductProps) => {
   const { id, title, brand, totalRating, price, sold, quantity, image } = props;
   return (
     <>
-      <div className="bg-white rounded-md overflow-hidden product-card flex pb-5">
+      <div className="bg-white rounded-md overflow-hidden product-card xl:flex  xl:min-w-[460px] pb-5 ">
         <div className="relative">
           <img
             src={image}

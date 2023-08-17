@@ -75,8 +75,8 @@ const ProductCard = (props: IProductCard) => {
                       }
                     }}
                   >
-                    {wishlist.includes(item._id) ||
-                    dataWishlist.includes(item._id) ? (
+                    {wishlist?.includes(item._id) ||
+                    dataWishlist?.includes(item._id) ? (
                       <img
                         src={loveFill}
                         alt="love"

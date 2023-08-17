@@ -425,7 +425,7 @@ const Home = () => {
             </section>
             <section className="special-product px-10 mb-12">
               <h3 className="text-xl font-bold mb-3">Special Products</h3>
-              <div className="grid grid-flow-row grid-cols-3 auto-fit gap-5 mx-auto">
+              <div className="grid grid-flow-row grid-cols-3 auto-fit xl:gap-20  gap-5">
                 {getProducts &&
                   getProducts.map((product, index) => {
                     if (product.tags === "special") {

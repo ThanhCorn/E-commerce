@@ -7,6 +7,7 @@ import { IProduct } from "../@types/declare";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { addToWishlist } from "../features/products/productSlice";
+import { getUserFromLocalStorage } from "../utils/localStorage";
 
 interface IProductCard {
   grid: number | boolean;
@@ -22,6 +23,7 @@ const ProductCard = (props: IProductCard) => {
   const updatedData = useSelector(
     (state: RootState) => state.product.addToWishlist
   );
+  const existingUser = getUserFromLocalStorage();
 
   const addToWishList = (id: string) => {
     dispatch(addToWishlist(id));
@@ -64,7 +66,15 @@ const ProductCard = (props: IProductCard) => {
                   className="mx-auto object-contain w-full"
                 />
                 <div className="absolute top-3 right-2  ">
-                  <button onClick={() => addToWishList(item._id)}>
+                  <button
+                    onClick={() => {
+                      if (!existingUser) {
+                        window.location.href = "/login";
+                      } else {
+                        addToWishList(item._id);
+                      }
+                    }}
+                  >
                     {wishlist.includes(item._id) ||
                     dataWishlist.includes(item._id) ? (
                       <img

@@ -37,6 +37,7 @@ import { AppDispatch, RootState } from "../app/store";
 import { getAllProduct } from "../features/products/productSlice";
 import { IProduct } from "../@types/declare";
 import { getUserProductWishlist } from "../features/user/userSlice";
+import { getUserFromLocalStorage } from "../utils/localStorage";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -45,24 +46,41 @@ const Home = () => {
   const userWishlist = useSelector(
     (state: RootState) => state.auth.userWishlist
   );
+
+  const existingUser = getUserFromLocalStorage();
+
   let wishlist: string[] = [];
   if (userWishlist) {
     wishlist = userWishlist.map((item: IProduct) => item._id);
   }
 
   useEffect(() => {
-    dispatch(getAllBlog());
-    dispatch(
-      getAllProduct({
-        sort: "",
-        minPrice: 0,
-        maxPrice: 10000,
-        tag: "",
-        category: "",
-        brand: "",
-      })
-    );
-    dispatch(getUserProductWishlist());
+    if (existingUser) {
+      dispatch(getAllBlog());
+      dispatch(
+        getAllProduct({
+          sort: "",
+          minPrice: 0,
+          maxPrice: 10000,
+          tag: "",
+          category: "",
+          brand: "",
+        })
+      );
+      dispatch(getUserProductWishlist());
+    } else {
+      dispatch(getAllBlog());
+      dispatch(
+        getAllProduct({
+          sort: "",
+          minPrice: 0,
+          maxPrice: 10000,
+          tag: "",
+          category: "",
+          brand: "",
+        })
+      );
+    }
   }, []);
   return (
     <>

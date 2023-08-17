@@ -31,7 +31,9 @@ const Header = () => {
   const user = getUserFromLocalStorage();
 
   useEffect(() => {
-    dispatch(getCart());
+    if (user) {
+      dispatch(getCart());
+    }
   }, []);
 
   useEffect(() => {

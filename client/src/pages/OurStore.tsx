@@ -56,11 +56,11 @@ const OurStore = () => {
 
   useEffect(() => {
     getAllProducts();
-    dispatch(getUserProductWishlist());
   }, [dispatch, sort, minPrice, maxPrice, category, brand, tag]);
 
   const getAllProducts = () => {
     dispatch(getAllProduct({ sort, minPrice, maxPrice, category, brand, tag }));
+    dispatch(getUserProductWishlist());
   };
 
   return (
